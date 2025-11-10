@@ -202,6 +202,50 @@
         .color-orange { background: #FFA500; }
         .color-red { background: #FF6B6B; }
         
+        .search-result {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+        }
+        
+        .result-header {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .result-item {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 2px solid #ddd;
+        }
+        
+        .result-item.green { background: #90EE90; border-color: #5cb85c; }
+        .result-item.yellow { background: #FFFF00; border-color: #f0ad4e; }
+        .result-item.orange { background: #FFA500; border-color: #ff8c00; }
+        .result-item.red { background: #FF6B6B; border-color: #d9534f; }
+        
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 1em;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .result-value {
+            color: #555;
+            text-align: right;
+        }
+        
         .processing {
             text-align: center;
             padding: 20px;
@@ -226,8 +270,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>🤖 Robo Technolog v2</h1>
-        <p class="subtitle">Automatické doplňování artiklových čísel</p>
+        <h1>🤖 Robo Technolog</h1>
+        <p class="subtitle">V2.2 pro automatické doplňování artiklových čísel</p>
         
         <!-- Master File Section -->
         <div class="section">
@@ -243,6 +287,18 @@
             <button class="btn btn-danger" id="clearMasterBtn" onclick="clearMasterFile()" style="display:none; margin-top:15px;">
                 🗑️ Smazat uloženou vědomostní základnu
             </button>
+        </div>
+        
+        <!-- Quick Search Section -->
+        <div class="section">
+            <h2>🔍 Rychlé vyhledávání</h2>
+            <input type="text" id="searchInput" placeholder="Zadejte typové označení k vyhledání..." 
+                   style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 1.05em; margin-bottom: 10px;"
+                   onkeypress="if(event.key==='Enter') searchSingle()">
+            <button class="btn btn-primary" id="searchBtn" onclick="searchSingle()" disabled>
+                🔎 Vyhledat artikl
+            </button>
+            <div id="searchResults" style="display:none; margin-top: 20px;"></div>
         </div>
         
         <!-- User File Section -->
@@ -297,32 +353,8 @@
     </div>
 
     <script>
-        // ========================================
-        // MÍSTO PRO PŘEDPŘIPRAVENÝ CSV MASTER LIST
-        // ========================================
-        // DŮLEŽITÉ: Kvůli velkému množství dat a speciálním znakům
-        // používejte obyčejný string, ne template literal!
-        // 
-        // Formát: Každý řádek zakončete \n a celé data dejte do '' nebo ""
-        // Příklad:
-        // const PREDEFINED_CSV = 'Typové označení;Artikl\n' +
-        //     'RIT.123456;ART001\n' +
-        //     'SE.789012;ART002\n' +
-        //     'SIE.345678;ART003';
-        //
-        // NEBO můžete použít loadPredefinedFromURL() níže
-        // 
-        // Nechte prázdné ('') pokud nechcete používat předpřipravená data
-        
         const PREDEFINED_CSV = '';
-        
-        // ALTERNATIVA: Načíst data z externího souboru
-        // Vytvořte soubor master-data.csv a dejte ho do stejné složky
-        // Pak odkomentujte následující řádek:
-        // const PREDEFINED_CSV_URL = 'master-data.csv';
         const PREDEFINED_CSV_URL = 'master-data.csv';
-        
-        // ========================================
         
         let masterData = null;
         let userData = null;
@@ -337,7 +369,7 @@
             
             for (let i = 1; i < lines.length; i++) {
                 const line = lines[i].trim();
-                if (!line) continue; // Přeskočit prázdné řádky
+                if (!line) continue;
                 
                 const values = line.split(';');
                 const row = {};
@@ -345,7 +377,6 @@
                     row[header] = values[index] !== undefined ? values[index].trim() : '';
                 });
                 
-                // Přidat řádek i když má prázdné typové označení
                 data.push(row);
             }
             
@@ -353,7 +384,6 @@
         }
         
         function loadPredefinedData() {
-            // Pokud je zadána URL, načíst z externího souboru
             if (PREDEFINED_CSV_URL && PREDEFINED_CSV_URL.trim() !== '') {
                 loadPredefinedFromURL();
                 return true;
@@ -380,9 +410,9 @@
                 masterData = data;
                 usingPredefinedData = true;
                 
-                document.getElementById('masterFileName').textContent = '📄 Předpřipravená data';
+                document.getElementById('masterFileName').textContent = '📄 Předpřipravená data (neobsahují artikly ve výběhu a označené k výmazu)';
                 document.getElementById('masterStatus').innerHTML = 
-                    '<div class="status success">✅ Používají se předpřipravená data (' + masterData.length + ' záznamů)</div>';
+                    '<div class="status success">✅ Používají se předpřipravená data -bez výběhů a výmazů  (' + masterData.length + ' záznamů)</div>';
                 document.getElementById('clearMasterBtn').style.display = 'block';
                 
                 console.log('Předpřipravená data úspěšně načtena:', masterData.length, 'záznamů');
@@ -428,6 +458,7 @@
                     document.getElementById('clearMasterBtn').style.display = 'block';
                     
                     checkReadyToProcess();
+                    updateSearchButton();
                     console.log('Předpřipravená data úspěšně načtena ze souboru:', masterData.length, 'záznamů');
                     console.log('První 3 záznamy:', masterData.slice(0, 3));
                     console.log('Názvy sloupců:', Object.keys(masterData[0]));
@@ -439,11 +470,102 @@
                 });
         }
         
-        // Načíst předpřipravená data při startu
         window.addEventListener('load', function() {
             loadPredefinedData();
             checkReadyToProcess();
+            updateSearchButton();
         });
+        
+        function updateSearchButton() {
+            const searchBtn = document.getElementById('searchBtn');
+            const searchInput = document.getElementById('searchInput');
+            
+            if (masterData && searchInput.value.trim()) {
+                searchBtn.disabled = false;
+            } else {
+                searchBtn.disabled = true;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', updateSearchButton);
+            }
+        });
+        
+        function searchSingle() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.trim();
+            
+            if (!searchTerm) {
+                alert('⚠️ Zadejte typové označení k vyhledání');
+                return;
+            }
+            
+            if (!masterData) {
+                alert('⚠️ Nejprve nahrajte master soubor');
+                return;
+            }
+            
+            const matchResult = findMatch(searchTerm);
+            
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.style.display = 'block';
+            
+            if (matchResult.matches.length === 0) {
+                resultsDiv.innerHTML = `
+                    <div class="search-result">
+                        <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
+                        <div class="result-item red">
+                            <div class="result-row">
+                                <span class="result-label">❌ Nenalezena žádná shoda</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="search-result">
+                    <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
+            `;
+            
+            matchResult.matches.forEach((match, index) => {
+                let colorClass;
+                if (match.score === 100) colorClass = 'green';
+                else if (match.score >= 95) colorClass = 'yellow';
+                else if (match.score >= 80) colorClass = 'orange';
+                else colorClass = 'red';
+                
+                let matchIcon;
+                if (match.score === 100) matchIcon = '✅';
+                else if (match.score >= 95) matchIcon = '⚠️';
+                else if (match.score >= 80) matchIcon = '🔶';
+                else matchIcon = '❌';
+                
+                html += `
+                    <div class="result-item ${colorClass}">
+                        <div class="result-row">
+                            <span class="result-label">${matchIcon} Shoda ${index + 1}:</span>
+                            <span class="result-value">${match.score}%</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">📦 Artikl:</span>
+                            <span class="result-value"><strong>${match.artikl || 'N/A'}</strong></span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">🏷️ Nalezené typ. ozn.:</span>
+                            <span class="result-value">${match.foundTyp || 'N/A'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
         
         function handleMasterFile(e) {
             const file = e.target.files[0];
@@ -459,14 +581,13 @@
                     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                     const jsonData = XLSX.utils.sheet_to_json(firstSheet);
                     
-                    // Validate structure
                     if (jsonData.length === 0) {
                         alert('❌ Soubor je prázdný!');
                         return;
                     }
                     
                     const firstRow = jsonData[0];
-                    if (!firstRow['Typové označení'] && !firstRow['Typov\u0082© ozna\u00a3\u0082\u00be en\u00a3\u00ad']) {
+                    if (!firstRow['Typové označení'] && !firstRow['Typov\u0082© ozna\u00a3\u0082¾ en\u00a3­']) {
                         alert('❌ Soubor musí obsahovat sloupec "Typové označení"!');
                         return;
                     }
@@ -479,6 +600,7 @@
                     document.getElementById('clearMasterBtn').style.display = 'block';
                     
                     checkReadyToProcess();
+                    updateSearchButton();
                 } catch (error) {
                     alert('❌ Chyba při načítání souboru: ' + error.message);
                 }
@@ -499,6 +621,7 @@
                 document.getElementById('clearMasterBtn').style.display = 'none';
                 document.getElementById('masterFile').value = '';
                 checkReadyToProcess();
+                updateSearchButton();
             }
         }
         
@@ -550,27 +673,20 @@
         }
         
         function normalizeString(str) {
-            // Odstranit formátovací znaky a převést na velká písmena
             return String(str).toUpperCase().replace(/[.\-_\s]/g, '');
         }
         
         function calculateSimilarity(userStr, masterStr) {
-            // 1. Přesná shoda 1:1
             if (userStr === masterStr) return 100;
             
-            // Normalizovat oba řetězce (odstranit formátování)
             const userNorm = normalizeString(userStr);
             const masterNorm = normalizeString(masterStr);
             
-            // 2. Shoda po normalizaci (rozdíl jen ve formátování)
             if (userNorm === masterNorm) return 95;
             
-            // 3. Kontrola chybějících nul na začátku nebo konci
-            // Odstranit vedoucí nuly
             const userNoLeadZero = userNorm.replace(/^0+/, '');
             const masterNoLeadZero = masterNorm.replace(/^0+/, '');
             
-            // Odstranit koncové nuly
             const userNoTrailZero = userNorm.replace(/0+$/, '');
             const masterNoTrailZero = masterNorm.replace(/0+$/, '');
             
@@ -581,7 +697,6 @@
                 return 95;
             }
             
-            // 4. Jedno jiné číslo nebo písmeno
             if (userNorm.length === masterNorm.length) {
                 let differences = 0;
                 for (let i = 0; i < userNorm.length; i++) {
@@ -591,13 +706,12 @@
                 }
                 
                 if (differences === 1) {
-                    return 85; // Jedno jiné písmeno/číslo
+                    return 85;
                 } else if (differences === 2) {
-                    return 70; // Dvě jiná písmena/čísla
+                    return 70;
                 }
             }
             
-            // 5. Částečná shoda - Levenshteinova vzdálenost
             const maxLen = Math.max(userNorm.length, masterNorm.length);
             if (maxLen === 0) return 100;
             
@@ -637,7 +751,6 @@
         
         function removeSuffix(str) {
             if (!str) return '';
-            // Odstraní -Z X01, -ZY123 a podobné suffixy
             return String(str)
                 .replace(/[-\s]Z\s+[A-Z0-9]+$/i, '')
                 .replace(/[-\s]ZY\d+$/i, '')
@@ -653,7 +766,6 @@
             
             const userTypStr = String(userTyp);
             
-            // Debug: vypsat co hledáme
             if (!masterData || masterData.length === 0) {
                 console.error('Master data jsou prázdná!');
                 return { 
@@ -665,45 +777,40 @@
             
             let allMatches = [];
             
-            // Zjistit názvy sloupců z prvního záznamu
             const firstRow = masterData[0];
             const columns = Object.keys(firstRow);
             
-            // Najít sloupec s typovým označením a artiklem
             const typColumn = columns.find(col => 
                 col.toLowerCase().includes('typ') || 
                 col.toLowerCase().includes('ozna') ||
-                col === columns[0] // První sloupec jako fallback
+                col === columns[0]
             ) || columns[0];
             
             const artiklColumn = columns.find(col => 
                 col.toLowerCase().includes('artikl') ||
-                col === columns[1] // Druhý sloupec jako fallback
+                col === columns[1]
             ) || columns[1];
             
             for (let row of masterData) {
                 const masterTyp = row[typColumn];
                 const masterArtikl = row[artiklColumn];
                 
-                if (!masterTyp && !masterArtikl) continue; // Přeskočit prázdné řádky
+                if (!masterTyp && !masterArtikl) continue;
                 
                 const masterTypStr = String(masterTyp || '');
                 
                 let scores = [];
                 
-                // 1. Přímé porovnání
                 const directScore = calculateSimilarity(userTypStr, masterTypStr);
                 scores.push(directScore);
                 
-                // 2. Porovnání bez prefixů (SIE., PILZ., atd.)
                 const userNoPref = removePrefix(userTypStr);
                 const masterNoPref = removePrefix(masterTypStr);
                 
-                // Pokud se nějaký prefix skutečně odstranil, dáme 98%
                 if (userNoPref !== userTypStr || masterNoPref !== masterTypStr) {
                     const noPrefScore = calculateSimilarity(userNoPref, masterNoPref);
                     if (noPrefScore === 100) {
-                        scores.push(98); // Přesná shoda po odstranění prefixu
+                        scores.push(98);
                     } else {
                         scores.push(noPrefScore);
                     }
@@ -712,21 +819,19 @@
                     scores.push(noPrefScore);
                 }
                 
-                // 3. Kontrola s přidáním běžných prefixů
                 const prefixes = ['RIT.', 'SE.', 'SIE.', 'PXC.', 'FES.', 'WAGO.', 'WEI.', 'PILZ.', 'ABB.', 'SCHNE.', 'PHO.', 'EATON.', 'SICK.'];
                 for (let prefix of prefixes) {
                     const masterUpper = masterTypStr.toUpperCase();
                     if (masterUpper.startsWith(prefix)) {
                         const withPrefixScore = calculateSimilarity(prefix + userTypStr, masterTypStr);
                         if (withPrefixScore === 100) {
-                            scores.push(98); // Přesná shoda po přidání prefixu
+                            scores.push(98);
                         } else {
                             scores.push(withPrefixScore);
                         }
                     }
                 }
                 
-                // 4. Odstranění suffixů (např. -Z X01)
                 const userNoSuffix = removeSuffix(userTypStr);
                 const masterNoSuffix = removeSuffix(masterTypStr);
                 if (userNoSuffix !== userTypStr || masterNoSuffix !== masterTypStr) {
@@ -736,7 +841,6 @@
                 
                 const bestScore = Math.max(...scores);
                 
-                // Přidat shody nad 40%
                 if (bestScore >= 40) {
                     allMatches.push({
                         artikl: masterArtikl,
@@ -746,10 +850,8 @@
                 }
             }
             
-            // Seřadit podle skóre
             allMatches.sort((a, b) => b.score - a.score);
             
-            // Odstranit duplicitní artikly
             const seen = new Set();
             allMatches = allMatches.filter(match => {
                 if (seen.has(match.artikl)) return false;
@@ -757,7 +859,6 @@
                 return true;
             });
             
-            // Vzít maximálně 3 nejlepší
             const topMatches = allMatches.slice(0, 3);
             
             if (topMatches.length === 0) {
@@ -799,15 +900,13 @@
                         red: 0
                     };
                     
-                    // Process each row
                     for (let i = 0; i < jsonData.length; i++) {
                         const row = jsonData[i];
-                        const userTyp = row['Typové označení'] || row['Typov\u0082© ozna\u00a3\u0082\u00be en\u00a3\u00ad'];
+                        const userTyp = row['Typové označení'] || row['Typov\u0082© ozna\u00a3\u0082¾ en\u00a3­'];
                         
                         const matchResult = findMatch(userTyp);
                         
                         if (matchResult.matches.length > 0) {
-                            // Přidat samostatné sloupce pro každou shodu
                             for (let j = 0; j < 3; j++) {
                                 if (j < matchResult.matches.length) {
                                     const match = matchResult.matches[j];
@@ -837,7 +936,6 @@
                         stats[matchResult.matchType]++;
                     }
                     
-                    // Create new workbook with colors
                     const newWb = XLSX.utils.book_new();
                     const newWs = XLSX.utils.json_to_sheet(jsonData.map(row => {
                         const newRow = {...row};
@@ -845,7 +943,6 @@
                         return newRow;
                     }));
                     
-                    // Apply colors to entire rows
                     const range = XLSX.utils.decode_range(newWs['!ref']);
                     
                     for (let R = range.s.r + 1; R <= range.e.r; R++) {
@@ -877,11 +974,9 @@
                     
                     XLSX.utils.book_append_sheet(newWb, newWs, 'Data');
                     
-                    // Download
                     const fileName = userData.fileName.replace(/\.xlsx?$/i, '_doplneno.xlsx');
                     XLSX.writeFile(newWb, fileName, {cellStyles: true});
                     
-                    // Show results
                     document.getElementById('resultsSection').style.display = 'block';
                     document.getElementById('resultsInfo').innerHTML = 
                         `<strong>✅ Soubor zpracován a stažen!</strong><br><br>` +
