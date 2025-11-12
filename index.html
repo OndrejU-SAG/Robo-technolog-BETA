@@ -240,6 +240,10 @@
             background: #28a745;
         }
         
+        .toggle-label.effretikon {
+            background: #dc3545 !important;
+        }
+        
         .toggle-input:checked + .toggle-label .toggle-button {
             transform: translateX(30px);
         }
@@ -318,6 +322,19 @@
         <!-- Master File Section -->
         <div class="section">
             <h2>📚 Vědomostní základna (Master XLSX)</h2>
+            
+            <!-- Database Toggle -->
+            <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 15px;">
+                <span style="font-weight: 600; color: #333;">Databáze:</span>
+                <div class="toggle-container">
+                    <input type="checkbox" id="databaseToggle" class="toggle-input" onchange="updateDatabase()">
+                    <label for="databaseToggle" class="toggle-label" id="databaseToggleLabel" style="background: #28a745;">
+                        <span class="toggle-button"></span>
+                    </label>
+                </div>
+                <span id="databaseText" style="font-weight: 600; color: #28a745;">Ústí nad Labem</span>
+            </div>
+            
             <div class="file-input-wrapper">
                 <input type="file" id="masterFile" accept=".xlsx,.xls" onchange="handleMasterFile(event)">
                 <label for="masterFile" class="file-input-label">
@@ -451,6 +468,7 @@
     <script>
         const PREDEFINED_CSV = '';
         const PREDEFINED_CSV_URL = 'master-data.csv';
+        const PREDEFINED_CSV_URL_EFFI = 'master-data-effi.csv';
         
         let masterData = null;
         let userData = null;
@@ -459,6 +477,7 @@
         let searchField = 'typ'; // 'typ', 'vyrobce', or 'nazev'
         let lastSearchResults = []; // Store last search results for filtering
         let selectedManufacturers = new Set(); // Store selected manufacturers
+        let currentDatabase = 'usti'; // 'usti' or 'effretikon'
         
         function parseCsvWithSemicolon(csvText) {
             const lines = csvText.trim().split('\n');
@@ -549,13 +568,16 @@
         }
         
         function loadPredefinedFromURL() {
+            const csvUrl = currentDatabase === 'usti' ? PREDEFINED_CSV_URL : PREDEFINED_CSV_URL_EFFI;
+            const dbName = currentDatabase === 'usti' ? 'Ústí nad Labem' : 'Effretikon';
+            
             document.getElementById('masterStatus').innerHTML = 
                 '<div class="status info">⏳ Načítám předpřipravená data ze souboru...</div>';
             
-            fetch(PREDEFINED_CSV_URL)
+            fetch(csvUrl)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Soubor nenalezen: ' + PREDEFINED_CSV_URL);
+                        throw new Error('Soubor nenalezen: ' + csvUrl);
                     }
                     return response.text();
                 })
@@ -574,7 +596,7 @@
                     masterData = data;
                     usingPredefinedData = true;
                     
-                    document.getElementById('masterFileName').textContent = '📄 Předpřipravená data (ze souboru)';
+                    document.getElementById('masterFileName').textContent = `📄 Předpřipravená data (${dbName})`;
                     document.getElementById('masterStatus').innerHTML = 
                         '<div class="status success">✅ Používají se předpřipravená data (' + masterData.length + ' záznamů)</div>';
                     document.getElementById('clearMasterBtn').style.display = 'block';
