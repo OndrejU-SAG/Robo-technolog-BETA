@@ -377,7 +377,17 @@
             
             <!-- Manufacturer Filter (only visible in completion mode after search) -->
             <div id="manufacturerFilter" style="display:none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 2px solid #ddd;">
-                <div style="margin-bottom: 10px; font-weight: 600; color: #333;">🏭 Filtrovat podle výrobců:</div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="font-weight: 600; color: #333;">🏭 Filtrovat podle výrobců:</div>
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="selectAllManufacturers()" style="padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='#5568d3'" onmouseout="this.style.background='#667eea'">
+                            ✓ Vše
+                        </button>
+                        <button onclick="deselectAllManufacturers()" style="padding: 5px 15px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='#c82333'" onmouseout="this.style.background='#dc3545'">
+                            ✗ Nic
+                        </button>
+                    </div>
+                </div>
                 <div id="manufacturerCheckboxes" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
                 <button class="btn btn-primary" onclick="applyManufacturerFilter()" style="margin-top: 10px; padding: 10px 20px; font-size: 0.95em;">
                     ✓ Použít filtr
@@ -931,6 +941,22 @@
             });
             
             displayCompletionResults(filteredResults, searchTerm);
+        }
+        
+        function selectAllManufacturers() {
+            const checkboxes = document.querySelectorAll('#manufacturerCheckboxes input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+                selectedManufacturers.add(checkbox.value);
+            });
+        }
+        
+        function deselectAllManufacturers() {
+            const checkboxes = document.querySelectorAll('#manufacturerCheckboxes input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+                selectedManufacturers.delete(checkbox.value);
+            });
         }
         
         function displayCompletionResults(matches, searchTerm) {
