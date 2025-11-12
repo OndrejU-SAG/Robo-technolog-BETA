@@ -313,7 +313,7 @@
 <body>
     <div class="container">
         <h1>🤖 Robo Technolog</h1>
-        <p class="subtitle">V2.3 pro automatické doplňování artiklových čísel</p>
+        <p class="subtitle">V2.4 pro automatické doplňování artiklových čísel</p>
         
         <!-- Master File Section -->
         <div class="section">
@@ -345,6 +345,23 @@
                     </label>
                 </div>
                 <span id="searchModeText" style="font-weight: 600; color: #667eea;">Fuzzy Search</span>
+            </div>
+            
+            <!-- Search Field Selector -->
+            <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                <span style="font-weight: 600; color: #333;">Hledat v:</span>
+                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 8px 15px; background: #f0f2ff; border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.background='#e0e4ff'" onmouseout="this.style.background='#f0f2ff'">
+                    <input type="radio" name="searchField" value="typ" checked onchange="updateSearchField()" style="cursor: pointer;">
+                    <span style="font-weight: 500;">Typové označení</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 8px 15px; background: #f0f2ff; border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.background='#e0e4ff'" onmouseout="this.style.background='#f0f2ff'">
+                    <input type="radio" name="searchField" value="vyrobce" onchange="updateSearchField()" style="cursor: pointer;">
+                    <span style="font-weight: 500;">Výrobce</span>
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 8px 15px; background: #f0f2ff; border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.background='#e0e4ff'" onmouseout="this.style.background='#f0f2ff'">
+                    <input type="radio" name="searchField" value="nazev" onchange="updateSearchField()" style="cursor: pointer;">
+                    <span style="font-weight: 500;">Název</span>
+                </label>
             </div>
             
             <div id="searchModeDescription" style="text-align: center; margin-bottom: 15px; padding: 10px; background: #f0f2ff; border-radius: 8px; font-size: 0.95em; color: #555;">
@@ -419,6 +436,7 @@
         let userData = null;
         let usingPredefinedData = false;
         let searchMode = 'fuzzy'; // 'fuzzy' or 'completion'
+        let searchField = 'typ'; // 'typ', 'vyrobce', or 'nazev'
         
         function parseCsvWithSemicolon(csvText) {
             const lines = csvText.trim().split('\n');
@@ -566,14 +584,45 @@
                 modeText.style.color = '#28a745';
                 modeDescription.innerHTML = '📝 Doplňuje typové označení, vrací všechny shody. Podporuje wildcard (*).';
                 modeDescription.style.background = '#d4edda';
-                searchInput.placeholder = 'Např: VX, *VX*50*, 2500.*';
+                updatePlaceholder();
             } else {
                 searchMode = 'fuzzy';
                 modeText.textContent = 'Fuzzy Search';
                 modeText.style.color = '#667eea';
                 modeDescription.innerHTML = '🎯 Hledá nejpodobnější shody, vrací top 3 výsledky';
                 modeDescription.style.background = '#f0f2ff';
-                searchInput.placeholder = 'Zadejte typové označení k vyhledání...';
+                updatePlaceholder();
+            }
+        }
+        
+        function updateSearchField() {
+            const selected = document.querySelector('input[name="searchField"]:checked');
+            if (selected) {
+                searchField = selected.value;
+                updatePlaceholder();
+            }
+        }
+        
+        function updatePlaceholder() {
+            const searchInput = document.getElementById('searchInput');
+            let fieldName = '';
+            
+            switch(searchField) {
+                case 'typ':
+                    fieldName = 'typové označení';
+                    break;
+                case 'vyrobce':
+                    fieldName = 'výrobce';
+                    break;
+                case 'nazev':
+                    fieldName = 'název';
+                    break;
+            }
+            
+            if (searchMode === 'completion') {
+                searchInput.placeholder = `Např: ${fieldName === 'typové označení' ? 'VX, *VX*50*, 2500.*' : fieldName === 'výrobce' ? 'WAGO, *SCHALTAG*' : 'Kanal*, *SROUB*'}`;
+            } else {
+                searchInput.placeholder = `Zadejte ${fieldName} k vyhledání...`;
             }
         }
         
@@ -593,18 +642,42 @@
             const firstRow = masterData[0];
             const columns = Object.keys(firstRow);
             
+            // Get column names
             const typColumn = columns.find(col => 
                 col.toLowerCase().includes('typ') || 
-                col.toLowerCase().includes('ozna') ||
-                col === columns[0]
+                col.toLowerCase().includes('ozna')
             ) || columns[0];
             
             const artiklColumn = columns.find(col => 
-                col.toLowerCase().includes('artikl') ||
-                col === columns[1]
+                col.toLowerCase().includes('artikl')
             ) || columns[1];
             
+            const vyrobceColumn = columns.find(col => 
+                col.toLowerCase().includes('výrobce') ||
+                col.toLowerCase().includes('vyrobce')
+            ) || columns[2];
+            
+            const nazevColumn = columns.find(col => 
+                col.toLowerCase().includes('název') ||
+                col.toLowerCase().includes('nazev')
+            ) || columns[3];
+            
             let matches = [];
+            
+            // Determine which column to search in
+            let searchColumn;
+            switch(searchField) {
+                case 'vyrobce':
+                    searchColumn = vyrobceColumn;
+                    break;
+                case 'nazev':
+                    searchColumn = nazevColumn;
+                    break;
+                case 'typ':
+                default:
+                    searchColumn = typColumn;
+                    break;
+            }
             
             // Check if wildcard is used
             const hasWildcard = searchTerm.includes('*');
@@ -613,12 +686,14 @@
                 const regex = wildcardToRegex(searchTerm);
                 
                 for (let row of masterData) {
-                    const masterTyp = String(row[typColumn] || '');
+                    const searchValue = String(row[searchColumn] || '');
                     
-                    if (regex.test(masterTyp)) {
+                    if (regex.test(searchValue)) {
                         matches.push({
                             artikl: row[artiklColumn],
-                            foundTyp: masterTyp,
+                            foundTyp: row[typColumn],
+                            vyrobce: row[vyrobceColumn] || 'N/A',
+                            nazev: row[nazevColumn] || 'N/A',
                             score: 100
                         });
                     }
@@ -628,13 +703,15 @@
                 const searchUpper = searchTerm.toUpperCase();
                 
                 for (let row of masterData) {
-                    const masterTyp = String(row[typColumn] || '');
-                    const masterTypUpper = masterTyp.toUpperCase();
+                    const searchValue = String(row[searchColumn] || '');
+                    const searchValueUpper = searchValue.toUpperCase();
                     
-                    if (masterTypUpper.includes(searchUpper)) {
+                    if (searchValueUpper.includes(searchUpper)) {
                         matches.push({
                             artikl: row[artiklColumn],
-                            foundTyp: masterTyp,
+                            foundTyp: row[typColumn],
+                            vyrobce: row[vyrobceColumn] || 'N/A',
+                            nazev: row[nazevColumn] || 'N/A',
                             score: 100
                         });
                     }
@@ -697,6 +774,14 @@
                             <div class="result-row">
                                 <span class="result-label">🏷️ Typové označení:</span>
                                 <span class="result-value">${match.foundTyp || 'N/A'}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">🏭 Výrobce:</span>
+                                <span class="result-value">${match.vyrobce || 'N/A'}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">📝 Název:</span>
+                                <span class="result-value">${match.nazev || 'N/A'}</span>
                             </div>
                         </div>
                     `;
@@ -979,61 +1064,87 @@
             
             const typColumn = columns.find(col => 
                 col.toLowerCase().includes('typ') || 
-                col.toLowerCase().includes('ozna') ||
-                col === columns[0]
+                col.toLowerCase().includes('ozna')
             ) || columns[0];
             
             const artiklColumn = columns.find(col => 
-                col.toLowerCase().includes('artikl') ||
-                col === columns[1]
+                col.toLowerCase().includes('artikl')
             ) || columns[1];
             
+            const vyrobceColumn = columns.find(col => 
+                col.toLowerCase().includes('výrobce') ||
+                col.toLowerCase().includes('vyrobce')
+            ) || columns[2];
+            
+            const nazevColumn = columns.find(col => 
+                col.toLowerCase().includes('název') ||
+                col.toLowerCase().includes('nazev')
+            ) || columns[3];
+            
+            // Determine which column to search in
+            let searchColumn;
+            switch(searchField) {
+                case 'vyrobce':
+                    searchColumn = vyrobceColumn;
+                    break;
+                case 'nazev':
+                    searchColumn = nazevColumn;
+                    break;
+                case 'typ':
+                default:
+                    searchColumn = typColumn;
+                    break;
+            }
+            
             for (let row of masterData) {
-                const masterTyp = row[typColumn];
+                const masterValue = row[searchColumn];
                 const masterArtikl = row[artiklColumn];
                 
-                if (!masterTyp && !masterArtikl) continue;
+                if (!masterValue && !masterArtikl) continue;
                 
-                const masterTypStr = String(masterTyp || '');
+                const masterValueStr = String(masterValue || '');
                 
                 let scores = [];
                 
-                const directScore = calculateSimilarity(userTypStr, masterTypStr);
+                const directScore = calculateSimilarity(userTypStr, masterValueStr);
                 scores.push(directScore);
                 
-                const userNoPref = removePrefix(userTypStr);
-                const masterNoPref = removePrefix(masterTypStr);
-                
-                if (userNoPref !== userTypStr || masterNoPref !== masterTypStr) {
-                    const noPrefScore = calculateSimilarity(userNoPref, masterNoPref);
-                    if (noPrefScore === 100) {
-                        scores.push(98);
-                    } else {
-                        scores.push(noPrefScore);
-                    }
-                } else {
-                    const noPrefScore = calculateSimilarity(userNoPref, masterNoPref);
-                    scores.push(noPrefScore);
-                }
-                
-                const prefixes = ['RIT.', 'SE.', 'SIE.', 'PXC.', 'FES.', 'WAGO.', 'WEI.', 'PILZ.', 'ABB.', 'SCHNE.', 'PHO.', 'EATON.', 'SICK.'];
-                for (let prefix of prefixes) {
-                    const masterUpper = masterTypStr.toUpperCase();
-                    if (masterUpper.startsWith(prefix)) {
-                        const withPrefixScore = calculateSimilarity(prefix + userTypStr, masterTypStr);
-                        if (withPrefixScore === 100) {
+                // Only apply prefix/suffix logic for typové označení
+                if (searchField === 'typ') {
+                    const userNoPref = removePrefix(userTypStr);
+                    const masterNoPref = removePrefix(masterValueStr);
+                    
+                    if (userNoPref !== userTypStr || masterNoPref !== masterValueStr) {
+                        const noPrefScore = calculateSimilarity(userNoPref, masterNoPref);
+                        if (noPrefScore === 100) {
                             scores.push(98);
                         } else {
-                            scores.push(withPrefixScore);
+                            scores.push(noPrefScore);
+                        }
+                    } else {
+                        const noPrefScore = calculateSimilarity(userNoPref, masterNoPref);
+                        scores.push(noPrefScore);
+                    }
+                    
+                    const prefixes = ['RIT.', 'SE.', 'SIE.', 'PXC.', 'FES.', 'WAGO.', 'WEI.', 'PILZ.', 'ABB.', 'SCHNE.', 'PHO.', 'EATON.', 'SICK.'];
+                    for (let prefix of prefixes) {
+                        const masterUpper = masterValueStr.toUpperCase();
+                        if (masterUpper.startsWith(prefix)) {
+                            const withPrefixScore = calculateSimilarity(prefix + userTypStr, masterValueStr);
+                            if (withPrefixScore === 100) {
+                                scores.push(98);
+                            } else {
+                                scores.push(withPrefixScore);
+                            }
                         }
                     }
-                }
-                
-                const userNoSuffix = removeSuffix(userTypStr);
-                const masterNoSuffix = removeSuffix(masterTypStr);
-                if (userNoSuffix !== userTypStr || masterNoSuffix !== masterTypStr) {
-                    const noSuffixScore = calculateSimilarity(userNoSuffix, masterNoSuffix);
-                    scores.push(noSuffixScore);
+                    
+                    const userNoSuffix = removeSuffix(userTypStr);
+                    const masterNoSuffix = removeSuffix(masterValueStr);
+                    if (userNoSuffix !== userTypStr || masterNoSuffix !== masterValueStr) {
+                        const noSuffixScore = calculateSimilarity(userNoSuffix, masterNoSuffix);
+                        scores.push(noSuffixScore);
+                    }
                 }
                 
                 const bestScore = Math.max(...scores);
@@ -1041,7 +1152,9 @@
                 if (bestScore >= 40) {
                     allMatches.push({
                         artikl: masterArtikl,
-                        foundTyp: masterTyp,
+                        foundTyp: row[typColumn],
+                        vyrobce: row[vyrobceColumn] || 'N/A',
+                        nazev: row[nazevColumn] || 'N/A',
                         score: Math.round(bestScore * 10) / 10
                     });
                 }
