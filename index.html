@@ -553,7 +553,7 @@
                 
                 document.getElementById('masterFileName').textContent = '📄 Předpřipravená data (neobsahují artikly ve výběhu a označené k výmazu)';
                 document.getElementById('masterStatus').innerHTML = 
-                    '<div class="status success">✅ Používají se předpřipravená data (' + masterData.length + ' záznamů)</div>';
+                    '<div class="status success">✅ Používají se předpřipravená data -bez výběhů a výmazů  (' + masterData.length + ' záznamů)</div>';
                 document.getElementById('clearMasterBtn').style.display = 'block';
                 
                 console.log('Předpřipravená data úspěšně načtena:', masterData.length, 'záznamů');
@@ -590,7 +590,7 @@
                     
                     const firstRow = data[0];
                     if (!firstRow.hasOwnProperty('Typové označení') && !firstRow.hasOwnProperty('Artikl')) {
-                        throw new Error('Soubor nemá požadované sloupce (Typové označení, Artikl, Výrobce, Název)');
+                        throw new Error('Soubor nemá požadované sloupce (Typové označení, Artikl)');
                     }
                     
                     masterData = data;
@@ -686,7 +686,7 @@
             }
             
             if (searchMode === 'completion') {
-                searchInput.placeholder = `Např: ${fieldName === 'typové označení' ? 'VX, *VX*50*,... : fieldName === 'výrobce' ? 'WAGO, *PHOENIX*' : 'Kanal*, *SROUB*'}`;
+                searchInput.placeholder = `Např: ${fieldName === 'typové označení' ? 'VX, *VX*50*, 2500.*' : fieldName === 'výrobce' ? 'WAGO, *SCHALTAG*' : 'Kanal*, *SROUB*'}`;
             } else {
                 searchInput.placeholder = `Zadejte ${fieldName} k vyhledání...`;
             }
