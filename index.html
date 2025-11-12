@@ -202,6 +202,48 @@
         .color-orange { background: #FFA500; }
         .color-red { background: #FF6B6B; }
         
+        /* Material You Toggle Switch */
+        .toggle-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .toggle-input {
+            display: none;
+        }
+        
+        .toggle-label {
+            display: block;
+            width: 60px;
+            height: 30px;
+            background: #667eea;
+            border-radius: 15px;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .toggle-button {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .toggle-input:checked + .toggle-label {
+            background: #28a745;
+        }
+        
+        .toggle-input:checked + .toggle-label .toggle-button {
+            transform: translateX(30px);
+        }
+        
         .search-result {
             background: white;
             border-radius: 10px;
@@ -271,7 +313,7 @@
 <body>
     <div class="container">
         <h1>🤖 Robo Technolog</h1>
-        <p class="subtitle">V2.2 pro automatické doplňování artiklových čísel</p>
+        <p class="subtitle">V2.3 pro automatické doplňování artiklových čísel</p>
         
         <!-- Master File Section -->
         <div class="section">
@@ -292,6 +334,23 @@
         <!-- Quick Search Section -->
         <div class="section">
             <h2>🔍 Rychlé vyhledávání</h2>
+            
+            <!-- Mode Toggle -->
+            <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 15px;">
+                <span style="font-weight: 600; color: #333;">Režim:</span>
+                <div class="toggle-container">
+                    <input type="checkbox" id="searchModeToggle" class="toggle-input" onchange="updateSearchMode()">
+                    <label for="searchModeToggle" class="toggle-label">
+                        <span class="toggle-button"></span>
+                    </label>
+                </div>
+                <span id="searchModeText" style="font-weight: 600; color: #667eea;">Fuzzy Search</span>
+            </div>
+            
+            <div id="searchModeDescription" style="text-align: center; margin-bottom: 15px; padding: 10px; background: #f0f2ff; border-radius: 8px; font-size: 0.95em; color: #555;">
+                🎯 Hledá nejpodobnější shody, vrací top 3 výsledky
+            </div>
+            
             <input type="text" id="searchInput" placeholder="Zadejte typové označení k vyhledání..." 
                    style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 1.05em; margin-bottom: 10px;"
                    onkeypress="if(event.key==='Enter') searchSingle()">
@@ -359,6 +418,7 @@
         let masterData = null;
         let userData = null;
         let usingPredefinedData = false;
+        let searchMode = 'fuzzy'; // 'fuzzy' or 'completion'
         
         function parseCsvWithSemicolon(csvText) {
             const lines = csvText.trim().split('\n');
@@ -494,6 +554,96 @@
             }
         });
         
+        function updateSearchMode() {
+            const toggle = document.getElementById('searchModeToggle');
+            const modeText = document.getElementById('searchModeText');
+            const modeDescription = document.getElementById('searchModeDescription');
+            const searchInput = document.getElementById('searchInput');
+            
+            if (toggle.checked) {
+                searchMode = 'completion';
+                modeText.textContent = 'Doplňování';
+                modeText.style.color = '#28a745';
+                modeDescription.innerHTML = '📝 Doplňuje typové označení, vrací všechny shody. Podporuje wildcard (*).';
+                modeDescription.style.background = '#d4edda';
+                searchInput.placeholder = 'Např: VX, *VX*50*, 2500.*';
+            } else {
+                searchMode = 'fuzzy';
+                modeText.textContent = 'Fuzzy Search';
+                modeText.style.color = '#667eea';
+                modeDescription.innerHTML = '🎯 Hledá nejpodobnější shody, vrací top 3 výsledky';
+                modeDescription.style.background = '#f0f2ff';
+                searchInput.placeholder = 'Zadejte typové označení k vyhledání...';
+            }
+        }
+        
+        function wildcardToRegex(pattern) {
+            // Escape special regex characters except *
+            const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
+            // Replace * with .*
+            const regex = escaped.replace(/\*/g, '.*');
+            return new RegExp(regex, 'i');
+        }
+        
+        function searchCompletion(searchTerm) {
+            if (!masterData) {
+                return [];
+            }
+            
+            const firstRow = masterData[0];
+            const columns = Object.keys(firstRow);
+            
+            const typColumn = columns.find(col => 
+                col.toLowerCase().includes('typ') || 
+                col.toLowerCase().includes('ozna') ||
+                col === columns[0]
+            ) || columns[0];
+            
+            const artiklColumn = columns.find(col => 
+                col.toLowerCase().includes('artikl') ||
+                col === columns[1]
+            ) || columns[1];
+            
+            let matches = [];
+            
+            // Check if wildcard is used
+            const hasWildcard = searchTerm.includes('*');
+            
+            if (hasWildcard) {
+                const regex = wildcardToRegex(searchTerm);
+                
+                for (let row of masterData) {
+                    const masterTyp = String(row[typColumn] || '');
+                    
+                    if (regex.test(masterTyp)) {
+                        matches.push({
+                            artikl: row[artiklColumn],
+                            foundTyp: masterTyp,
+                            score: 100
+                        });
+                    }
+                }
+            } else {
+                // Simple contains search
+                const searchUpper = searchTerm.toUpperCase();
+                
+                for (let row of masterData) {
+                    const masterTyp = String(row[typColumn] || '');
+                    const masterTypUpper = masterTyp.toUpperCase();
+                    
+                    if (masterTypUpper.includes(searchUpper)) {
+                        matches.push({
+                            artikl: row[artiklColumn],
+                            foundTyp: masterTyp,
+                            score: 100
+                        });
+                    }
+                }
+            }
+            
+            return matches;
+        }
+        
         function searchSingle() {
             const searchInput = document.getElementById('searchInput');
             const searchTerm = searchInput.value.trim();
@@ -508,63 +658,110 @@
                 return;
             }
             
-            const matchResult = findMatch(searchTerm);
-            
             const resultsDiv = document.getElementById('searchResults');
             resultsDiv.style.display = 'block';
             
-            if (matchResult.matches.length === 0) {
-                resultsDiv.innerHTML = `
-                    <div class="search-result">
-                        <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
-                        <div class="result-item red">
-                            <div class="result-row">
-                                <span class="result-label">❌ Nenalezena žádná shoda</span>
+            if (searchMode === 'completion') {
+                // Completion mode
+                const matches = searchCompletion(searchTerm);
+                
+                if (matches.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div class="search-result">
+                            <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
+                            <div class="result-item red">
+                                <div class="result-row">
+                                    <span class="result-label">❌ Nenalezena žádná shoda</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    `;
+                    return;
+                }
+                
+                let html = `
+                    <div class="search-result">
+                        <div class="result-header">🔍 Výsledky doplňování: "${searchTerm}" (${matches.length} ${matches.length === 1 ? 'výsledek' : matches.length < 5 ? 'výsledky' : 'výsledků'})</div>
                 `;
-                return;
+                
+                matches.forEach((match, index) => {
+                    html += `
+                        <div class="result-item green">
+                            <div class="result-row">
+                                <span class="result-label">✅ Výsledek ${index + 1}:</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">📦 Artikl:</span>
+                                <span class="result-value"><strong>${match.artikl || 'N/A'}</strong></span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">🏷️ Typové označení:</span>
+                                <span class="result-value">${match.foundTyp || 'N/A'}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                resultsDiv.innerHTML = html;
+                
+            } else {
+                // Fuzzy search mode (original)
+                const matchResult = findMatch(searchTerm);
+                
+                if (matchResult.matches.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div class="search-result">
+                            <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
+                            <div class="result-item red">
+                                <div class="result-row">
+                                    <span class="result-label">❌ Nenalezena žádná shoda</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = `
+                    <div class="search-result">
+                        <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
+                `;
+                
+                matchResult.matches.forEach((match, index) => {
+                    let colorClass;
+                    if (match.score === 100) colorClass = 'green';
+                    else if (match.score >= 95) colorClass = 'yellow';
+                    else if (match.score >= 80) colorClass = 'orange';
+                    else colorClass = 'red';
+                    
+                    let matchIcon;
+                    if (match.score === 100) matchIcon = '✅';
+                    else if (match.score >= 95) matchIcon = '⚠️';
+                    else if (match.score >= 80) matchIcon = '🔶';
+                    else matchIcon = '❌';
+                    
+                    html += `
+                        <div class="result-item ${colorClass}">
+                            <div class="result-row">
+                                <span class="result-label">${matchIcon} Shoda ${index + 1}:</span>
+                                <span class="result-value">${match.score}%</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">📦 Artikl:</span>
+                                <span class="result-value"><strong>${match.artikl || 'N/A'}</strong></span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">🏷️ Nalezené typ. ozn.:</span>
+                                <span class="result-value">${match.foundTyp || 'N/A'}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                resultsDiv.innerHTML = html;
             }
-            
-            let html = `
-                <div class="search-result">
-                    <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
-            `;
-            
-            matchResult.matches.forEach((match, index) => {
-                let colorClass;
-                if (match.score === 100) colorClass = 'green';
-                else if (match.score >= 95) colorClass = 'yellow';
-                else if (match.score >= 80) colorClass = 'orange';
-                else colorClass = 'red';
-                
-                let matchIcon;
-                if (match.score === 100) matchIcon = '✅';
-                else if (match.score >= 95) matchIcon = '⚠️';
-                else if (match.score >= 80) matchIcon = '🔶';
-                else matchIcon = '❌';
-                
-                html += `
-                    <div class="result-item ${colorClass}">
-                        <div class="result-row">
-                            <span class="result-label">${matchIcon} Shoda ${index + 1}:</span>
-                            <span class="result-value">${match.score}%</span>
-                        </div>
-                        <div class="result-row">
-                            <span class="result-label">📦 Artikl:</span>
-                            <span class="result-value"><strong>${match.artikl || 'N/A'}</strong></span>
-                        </div>
-                        <div class="result-row">
-                            <span class="result-label">🏷️ Nalezené typ. ozn.:</span>
-                            <span class="result-value">${match.foundTyp || 'N/A'}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += '</div>';
-            resultsDiv.innerHTML = html;
         }
         
         function handleMasterFile(e) {
