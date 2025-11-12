@@ -374,6 +374,16 @@
             <button class="btn btn-primary" id="searchBtn" onclick="searchSingle()" disabled>
                 🔎 Vyhledat artikl
             </button>
+            
+            <!-- Manufacturer Filter (only visible in completion mode after search) -->
+            <div id="manufacturerFilter" style="display:none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 2px solid #ddd;">
+                <div style="margin-bottom: 10px; font-weight: 600; color: #333;">🏭 Filtrovat podle výrobců:</div>
+                <div id="manufacturerCheckboxes" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                <button class="btn btn-primary" onclick="applyManufacturerFilter()" style="margin-top: 10px; padding: 10px 20px; font-size: 0.95em;">
+                    ✓ Použít filtr
+                </button>
+            </div>
+            
             <div id="searchResults" style="display:none; margin-top: 20px;"></div>
         </div>
         
@@ -437,6 +447,8 @@
         let usingPredefinedData = false;
         let searchMode = 'fuzzy'; // 'fuzzy' or 'completion'
         let searchField = 'typ'; // 'typ', 'vyrobce', or 'nazev'
+        let lastSearchResults = []; // Store last search results for filtering
+        let selectedManufacturers = new Set(); // Store selected manufacturers
         
         function parseCsvWithSemicolon(csvText) {
             const lines = csvText.trim().split('\n');
@@ -452,13 +464,35 @@
                 const values = line.split(';');
                 const row = {};
                 headers.forEach((header, index) => {
-                    row[header] = values[index] !== undefined ? values[index].trim() : '';
+                    const value = values[index] !== undefined ? values[index].trim() : '';
+                    // Fix encoding issues with Czech characters
+                    row[header] = fixCzechEncoding(value);
                 });
                 
                 data.push(row);
             }
             
             return data;
+        }
+        
+        function fixCzechEncoding(text) {
+            if (!text) return text;
+            
+            // Common Czech character encoding fixes
+            const replacements = {
+                'Ã¡': 'á', 'Ã©': 'é', 'Ã­': 'í', 'Ã³': 'ó', 'Ãº': 'ú', 'Å¯': 'ů', 'Ã½': 'ý',
+                'Ä': 'č', 'Ä›': 'ě', 'Å¡': 'š', 'Å™': 'ř', 'Å¾': 'ž', 'Ä': 'ď', 'Å¥': 'ť', 'Å': 'ň',
+                'Ã': 'Á', 'Ã‰': 'É', 'Ã': 'Í', 'Ã"': 'Ó', 'Ãš': 'Ú', 'Å®': 'Ů', 'Ã': 'Ý',
+                'Ä': 'Č', 'Äš': 'Ě', 'Å ': 'Š', 'Å˜': 'Ř', 'Å½': 'Ž', 'ÄŽ': 'Ď', 'Å¤': 'Ť', 'Å‡': 'Ň',
+                'Ã¤': 'ä', 'Ã¶': 'ö', 'Ã¼': 'ü', 'Ã„': 'Ä', 'Ã–': 'Ö', 'Ãœ': 'Ü', 'ÃŸ': 'ß'
+            };
+            
+            let fixed = text;
+            for (let [wrong, correct] of Object.entries(replacements)) {
+                fixed = fixed.replace(new RegExp(wrong, 'g'), correct);
+            }
+            
+            return fixed;
         }
         
         function loadPredefinedData() {
@@ -741,6 +775,7 @@
             if (searchMode === 'completion') {
                 // Completion mode
                 const matches = searchCompletion(searchTerm);
+                lastSearchResults = matches; // Store for filtering
                 
                 if (matches.length === 0) {
                     resultsDiv.innerHTML = `
@@ -753,45 +788,19 @@
                             </div>
                         </div>
                     `;
+                    document.getElementById('manufacturerFilter').style.display = 'none';
                     return;
                 }
                 
-                let html = `
-                    <div class="search-result">
-                        <div class="result-header">🔍 Výsledky doplňování: "${searchTerm}" (${matches.length} ${matches.length === 1 ? 'výsledek' : matches.length < 5 ? 'výsledky' : 'výsledků'})</div>
-                `;
+                // Show manufacturer filter
+                showManufacturerFilter(matches);
                 
-                matches.forEach((match, index) => {
-                    html += `
-                        <div class="result-item green">
-                            <div class="result-row">
-                                <span class="result-label">✅ Výsledek ${index + 1}:</span>
-                            </div>
-                            <div class="result-row">
-                                <span class="result-label">📦 Artikl:</span>
-                                <span class="result-value"><strong>${match.artikl || 'N/A'}</strong></span>
-                            </div>
-                            <div class="result-row">
-                                <span class="result-label">🏷️ Typové označení:</span>
-                                <span class="result-value">${match.foundTyp || 'N/A'}</span>
-                            </div>
-                            <div class="result-row">
-                                <span class="result-label">🏭 Výrobce:</span>
-                                <span class="result-value">${match.vyrobce || 'N/A'}</span>
-                            </div>
-                            <div class="result-row">
-                                <span class="result-label">📝 Název:</span>
-                                <span class="result-value">${match.nazev || 'N/A'}</span>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                html += '</div>';
-                resultsDiv.innerHTML = html;
+                // Display all results initially
+                displayCompletionResults(matches, searchTerm);
                 
             } else {
                 // Fuzzy search mode (original)
+                document.getElementById('manufacturerFilter').style.display = 'none';
                 const matchResult = findMatch(searchTerm);
                 
                 if (matchResult.matches.length === 0) {
@@ -857,6 +866,125 @@
             }
         }
         
+        function showManufacturerFilter(matches) {
+            // Get unique manufacturers
+            const manufacturers = new Set();
+            matches.forEach(match => {
+                if (match.vyrobce && match.vyrobce !== 'N/A') {
+                    manufacturers.add(match.vyrobce);
+                }
+            });
+            
+            // Initialize all manufacturers as selected
+            selectedManufacturers = new Set(manufacturers);
+            
+            const filterDiv = document.getElementById('manufacturerFilter');
+            const checkboxesDiv = document.getElementById('manufacturerCheckboxes');
+            
+            if (manufacturers.size === 0) {
+                filterDiv.style.display = 'none';
+                return;
+            }
+            
+            filterDiv.style.display = 'block';
+            checkboxesDiv.innerHTML = '';
+            
+            // Sort manufacturers alphabetically
+            const sortedManufacturers = Array.from(manufacturers).sort();
+            
+            sortedManufacturers.forEach(manufacturer => {
+                const label = document.createElement('label');
+                label.style.cssText = 'display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 8px 12px; background: white; border-radius: 8px; border: 2px solid #ddd; transition: all 0.3s;';
+                label.onmouseover = () => label.style.background = '#f0f2ff';
+                label.onmouseout = () => label.style.background = 'white';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = true;
+                checkbox.value = manufacturer;
+                checkbox.style.cursor = 'pointer';
+                checkbox.onchange = (e) => {
+                    if (e.target.checked) {
+                        selectedManufacturers.add(manufacturer);
+                    } else {
+                        selectedManufacturers.delete(manufacturer);
+                    }
+                };
+                
+                const span = document.createElement('span');
+                span.textContent = manufacturer;
+                span.style.fontWeight = '500';
+                
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                checkboxesDiv.appendChild(label);
+            });
+        }
+        
+        function applyManufacturerFilter() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.trim();
+            
+            // Filter results based on selected manufacturers
+            const filteredResults = lastSearchResults.filter(match => {
+                return selectedManufacturers.has(match.vyrobce) || match.vyrobce === 'N/A';
+            });
+            
+            displayCompletionResults(filteredResults, searchTerm);
+        }
+        
+        function displayCompletionResults(matches, searchTerm) {
+            const resultsDiv = document.getElementById('searchResults');
+            
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = `
+                    <div class="search-result">
+                        <div class="result-header">🔍 Výsledky doplňování: "${searchTerm}" (0 výsledků po filtrování)</div>
+                        <div class="result-item red">
+                            <div class="result-row">
+                                <span class="result-label">❌ Žádné výsledky pro vybrané výrobce</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="search-result">
+                    <div class="result-header">🔍 Výsledky doplňování: "${searchTerm}" (${matches.length} ${matches.length === 1 ? 'výsledek' : matches.length < 5 ? 'výsledky' : 'výsledků'})</div>
+            `;
+            
+            matches.forEach((match, index) => {
+                html += `
+                    <div class="result-item green">
+                        <div class="result-row">
+                            <span class="result-label">✅ Výsledek ${index + 1}:</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">📦 Artikl:</span>
+                            <span class="result-value"><strong>${match.artikl || 'N/A'}</strong></span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">🏷️ Typové označení:</span>
+                            <span class="result-value">${match.foundTyp || 'N/A'}</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">🏭 Výrobce:</span>
+                            <span class="result-value">${match.vyrobce || 'N/A'}</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">📝 Název:</span>
+                            <span class="result-value">${match.nazev || 'N/A'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+        
         function handleMasterFile(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -875,6 +1003,15 @@
                         alert('❌ Soubor je prázdný!');
                         return;
                     }
+                    
+                    // Fix Czech encoding in all string values
+                    jsonData.forEach(row => {
+                        Object.keys(row).forEach(key => {
+                            if (typeof row[key] === 'string') {
+                                row[key] = fixCzechEncoding(row[key]);
+                            }
+                        });
+                    });
                     
                     const firstRow = jsonData[0];
                     if (!firstRow['Typové označení'] && !firstRow['Typov\u0082© ozna\u00a3\u0082¾ en\u00a3­']) {
