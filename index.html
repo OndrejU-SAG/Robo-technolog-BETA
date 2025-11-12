@@ -248,6 +248,34 @@
             transform: translateX(30px);
         }
         
+        /* Enhanced toggle with labels */
+        .toggle-with-labels {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f0f2ff;
+            padding: 8px 15px;
+            border-radius: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .toggle-option-label {
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 15px;
+        }
+        
+        .toggle-option-label.active {
+            color: white;
+        }
+        
+        .toggle-option-label.inactive {
+            color: #999;
+        }
+        
         .search-result {
             background: white;
             border-radius: 10px;
@@ -292,6 +320,30 @@
             text-align: right;
         }
         
+        .google-search-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .google-search-btn:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(66, 133, 244, 0.4);
+        }
+        
         .processing {
             text-align: center;
             padding: 20px;
@@ -325,14 +377,16 @@
             
             <!-- Database Toggle -->
             <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 15px;">
-                <span style="font-weight: 600; color: #333;">Databáze:</span>
-                <div class="toggle-container">
-                    <input type="checkbox" id="databaseToggle" class="toggle-input" onchange="updateDatabase()">
-                    <label for="databaseToggle" class="toggle-label" id="databaseToggleLabel" style="background: #28a745;">
-                        <span class="toggle-button"></span>
-                    </label>
+                <div class="toggle-with-labels">
+                    <span class="toggle-option-label" id="ustiLabel" style="color: white; background: #28a745;">Ústí</span>
+                    <div class="toggle-container">
+                        <input type="checkbox" id="databaseToggle" class="toggle-input" onchange="updateDatabase()">
+                        <label for="databaseToggle" class="toggle-label" id="databaseToggleLabel" style="background: #28a745;">
+                            <span class="toggle-button"></span>
+                        </label>
+                    </div>
+                    <span class="toggle-option-label inactive" id="effiLabel">Effretikon</span>
                 </div>
-                <span id="databaseText" style="font-weight: 600; color: #28a745;">Ústí</span>
             </div>
             
             <div class="file-input-wrapper">
@@ -354,14 +408,16 @@
             
             <!-- Mode Toggle -->
             <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 15px;">
-                <span style="font-weight: 600; color: #333;">Režim:</span>
-                <div class="toggle-container">
-                    <input type="checkbox" id="searchModeToggle" class="toggle-input" onchange="updateSearchMode()">
-                    <label for="searchModeToggle" class="toggle-label">
-                        <span class="toggle-button"></span>
-                    </label>
+                <div class="toggle-with-labels">
+                    <span class="toggle-option-label" id="fuzzyLabel" style="color: white; background: #667eea;">Fuzzy Search</span>
+                    <div class="toggle-container">
+                        <input type="checkbox" id="searchModeToggle" class="toggle-input" onchange="updateSearchMode()">
+                        <label for="searchModeToggle" class="toggle-label">
+                            <span class="toggle-button"></span>
+                        </label>
+                    </div>
+                    <span class="toggle-option-label inactive" id="completionLabel">Doplňování</span>
                 </div>
-                <span id="searchModeText" style="font-weight: 600; color: #667eea;">Fuzzy Search</span>
             </div>
             
             <!-- Search Field Selector -->
@@ -507,18 +563,33 @@
         function fixCzechEncoding(text) {
             if (!text) return text;
             
-            // Common Czech character encoding fixes
-            const replacements = {
-                'Ã¡': 'á', 'Ã©': 'é', 'Ã­': 'í', 'Ã³': 'ó', 'Ãº': 'ú', 'Å¯': 'ů', 'Ã½': 'ý',
-                'Ä': 'č', 'Ä›': 'ě', 'Å¡': 'š', 'Å™': 'ř', 'Å¾': 'ž', 'Ä': 'ď', 'Å¥': 'ť', 'Å': 'ň',
-                'Ã': 'Á', 'Ã‰': 'É', 'Ã': 'Í', 'Ã"': 'Ó', 'Ãš': 'Ú', 'Å®': 'Ů', 'Ã': 'Ý',
-                'Ä': 'Č', 'Äš': 'Ě', 'Å ': 'Š', 'Å˜': 'Ř', 'Å½': 'Ž', 'ÄŽ': 'Ď', 'Å¤': 'Ť', 'Å‡': 'Ň',
-                'Ã¤': 'ä', 'Ã¶': 'ö', 'Ã¼': 'ü', 'Ã„': 'Ä', 'Ã–': 'Ö', 'Ãœ': 'Ü', 'ÃŸ': 'ß'
+            // Remove all diacritics - convert accented characters to base characters
+            const diacriticsMap = {
+                'á': 'a', 'Á': 'A', 'ä': 'a', 'Ä': 'A',
+                'č': 'c', 'Č': 'C', 'ć': 'c', 'Ć': 'C',
+                'ď': 'd', 'Ď': 'D',
+                'é': 'e', 'É': 'E', 'ě': 'e', 'Ě': 'E', 'ë': 'e', 'Ë': 'E',
+                'í': 'i', 'Í': 'I', 'ï': 'i', 'Ï': 'I',
+                'ň': 'n', 'Ň': 'N', 'ñ': 'n', 'Ñ': 'N',
+                'ó': 'o', 'Ó': 'O', 'ö': 'o', 'Ö': 'O', 'ô': 'o', 'Ô': 'O',
+                'ř': 'r', 'Ř': 'R',
+                'š': 's', 'Š': 'S',
+                'ť': 't', 'Ť': 'T',
+                'ú': 'u', 'Ú': 'U', 'ů': 'u', 'Ů': 'U', 'ü': 'u', 'Ü': 'U', 'ù': 'u', 'Ù': 'U',
+                'ý': 'y', 'Ý': 'Y', 'ÿ': 'y',
+                'ž': 'z', 'Ž': 'Z',
+                'ß': 'ss',
+                // Fix common encoding issues first
+                'Ã¡': 'a', 'Ã©': 'e', 'Ã­': 'i', 'Ã³': 'o', 'Ãº': 'u', 'Å¯': 'u', 'Ã½': 'y',
+                'Ä': 'c', 'Ä›': 'e', 'Å¡': 's', 'Å™': 'r', 'Å¾': 'z', 'Ä': 'd', 'Å¥': 't', 'Å': 'n',
+                'Ã': 'A', 'Ã‰': 'E', 'Ã': 'I', 'Ã"': 'O', 'Ãš': 'U', 'Å®': 'U', 'Ã': 'Y',
+                'Ä': 'C', 'Äš': 'E', 'Å ': 'S', 'Å˜': 'R', 'Å½': 'Z', 'ÄŽ': 'D', 'Å¤': 'T', 'Å‡': 'N',
+                'Ã¤': 'a', 'Ã¶': 'o', 'Ã¼': 'u', 'Ã„': 'A', 'Ã–': 'O', 'Ãœ': 'U', 'ÃŸ': 'ss'
             };
             
             let fixed = text;
-            for (let [wrong, correct] of Object.entries(replacements)) {
-                fixed = fixed.replace(new RegExp(wrong, 'g'), correct);
+            for (let [accented, base] of Object.entries(diacriticsMap)) {
+                fixed = fixed.replace(new RegExp(accented, 'g'), base);
             }
             
             return fixed;
@@ -569,7 +640,7 @@
         
         function loadPredefinedFromURL() {
             const csvUrl = currentDatabase === 'usti' ? PREDEFINED_CSV_URL : PREDEFINED_CSV_URL_EFFI;
-            const dbName = currentDatabase === 'usti' ? 'Ústí' : 'Effretikon';
+            const dbName = currentDatabase === 'usti' ? 'Ústí nad Labem' : 'Effretikon';
             
             document.getElementById('masterStatus').innerHTML = 
                 '<div class="status info">⏳ Načítám předpřipravená data ze souboru...</div>';
@@ -640,21 +711,28 @@
         
         function updateSearchMode() {
             const toggle = document.getElementById('searchModeToggle');
-            const modeText = document.getElementById('searchModeText');
             const modeDescription = document.getElementById('searchModeDescription');
             const searchInput = document.getElementById('searchInput');
+            const fuzzyLabel = document.getElementById('fuzzyLabel');
+            const completionLabel = document.getElementById('completionLabel');
             
             if (toggle.checked) {
                 searchMode = 'completion';
-                modeText.textContent = 'Doplňování';
-                modeText.style.color = '#28a745';
+                fuzzyLabel.className = 'toggle-option-label inactive';
+                completionLabel.className = 'toggle-option-label active';
+                completionLabel.style.color = 'white';
+                completionLabel.style.background = '#28a745';
+                fuzzyLabel.style.background = 'transparent';
                 modeDescription.innerHTML = '📝 Doplňuje typové označení, vrací všechny shody. Podporuje wildcard (*).';
                 modeDescription.style.background = '#d4edda';
                 updatePlaceholder();
             } else {
                 searchMode = 'fuzzy';
-                modeText.textContent = 'Fuzzy Search';
-                modeText.style.color = '#667eea';
+                fuzzyLabel.className = 'toggle-option-label active';
+                completionLabel.className = 'toggle-option-label inactive';
+                fuzzyLabel.style.color = 'white';
+                fuzzyLabel.style.background = '#667eea';
+                completionLabel.style.background = 'transparent';
                 modeDescription.innerHTML = '🎯 Hledá nejpodobnější shody, vrací top 3 výsledky';
                 modeDescription.style.background = '#f0f2ff';
                 updatePlaceholder();
@@ -979,6 +1057,30 @@
                 checkbox.checked = false;
                 selectedManufacturers.delete(checkbox.value);
             });
+        }
+        
+        function updateDatabase() {
+            const toggle = document.getElementById('databaseToggle');
+            const toggleLabel = document.getElementById('databaseToggleLabel');
+            const databaseText = document.getElementById('databaseText');
+            
+            if (toggle.checked) {
+                currentDatabase = 'effretikon';
+                databaseText.textContent = 'Effretikon';
+                databaseText.style.color = '#dc3545';
+                toggleLabel.classList.add('effretikon');
+            } else {
+                currentDatabase = 'usti';
+                databaseText.textContent = 'Ústí nad Labem';
+                databaseText.style.color = '#28a745';
+                toggleLabel.classList.remove('effretikon');
+            }
+            
+            // Clear current data and reload with new database
+            if (usingPredefinedData) {
+                masterData = null;
+                loadPredefinedData();
+            }
         }
         
         function displayCompletionResults(matches, searchTerm) {
