@@ -289,6 +289,10 @@
             font-weight: bold;
             margin-bottom: 15px;
             color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
         }
         
         .result-item {
@@ -296,6 +300,7 @@
             border-radius: 8px;
             margin-bottom: 10px;
             border: 2px solid #ddd;
+            position: relative;
         }
         
         .result-item.green { background: #90EE90; border-color: #5cb85c; }
@@ -330,12 +335,10 @@
             cursor: pointer;
             font-weight: 500;
             font-size: 0.9em;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
             transition: all 0.3s;
-            width: 100%;
-            justify-content: center;
         }
         
         .google-search-btn:hover {
@@ -533,16 +536,12 @@
         let searchField = 'typ'; // 'typ', 'vyrobce', or 'nazev'
         let lastSearchResults = []; // Store last search results for filtering
         let selectedManufacturers = new Set(); // Store selected manufacturers
-        
-    let currentDatabase = 'usti';
-    
-    function switchDatabase() {
-        const toggle = document.getElementById('databaseToggle');
-        currentDatabase = toggle.checked ? 'effretikon' : 'usti';
-        loadData();
-    }
-     // 'usti' or 'effretikon'
-        
+        let currentDatabase = 'usti'; // 'usti' or 'effretikon'
+
+        function escapeAttr(s) {
+            return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
         function parseCsvWithSemicolon(csvText) {
             const lines = csvText.trim().split('\n');
             if (lines.length < 2) return [];
@@ -586,13 +585,7 @@
                 'ú': 'u', 'Ú': 'U', 'ů': 'u', 'Ů': 'U', 'ü': 'u', 'Ü': 'U', 'ù': 'u', 'Ù': 'U',
                 'ý': 'y', 'Ý': 'Y', 'ÿ': 'y',
                 'ž': 'z', 'Ž': 'Z',
-                'ß': 'ss',
-                // Fix common encoding issues first
-                'Ã¡': 'a', 'Ã©': 'e', 'Ã­': 'i', 'Ã³': 'o', 'Ãº': 'u', 'Å¯': 'u', 'Ã½': 'y',
-                'Ä': 'c', 'Ä›': 'e', 'Å¡': 's', 'Å™': 'r', 'Å¾': 'z', 'Ä': 'd', 'Å¥': 't', 'Å': 'n',
-                'Ã': 'A', 'Ã‰': 'E', 'Ã': 'I', 'Ã"': 'O', 'Ãš': 'U', 'Å®': 'U', 'Ã': 'Y',
-                'Ä': 'C', 'Äš': 'E', 'Å ': 'S', 'Å˜': 'R', 'Å½': 'Z', 'ÄŽ': 'D', 'Å¤': 'T', 'Å‡': 'N',
-                'Ã¤': 'a', 'Ã¶': 'o', 'Ã¼': 'u', 'Ã„': 'A', 'Ã–': 'O', 'Ãœ': 'U', 'ÃŸ': 'ss'
+                'ß': 'ss'
             };
             
             let fixed = text;
@@ -635,9 +628,9 @@
                     '<div class="status success">✅ Používají se předpřipravená data -bez výběhů a výmazů  (' + masterData.length + ' záznamů)</div>';
                 document.getElementById('clearMasterBtn').style.display = 'block';
                 
+                checkReadyToProcess();
+                updateSearchButton();
                 console.log('Předpřipravená data úspěšně načtena:', masterData.length, 'záznamů');
-                console.log('První 3 záznamy:', masterData.slice(0, 3));
-                console.log('Názvy sloupců:', Object.keys(masterData[0]));
                 return true;
             } catch (error) {
                 console.error('Chyba při načítání předpřipravených dat:', error);
@@ -683,8 +676,6 @@
                     checkReadyToProcess();
                     updateSearchButton();
                     console.log('Předpřipravená data úspěšně načtena ze souboru:', masterData.length, 'záznamů');
-                    console.log('První 3 záznamy:', masterData.slice(0, 3));
-                    console.log('Názvy sloupců:', Object.keys(masterData[0]));
                 })
                 .catch(error => {
                     console.error('Chyba při načítání ze souboru:', error);
@@ -873,6 +864,18 @@
             return matches;
         }
         
+        function openGoogleSearch(query) {
+            const q = encodeURIComponent(String(query || '').trim() || document.getElementById('searchInput').value.trim());
+            if (!q) return;
+            const url = 'https://www.google.com/search?q=' + q;
+            window.open(url, '_blank');
+        }
+
+        function openGoogleSearchFromEl(el) {
+            const q = el && el.dataset && el.dataset.query ? el.dataset.query : document.getElementById('searchInput').value.trim();
+            openGoogleSearch(q);
+        }
+        
         function searchSingle() {
             const searchInput = document.getElementById('searchInput');
             const searchTerm = searchInput.value.trim();
@@ -896,17 +899,8 @@
                 lastSearchResults = matches; // Store for filtering
                 
                 if (matches.length === 0) {
-                    resultsDiv.innerHTML = `
-                        <div class="search-result">
-                            <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
-                            <div class="result-item red">
-                                <div class="result-row">
-                                    <span class="result-label">❌ Nenalezena žádná shoda</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
                     document.getElementById('manufacturerFilter').style.display = 'none';
+                    renderNoResults(searchTerm);
                     return;
                 }
                 
@@ -922,22 +916,13 @@
                 const matchResult = findMatch(searchTerm);
                 
                 if (matchResult.matches.length === 0) {
-                    resultsDiv.innerHTML = `
-                        <div class="search-result">
-                            <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
-                            <div class="result-item red">
-                                <div class="result-row">
-                                    <span class="result-label">❌ Nenalezena žádná shoda</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+                    renderNoResults(searchTerm);
                     return;
                 }
                 
                 let html = `
                     <div class="search-result">
-                        <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
+                        <div class="result-header">🔍 Výsledky vyhledávání: "${escapeAttr(searchTerm)}"</div>
                 `;
                 
                 matchResult.matches.forEach((match, index) => {
@@ -961,19 +946,22 @@
                             </div>
                             <div class="result-row">
                                 <span class="result-label">📦 Artikl:</span>
-                                <span class="result-value"><strong>${match.artikl || 'N/A'}</strong></span>
+                                <span class="result-value"><strong>${escapeAttr(match.artikl || 'N/A')}</strong></span>
                             </div>
                             <div class="result-row">
                                 <span class="result-label">🏷️ Typové označení:</span>
-                                <span class="result-value">${match.foundTyp || 'N/A'}</span>
+                                <span class="result-value">${escapeAttr(match.foundTyp || 'N/A')}</span>
                             </div>
                             <div class="result-row">
                                 <span class="result-label">🏭 Výrobce:</span>
-                                <span class="result-value">${match.vyrobce || 'N/A'}</span>
+                                <span class="result-value">${escapeAttr(match.vyrobce || 'N/A')}</span>
                             </div>
                             <div class="result-row">
                                 <span class="result-label">📝 Název:</span>
-                                <span class="result-value">${match.nazev || 'N/A'}</span>
+                                <span class="result-value">${escapeAttr(match.nazev || 'N/A')}</span>
+                            </div>
+                            <div style="margin-top:8px; display:flex; gap:8px;">
+                                <button class="google-search-btn" data-query="${escapeAttr(match.foundTyp || '')}" onclick="openGoogleSearchFromEl(this)">🔍 Hledat typové označení na Google</button>
                             </div>
                         </div>
                     `;
@@ -982,6 +970,37 @@
                 html += '</div>';
                 resultsDiv.innerHTML = html;
             }
+        }
+        
+        function renderNoResults(searchTerm) {
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = '';
+            const container = document.createElement('div');
+            container.className = 'search-result';
+            const header = document.createElement('div');
+            header.className = 'result-header';
+            header.textContent = `🔍 Hledání: "${searchTerm}"`;
+            
+            const card = document.createElement('div');
+            card.className = 'result-item red';
+            
+            const row = document.createElement('div');
+            row.className = 'result-row';
+            const label = document.createElement('span');
+            label.className = 'result-label';
+            label.textContent = '❌ Nenalezena žádná shoda';
+            row.appendChild(label);
+            card.appendChild(row);
+            
+            const btn = document.createElement('button');
+            btn.className = 'google-search-btn';
+            btn.textContent = '🔍 Hledat pomocí Google';
+            btn.addEventListener('click', () => openGoogleSearch(searchTerm));
+            card.appendChild(btn);
+            
+            container.appendChild(header);
+            container.appendChild(card);
+            resultsDiv.appendChild(container);
         }
         
         function showManufacturerFilter(matches) {
@@ -1070,21 +1089,28 @@
         function updateDatabase() {
             const toggle = document.getElementById('databaseToggle');
             const toggleLabel = document.getElementById('databaseToggleLabel');
-            const databaseText = document.getElementById('databaseText');
             
             if (toggle.checked) {
                 currentDatabase = 'effretikon';
-                databaseText.textContent = 'Effretikon';
-                databaseText.style.color = '#dc3545';
+                // visual update
                 toggleLabel.classList.add('effretikon');
+                document.getElementById('ustiLabel').style.background = 'transparent';
+                document.getElementById('ustiLabel').style.color = '#999';
+                document.getElementById('effiLabel').className = 'toggle-option-label active';
+                document.getElementById('effiLabel').style.background = '#dc3545';
+                document.getElementById('effiLabel').style.color = 'white';
             } else {
                 currentDatabase = 'usti';
-                databaseText.textContent = 'Ústí nad Labem';
-                databaseText.style.color = '#28a745';
                 toggleLabel.classList.remove('effretikon');
+                document.getElementById('ustiLabel').className = 'toggle-option-label active';
+                document.getElementById('ustiLabel').style.background = '#28a745';
+                document.getElementById('ustiLabel').style.color = 'white';
+                document.getElementById('effiLabel').className = 'toggle-option-label inactive';
+                document.getElementById('effiLabel').style.background = 'transparent';
+                document.getElementById('effiLabel').style.color = '#999';
             }
             
-            // Clear current data and reload with new database
+            // Clear current data and reload with new database if using predefined data
             if (usingPredefinedData) {
                 masterData = null;
                 loadPredefinedData();
@@ -1095,22 +1121,35 @@
             const resultsDiv = document.getElementById('searchResults');
             
             if (matches.length === 0) {
-                resultsDiv.innerHTML = `
-                    <div class="search-result">
-                        <div class="result-header">🔍 Výsledky doplňování: "${searchTerm}" (0 výsledků po filtrování)</div>
-                        <div class="result-item red">
-                            <div class="result-row">
-                                <span class="result-label">❌ Žádné výsledky pro vybrané výrobce</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                resultsDiv.innerHTML = '';
+                const container = document.createElement('div');
+                container.className = 'search-result';
+                const header = document.createElement('div');
+                header.className = 'result-header';
+                header.textContent = `🔍 Výsledky doplňování: "${searchTerm}" (0 výsledků)`;
+                const card = document.createElement('div');
+                card.className = 'result-item red';
+                const row = document.createElement('div');
+                row.className = 'result-row';
+                const label = document.createElement('span');
+                label.className = 'result-label';
+                label.textContent = '❌ Žádné výsledky pro vybrané výrobce';
+                row.appendChild(label);
+                card.appendChild(row);
+                const btn = document.createElement('button');
+                btn.className = 'google-search-btn';
+                btn.textContent = '🔍 Hledat pomocí Google';
+                btn.addEventListener('click', () => openGoogleSearch(searchTerm));
+                card.appendChild(btn);
+                container.appendChild(header);
+                container.appendChild(card);
+                resultsDiv.appendChild(container);
                 return;
             }
             
             let html = `
                 <div class="search-result">
-                    <div class="result-header">🔍 Výsledky doplňování: "${searchTerm}" (${matches.length} ${matches.length === 1 ? 'výsledek' : matches.length < 5 ? 'výsledky' : 'výsledků'})</div>
+                    <div class="result-header">🔍 Výsledky doplňování: "${escapeAttr(searchTerm)}" (${matches.length} ${matches.length === 1 ? 'výsledek' : matches.length < 5 ? 'výsledky' : 'výsledků'})</div>
             `;
             
             matches.forEach((match, index) => {
@@ -1121,19 +1160,22 @@
                         </div>
                         <div class="result-row">
                             <span class="result-label">📦 Artikl:</span>
-                            <span class="result-value"><strong>${match.artikl || 'N/A'}</strong></span>
+                            <span class="result-value"><strong>${escapeAttr(match.artikl || 'N/A')}</strong></span>
                         </div>
                         <div class="result-row">
                             <span class="result-label">🏷️ Typové označení:</span>
-                            <span class="result-value">${match.foundTyp || 'N/A'}</span>
+                            <span class="result-value">${escapeAttr(match.foundTyp || 'N/A')}</span>
                         </div>
                         <div class="result-row">
                             <span class="result-label">🏭 Výrobce:</span>
-                            <span class="result-value">${match.vyrobce || 'N/A'}</span>
+                            <span class="result-value">${escapeAttr(match.vyrobce || 'N/A')}</span>
                         </div>
                         <div class="result-row">
                             <span class="result-label">📝 Název:</span>
-                            <span class="result-value">${match.nazev || 'N/A'}</span>
+                            <span class="result-value">${escapeAttr(match.nazev || 'N/A')}</span>
+                        </div>
+                        <div style="margin-top:8px; display:flex; gap:8px;">
+                            <button class="google-search-btn" data-query="${escapeAttr(match.foundTyp || '')}" onclick="openGoogleSearchFromEl(this)">🔍 Hledat typové označení na Google</button>
                         </div>
                     </div>
                 `;
