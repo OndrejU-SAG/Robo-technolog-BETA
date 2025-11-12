@@ -533,7 +533,15 @@
         let searchField = 'typ'; // 'typ', 'vyrobce', or 'nazev'
         let lastSearchResults = []; // Store last search results for filtering
         let selectedManufacturers = new Set(); // Store selected manufacturers
-        let currentDatabase = 'usti'; // 'usti' or 'effretikon'
+        
+    let currentDatabase = 'usti';
+    
+    function switchDatabase() {
+        const toggle = document.getElementById('databaseToggle');
+        currentDatabase = toggle.checked ? 'effretikon' : 'usti';
+        loadData();
+    }
+     // 'usti' or 'effretikon'
         
         function parseCsvWithSemicolon(csvText) {
             const lines = csvText.trim().split('\n');
