@@ -11,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -21,7 +21,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .container {
             background: white;
             border-radius: 20px;
@@ -30,21 +30,21 @@
             max-width: 800px;
             width: 100%;
         }
-        
+
         h1 {
             color: #667eea;
             margin-bottom: 10px;
             font-size: 2.5em;
             text-align: center;
         }
-        
+
         .subtitle {
             text-align: center;
             color: #666;
             margin-bottom: 30px;
             font-size: 1.1em;
         }
-        
+
         .section {
             margin-bottom: 30px;
             padding: 25px;
@@ -53,30 +53,30 @@
             border: 2px dashed #ddd;
             transition: all 0.3s;
         }
-        
+
         .section:hover {
             border-color: #667eea;
             background: #f0f2ff;
         }
-        
+
         .section h2 {
             color: #333;
             margin-bottom: 15px;
             font-size: 1.3em;
         }
-        
+
         .file-input-wrapper {
             position: relative;
             overflow: hidden;
             display: inline-block;
             width: 100%;
         }
-        
+
         .file-input-wrapper input[type=file] {
             position: absolute;
             left: -9999px;
         }
-        
+
         .file-input-label {
             display: block;
             padding: 15px 25px;
@@ -89,45 +89,45 @@
             transition: all 0.3s;
             font-size: 1.05em;
         }
-        
+
         .file-input-label:hover {
             background: #5568d3;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-        
+
         .file-name {
             margin-top: 10px;
             color: #666;
             font-size: 0.9em;
             text-align: center;
         }
-        
+
         .status {
             margin-top: 15px;
             padding: 12px;
             border-radius: 8px;
             font-weight: 500;
         }
-        
+
         .status.success {
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-        
+
         .status.info {
             background: #d1ecf1;
             color: #0c5460;
             border: 1px solid #bee5eb;
         }
-        
+
         .status.warning {
             background: #fff3cd;
             color: #856404;
             border: 1px solid #ffeaa7;
         }
-        
+
         .btn {
             padding: 15px 30px;
             border: none;
@@ -139,35 +139,35 @@
             width: 100%;
             margin-top: 10px;
         }
-        
+
         .btn-primary {
             background: #28a745;
             color: white;
         }
-        
+
         .btn-primary:hover:not(:disabled) {
             background: #218838;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
         }
-        
+
         .btn-danger {
             background: #dc3545;
             color: white;
         }
-        
+
         .btn-danger:hover {
             background: #c82333;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
         }
-        
+
         .btn:disabled {
             background: #ccc;
             cursor: not-allowed;
             transform: none;
         }
-        
+
         .legend {
             margin-top: 20px;
             padding: 20px;
@@ -175,20 +175,20 @@
             border-radius: 10px;
             border: 1px solid #ddd;
         }
-        
+
         .legend h3 {
             margin-bottom: 15px;
             color: #333;
             font-size: 1.1em;
         }
-        
+
         .legend-item {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
             font-size: 0.95em;
         }
-        
+
         .legend-color {
             width: 30px;
             height: 20px;
@@ -196,22 +196,22 @@
             margin-right: 10px;
             border: 1px solid #ddd;
         }
-        
+
         .color-green { background: #90EE90; }
         .color-yellow { background: #FFFF00; }
         .color-orange { background: #FFA500; }
         .color-red { background: #FF6B6B; }
-        
+
         /* Material You Toggle Switch */
         .toggle-container {
             position: relative;
             display: inline-block;
         }
-        
+
         .toggle-input {
             display: none;
         }
-        
+
         .toggle-label {
             display: block;
             width: 60px;
@@ -223,7 +223,7 @@
             transition: background 0.3s;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        
+
         .toggle-button {
             position: absolute;
             top: 3px;
@@ -235,19 +235,19 @@
             transition: transform 0.3s;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        
+
         .toggle-input:checked + .toggle-label {
             background: #28a745;
         }
-        
+
         .toggle-label.effretikon {
             background: #dc3545 !important;
         }
-        
+
         .toggle-input:checked + .toggle-label .toggle-button {
             transform: translateX(30px);
         }
-        
+
         /* Enhanced toggle with labels */
         .toggle-with-labels {
             display: flex;
@@ -258,7 +258,7 @@
             border-radius: 25px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
+
         .toggle-option-label {
             font-weight: 600;
             font-size: 0.95em;
@@ -267,15 +267,15 @@
             padding: 5px 10px;
             border-radius: 15px;
         }
-        
+
         .toggle-option-label.active {
             color: white;
         }
-        
+
         .toggle-option-label.inactive {
             color: #999;
         }
-        
+
         .search-result {
             background: white;
             border-radius: 10px;
@@ -283,7 +283,7 @@
             margin-bottom: 15px;
             border: 2px solid #ddd;
         }
-        
+
         .result-header {
             font-size: 1.2em;
             font-weight: bold;
@@ -294,7 +294,7 @@
             align-items: center;
             gap: 10px;
         }
-        
+
         .result-item {
             padding: 15px;
             border-radius: 8px;
@@ -302,29 +302,29 @@
             border: 2px solid #ddd;
             position: relative;
         }
-        
+
         .result-item.green { background: #90EE90; border-color: #5cb85c; }
         .result-item.yellow { background: #FFFF00; border-color: #f0ad4e; }
         .result-item.orange { background: #FFA500; border-color: #ff8c00; }
         .result-item.red { background: #FF6B6B; border-color: #d9534f; }
-        
+
         .result-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
             font-size: 1em;
         }
-        
+
         .result-label {
             font-weight: 600;
             color: #333;
         }
-        
+
         .result-value {
             color: #555;
             text-align: right;
         }
-        
+
         .google-search-btn {
             margin-top: 10px;
             padding: 8px 16px;
@@ -340,19 +340,32 @@
             gap: 8px;
             transition: all 0.3s;
         }
-        
+
         .google-search-btn:hover {
             background: #3367d6;
             transform: translateY(-2px);
             box-shadow: 0 3px 10px rgba(66, 133, 244, 0.4);
         }
-        
+
+        .google-search-icon {
+            cursor: pointer;
+            color: #4285f4;
+            font-size: 1.2em;
+            margin-left: 8px;
+            transition: all 0.3s;
+        }
+
+        .google-search-icon:hover {
+            color: #3367d6;
+            transform: scale(1.2);
+        }
+
         .processing {
             text-align: center;
             padding: 20px;
             display: none;
         }
-        
+
         .spinner {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #667eea;
@@ -362,7 +375,7 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 15px;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -373,11 +386,11 @@
     <div class="container">
         <h1>🤖 Robo Technolog</h1>
         <p class="subtitle">V2.4 pro automatické doplňování artiklových čísel</p>
-        
+
         <!-- Master File Section -->
         <div class="section">
             <h2>📚 Vědomostní základna (Master XLSX)</h2>
-            
+
             <!-- Database Toggle -->
             <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 15px;">
                 <div class="toggle-with-labels">
@@ -391,7 +404,7 @@
                     <span class="toggle-option-label inactive" id="effiLabel">Effretikon</span>
                 </div>
             </div>
-            
+
             <div class="file-input-wrapper">
                 <input type="file" id="masterFile" accept=".xlsx,.xls" onchange="handleMasterFile(event)">
                 <label for="masterFile" class="file-input-label">
@@ -404,11 +417,11 @@
                 🗑️ Smazat uloženou vědomostní základnu
             </button>
         </div>
-        
+
         <!-- Quick Search Section -->
         <div class="section">
             <h2>🔍 Rychlé vyhledávání</h2>
-            
+
             <!-- Mode Toggle -->
             <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 15px;">
                 <div class="toggle-with-labels">
@@ -422,7 +435,7 @@
                     <span class="toggle-option-label inactive" id="completionLabel">Doplňování</span>
                 </div>
             </div>
-            
+
             <!-- Search Field Selector -->
             <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
                 <span style="font-weight: 600; color: #333;">Hledat v:</span>
@@ -439,40 +452,40 @@
                     <span style="font-weight: 500;">Název</span>
                 </label>
             </div>
-            
+
             <div id="searchModeDescription" style="text-align: center; margin-bottom: 15px; padding: 10px; background: #f0f2ff; border-radius: 8px; font-size: 0.95em; color: #555;">
                 🎯 Hledá nejpodobnější shody, vrací top 3 výsledky
             </div>
-            
-            <input type="text" id="searchInput" placeholder="Zadejte typové označení k vyhledání..." 
+
+            <input type="text" id="searchInput" placeholder="Zadejte typové označení k vyhledání..."
                    style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 1.05em; margin-bottom: 10px;"
                    onkeypress="if(event.key==='Enter') searchSingle()">
             <button class="btn btn-primary" id="searchBtn" onclick="searchSingle()" disabled>
                 🔎 Vyhledat artikl
             </button>
-            
+
             <!-- Manufacturer Filter (only visible in completion mode after search) -->
             <div id="manufacturerFilter" style="display:none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 2px solid #ddd;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                     <div style="font-weight: 600; color: #333;">🏭 Filtrovat podle výrobců:</div>
                     <div style="display: flex; gap: 10px;">
-                        <button onclick="selectAllManufacturers()" style="padding: 5px 15px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='#5568d3'" onmouseout="this.style.background='#667eea'">
+                        <button onclick="selectAllManufacturers()" style="padding: 5px 10px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='#5568d3'" onmouseout="this.style.background='#667eea'">
                             ✓ Vše
                         </button>
-                        <button onclick="deselectAllManufacturers()" style="padding: 5px 15px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='#c82333'" onmouseout="this.style.background='#dc3545'">
+                        <button onclick="deselectAllManufacturers()" style="padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='#c82333'" onmouseout="this.style.background='#dc3545'">
                             ✗ Nic
                         </button>
                     </div>
                 </div>
-                <div id="manufacturerCheckboxes" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+                <div id="manufacturerCheckboxes" style="display: flex; flex-wrap: wrap; gap: 5px;"></div> <!-- Reduced gap -->
                 <button class="btn btn-primary" onclick="applyManufacturerFilter()" style="margin-top: 10px; padding: 10px 20px; font-size: 0.95em;">
                     ✓ Použít filtr
                 </button>
             </div>
-            
+
             <div id="searchResults" style="display:none; margin-top: 20px;"></div>
         </div>
-        
+
         <!-- User File Section -->
         <div class="section">
             <h2>📄 Uživatelský soubor (XLSX k doplnění)</h2>
@@ -487,18 +500,18 @@
                 ⚙️ Zpracovat a doplnit artikly
             </button>
         </div>
-        
+
         <!-- Processing Animation -->
         <div class="processing" id="processingDiv">
             <div class="spinner"></div>
             <p>Zpracovávám data...</p>
         </div>
-        
+
         <!-- Results Section -->
         <div id="resultsSection" style="display:none;">
             <div class="status info" id="resultsInfo"></div>
         </div>
-        
+
         <!-- Legend -->
         <div class="legend">
             <h3>📊 Legenda označení:</h3>
@@ -528,7 +541,7 @@
         const PREDEFINED_CSV = '';
         const PREDEFINED_CSV_URL = 'master-data.csv';
         const PREDEFINED_CSV_URL_EFFI = 'master-data-effi.csv';
-        
+
         let masterData = null;
         let userData = null;
         let usingPredefinedData = false;
@@ -545,14 +558,14 @@
         function parseCsvWithSemicolon(csvText) {
             const lines = csvText.trim().split('\n');
             if (lines.length < 2) return [];
-            
+
             const headers = lines[0].split(';').map(h => h.trim());
             const data = [];
-            
+
             for (let i = 1; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (!line) continue;
-                
+
                 const values = line.split(';');
                 const row = {};
                 headers.forEach((header, index) => {
@@ -560,16 +573,16 @@
                     // Fix encoding issues with Czech characters
                     row[header] = fixCzechEncoding(value);
                 });
-                
+
                 data.push(row);
             }
-            
+
             return data;
         }
-        
+
         function fixCzechEncoding(text) {
             if (!text) return text;
-            
+
             // Remove all diacritics - convert accented characters to base characters
             const diacriticsMap = {
                 'á': 'a', 'Á': 'A', 'ä': 'a', 'Ä': 'A',
@@ -587,47 +600,47 @@
                 'ž': 'z', 'Ž': 'Z',
                 'ß': 'ss'
             };
-            
+
             let fixed = text;
             for (let [accented, base] of Object.entries(diacriticsMap)) {
                 fixed = fixed.replace(new RegExp(accented, 'g'), base);
             }
-            
+
             return fixed;
         }
-        
+
         function loadPredefinedData() {
             if (PREDEFINED_CSV_URL && PREDEFINED_CSV_URL.trim() !== '') {
                 loadPredefinedFromURL();
                 return true;
             }
-            
+
             if (!PREDEFINED_CSV || PREDEFINED_CSV.trim() === '') {
                 return false;
             }
-            
+
             try {
                 const data = parseCsvWithSemicolon(PREDEFINED_CSV);
-                
+
                 if (data.length === 0) {
                     console.warn('Předpřipravená data jsou prázdná');
                     return false;
                 }
-                
+
                 const firstRow = data[0];
                 if (!firstRow.hasOwnProperty('Typové označení') && !firstRow.hasOwnProperty('Artikl')) {
                     console.error('Předpřipravená data nemají požadované sloupce (Typové označení, Artikl)');
                     return false;
                 }
-                
+
                 masterData = data;
                 usingPredefinedData = true;
-                
+
                 document.getElementById('masterFileName').textContent = '📄 Předpřipravená data (neobsahují artikly ve výběhu a označené k výmazu)';
-                document.getElementById('masterStatus').innerHTML = 
+                document.getElementById('masterStatus').innerHTML =
                     '<div class="status success">✅ Používají se předpřipravená data -bez výběhů a výmazů  (' + masterData.length + ' záznamů)</div>';
                 document.getElementById('clearMasterBtn').style.display = 'block';
-                
+
                 checkReadyToProcess();
                 updateSearchButton();
                 console.log('Předpřipravená data úspěšně načtena:', masterData.length, 'záznamů');
@@ -638,14 +651,14 @@
                 return false;
             }
         }
-        
+
         function loadPredefinedFromURL() {
             const csvUrl = currentDatabase === 'usti' ? PREDEFINED_CSV_URL : PREDEFINED_CSV_URL_EFFI;
-            const dbName = currentDatabase === 'usti' ? 'Ústí nad Labem' : 'Effretikon';
-            
-            document.getElementById('masterStatus').innerHTML = 
+            const dbName = currentDatabase === 'usti' ? 'Ústí' : 'Effretikon';
+
+            document.getElementById('masterStatus').innerHTML =
                 '<div class="status info">⏳ Načítám předpřipravená data ze souboru...</div>';
-            
+
             fetch(csvUrl)
                 .then(response => {
                     if (!response.ok) {
@@ -655,66 +668,66 @@
                 })
                 .then(csvText => {
                     const data = parseCsvWithSemicolon(csvText);
-                    
+
                     if (data.length === 0) {
                         throw new Error('Soubor je prázdný');
                     }
-                    
+
                     const firstRow = data[0];
                     if (!firstRow.hasOwnProperty('Typové označení') && !firstRow.hasOwnProperty('Artikl')) {
                         throw new Error('Soubor nemá požadované sloupce (Typové označení, Artikl)');
                     }
-                    
+
                     masterData = data;
                     usingPredefinedData = true;
-                    
+
                     document.getElementById('masterFileName').textContent = `📄 Předpřipravená data (${dbName})`;
-                    document.getElementById('masterStatus').innerHTML = 
+                    document.getElementById('masterStatus').innerHTML =
                         '<div class="status success">✅ Používají se předpřipravená data (' + masterData.length + ' záznamů)</div>';
                     document.getElementById('clearMasterBtn').style.display = 'block';
-                    
+
                     checkReadyToProcess();
                     updateSearchButton();
                     console.log('Předpřipravená data úspěšně načtena ze souboru:', masterData.length, 'záznamů');
                 })
                 .catch(error => {
                     console.error('Chyba při načítání ze souboru:', error);
-                    document.getElementById('masterStatus').innerHTML = 
+                    document.getElementById('masterStatus').innerHTML =
                         '<div class="status warning">⚠️ Chyba při načítání: ' + error.message + '</div>';
                 });
         }
-        
+
         window.addEventListener('load', function() {
             loadPredefinedData();
             checkReadyToProcess();
             updateSearchButton();
         });
-        
+
         function updateSearchButton() {
             const searchBtn = document.getElementById('searchBtn');
             const searchInput = document.getElementById('searchInput');
-            
+
             if (masterData && searchInput.value.trim()) {
                 searchBtn.disabled = false;
             } else {
                 searchBtn.disabled = true;
             }
         }
-        
+
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
                 searchInput.addEventListener('input', updateSearchButton);
             }
         });
-        
+
         function updateSearchMode() {
             const toggle = document.getElementById('searchModeToggle');
             const modeDescription = document.getElementById('searchModeDescription');
             const searchInput = document.getElementById('searchInput');
             const fuzzyLabel = document.getElementById('fuzzyLabel');
             const completionLabel = document.getElementById('completionLabel');
-            
+
             if (toggle.checked) {
                 searchMode = 'completion';
                 fuzzyLabel.className = 'toggle-option-label inactive';
@@ -737,7 +750,7 @@
                 updatePlaceholder();
             }
         }
-        
+
         function updateSearchField() {
             const selected = document.querySelector('input[name="searchField"]:checked');
             if (selected) {
@@ -745,11 +758,11 @@
                 updatePlaceholder();
             }
         }
-        
+
         function updatePlaceholder() {
             const searchInput = document.getElementById('searchInput');
             let fieldName = '';
-            
+
             switch(searchField) {
                 case 'typ':
                     fieldName = 'typové označení';
@@ -761,14 +774,14 @@
                     fieldName = 'název';
                     break;
             }
-            
+
             if (searchMode === 'completion') {
                 searchInput.placeholder = `Např: ${fieldName === 'typové označení' ? 'VX, *VX*50*, 2500.*' : fieldName === 'výrobce' ? 'WAGO, *SCHALTAG*' : 'Kanal*, *SROUB*'}`;
             } else {
                 searchInput.placeholder = `Zadejte ${fieldName} k vyhledání...`;
             }
         }
-        
+
         function wildcardToRegex(pattern) {
             // Escape special regex characters except *
             const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
@@ -776,37 +789,37 @@
             const regex = escaped.replace(/\*/g, '.*');
             return new RegExp(regex, 'i');
         }
-        
+
         function searchCompletion(searchTerm) {
             if (!masterData) {
                 return [];
             }
-            
+
             const firstRow = masterData[0];
             const columns = Object.keys(firstRow);
-            
+
             // Get column names
-            const typColumn = columns.find(col => 
-                col.toLowerCase().includes('typ') || 
+            const typColumn = columns.find(col =>
+                col.toLowerCase().includes('typ') ||
                 col.toLowerCase().includes('ozna')
             ) || columns[0];
-            
-            const artiklColumn = columns.find(col => 
+
+            const artiklColumn = columns.find(col =>
                 col.toLowerCase().includes('artikl')
             ) || columns[1];
-            
-            const vyrobceColumn = columns.find(col => 
+
+            const vyrobceColumn = columns.find(col =>
                 col.toLowerCase().includes('výrobce') ||
                 col.toLowerCase().includes('vyrobce')
             ) || columns[2];
-            
-            const nazevColumn = columns.find(col => 
+
+            const nazevColumn = columns.find(col =>
                 col.toLowerCase().includes('název') ||
                 col.toLowerCase().includes('nazev')
             ) || columns[3];
-            
+
             let matches = [];
-            
+
             // Determine which column to search in
             let searchColumn;
             switch(searchField) {
@@ -821,16 +834,16 @@
                     searchColumn = typColumn;
                     break;
             }
-            
+
             // Check if wildcard is used
             const hasWildcard = searchTerm.includes('*');
-            
+
             if (hasWildcard) {
                 const regex = wildcardToRegex(searchTerm);
-                
+
                 for (let row of masterData) {
                     const searchValue = String(row[searchColumn] || '');
-                    
+
                     if (regex.test(searchValue)) {
                         matches.push({
                             artikl: row[artiklColumn],
@@ -844,11 +857,11 @@
             } else {
                 // Simple contains search
                 const searchUpper = searchTerm.toUpperCase();
-                
+
                 for (let row of masterData) {
                     const searchValue = String(row[searchColumn] || '');
                     const searchValueUpper = searchValue.toUpperCase();
-                    
+
                     if (searchValueUpper.includes(searchUpper)) {
                         matches.push({
                             artikl: row[artiklColumn],
@@ -860,14 +873,14 @@
                     }
                 }
             }
-            
+
             return matches;
         }
-        
+
         function openGoogleSearch(query) {
             const q = encodeURIComponent(String(query || '').trim() || document.getElementById('searchInput').value.trim());
             if (!q) return;
-            const url = 'https://www.google.com/search?q=' + q;
+            const url = 'https://aistudio.google.com/app?prompt=' + q;
             window.open(url, '_blank');
         }
 
@@ -875,69 +888,69 @@
             const q = el && el.dataset && el.dataset.query ? el.dataset.query : document.getElementById('searchInput').value.trim();
             openGoogleSearch(q);
         }
-        
+
         function searchSingle() {
             const searchInput = document.getElementById('searchInput');
             const searchTerm = searchInput.value.trim();
-            
+
             if (!searchTerm) {
                 alert('⚠️ Zadejte typové označení k vyhledání');
                 return;
             }
-            
+
             if (!masterData) {
                 alert('⚠️ Nejprve nahrajte master soubor');
                 return;
             }
-            
+
             const resultsDiv = document.getElementById('searchResults');
             resultsDiv.style.display = 'block';
-            
+
             if (searchMode === 'completion') {
                 // Completion mode
                 const matches = searchCompletion(searchTerm);
                 lastSearchResults = matches; // Store for filtering
-                
+
                 if (matches.length === 0) {
                     document.getElementById('manufacturerFilter').style.display = 'none';
                     renderNoResults(searchTerm);
                     return;
                 }
-                
+
                 // Show manufacturer filter
                 showManufacturerFilter(matches);
-                
+
                 // Display all results initially
                 displayCompletionResults(matches, searchTerm);
-                
+
             } else {
                 // Fuzzy search mode (original)
                 document.getElementById('manufacturerFilter').style.display = 'none';
                 const matchResult = findMatch(searchTerm);
-                
+
                 if (matchResult.matches.length === 0) {
                     renderNoResults(searchTerm);
                     return;
                 }
-                
+
                 let html = `
                     <div class="search-result">
                         <div class="result-header">🔍 Výsledky vyhledávání: "${escapeAttr(searchTerm)}"</div>
                 `;
-                
+
                 matchResult.matches.forEach((match, index) => {
                     let colorClass;
                     if (match.score === 100) colorClass = 'green';
                     else if (match.score >= 95) colorClass = 'yellow';
                     else if (match.score >= 80) colorClass = 'orange';
                     else colorClass = 'red';
-                    
+
                     let matchIcon;
                     if (match.score === 100) matchIcon = '✅';
                     else if (match.score >= 95) matchIcon = '⚠️';
                     else if (match.score >= 80) matchIcon = '🔶';
                     else matchIcon = '❌';
-                    
+
                     html += `
                         <div class="result-item ${colorClass}">
                             <div class="result-row">
@@ -950,7 +963,7 @@
                             </div>
                             <div class="result-row">
                                 <span class="result-label">🏷️ Typové označení:</span>
-                                <span class="result-value">${escapeAttr(match.foundTyp || 'N/A')}</span>
+                                <span class="result-value">${escapeAttr(match.foundTyp || 'N/A')}<span class="google-search-icon" data-query="${escapeAttr(match.foundTyp || '')}" onclick="openGoogleSearchFromEl(this)">🔍</span></span>
                             </div>
                             <div class="result-row">
                                 <span class="result-label">🏭 Výrobce:</span>
@@ -960,18 +973,15 @@
                                 <span class="result-label">📝 Název:</span>
                                 <span class="result-value">${escapeAttr(match.nazev || 'N/A')}</span>
                             </div>
-                            <div style="margin-top:8px; display:flex; gap:8px;">
-                                <button class="google-search-btn" data-query="${escapeAttr(match.foundTyp || '')}" onclick="openGoogleSearchFromEl(this)">🔍 Hledat typové označení na Google</button>
-                            </div>
                         </div>
                     `;
                 });
-                
+
                 html += '</div>';
                 resultsDiv.innerHTML = html;
             }
         }
-        
+
         function renderNoResults(searchTerm) {
             const resultsDiv = document.getElementById('searchResults');
             resultsDiv.innerHTML = '';
@@ -980,10 +990,10 @@
             const header = document.createElement('div');
             header.className = 'result-header';
             header.textContent = `🔍 Hledání: "${searchTerm}"`;
-            
+
             const card = document.createElement('div');
             card.className = 'result-item red';
-            
+
             const row = document.createElement('div');
             row.className = 'result-row';
             const label = document.createElement('span');
@@ -991,18 +1001,18 @@
             label.textContent = '❌ Nenalezena žádná shoda';
             row.appendChild(label);
             card.appendChild(row);
-            
+
             const btn = document.createElement('button');
             btn.className = 'google-search-btn';
-            btn.textContent = '🔍 Hledat pomocí Google';
+            btn.textContent = '🔍 Hledat pomocí Google AI';
             btn.addEventListener('click', () => openGoogleSearch(searchTerm));
             card.appendChild(btn);
-            
+
             container.appendChild(header);
             container.appendChild(card);
             resultsDiv.appendChild(container);
         }
-        
+
         function showManufacturerFilter(matches) {
             // Get unique manufacturers
             const manufacturers = new Set();
@@ -1011,30 +1021,30 @@
                     manufacturers.add(match.vyrobce);
                 }
             });
-            
+
             // Initialize all manufacturers as selected
             selectedManufacturers = new Set(manufacturers);
-            
+
             const filterDiv = document.getElementById('manufacturerFilter');
             const checkboxesDiv = document.getElementById('manufacturerCheckboxes');
-            
+
             if (manufacturers.size === 0) {
                 filterDiv.style.display = 'none';
                 return;
             }
-            
+
             filterDiv.style.display = 'block';
             checkboxesDiv.innerHTML = '';
-            
+
             // Sort manufacturers alphabetically
             const sortedManufacturers = Array.from(manufacturers).sort();
-            
+
             sortedManufacturers.forEach(manufacturer => {
                 const label = document.createElement('label');
-                label.style.cssText = 'display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 8px 12px; background: white; border-radius: 8px; border: 2px solid #ddd; transition: all 0.3s;';
+                label.style.cssText = 'display: flex; align-items: center; gap: 3px; cursor: pointer; padding: 5px 8px; background: white; border-radius: 6px; border: 1px solid #ddd; transition: all 0.3s; font-size: 0.85em;'; // Smaller styles
                 label.onmouseover = () => label.style.background = '#f0f2ff';
                 label.onmouseout = () => label.style.background = 'white';
-                
+
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.checked = true;
@@ -1047,29 +1057,29 @@
                         selectedManufacturers.delete(manufacturer);
                     }
                 };
-                
+
                 const span = document.createElement('span');
                 span.textContent = manufacturer;
                 span.style.fontWeight = '500';
-                
+
                 label.appendChild(checkbox);
                 label.appendChild(span);
                 checkboxesDiv.appendChild(label);
             });
         }
-        
+
         function applyManufacturerFilter() {
             const searchInput = document.getElementById('searchInput');
             const searchTerm = searchInput.value.trim();
-            
+
             // Filter results based on selected manufacturers
             const filteredResults = lastSearchResults.filter(match => {
                 return selectedManufacturers.has(match.vyrobce) || match.vyrobce === 'N/A';
             });
-            
+
             displayCompletionResults(filteredResults, searchTerm);
         }
-        
+
         function selectAllManufacturers() {
             const checkboxes = document.querySelectorAll('#manufacturerCheckboxes input[type="checkbox"]');
             checkboxes.forEach(checkbox => {
@@ -1077,7 +1087,7 @@
                 selectedManufacturers.add(checkbox.value);
             });
         }
-        
+
         function deselectAllManufacturers() {
             const checkboxes = document.querySelectorAll('#manufacturerCheckboxes input[type="checkbox"]');
             checkboxes.forEach(checkbox => {
@@ -1085,11 +1095,11 @@
                 selectedManufacturers.delete(checkbox.value);
             });
         }
-        
+
         function updateDatabase() {
             const toggle = document.getElementById('databaseToggle');
             const toggleLabel = document.getElementById('databaseToggleLabel');
-            
+
             if (toggle.checked) {
                 currentDatabase = 'effretikon';
                 // visual update
@@ -1109,17 +1119,17 @@
                 document.getElementById('effiLabel').style.background = 'transparent';
                 document.getElementById('effiLabel').style.color = '#999';
             }
-            
+
             // Clear current data and reload with new database if using predefined data
             if (usingPredefinedData) {
                 masterData = null;
                 loadPredefinedData();
             }
         }
-        
+
         function displayCompletionResults(matches, searchTerm) {
             const resultsDiv = document.getElementById('searchResults');
-            
+
             if (matches.length === 0) {
                 resultsDiv.innerHTML = '';
                 const container = document.createElement('div');
@@ -1138,7 +1148,7 @@
                 card.appendChild(row);
                 const btn = document.createElement('button');
                 btn.className = 'google-search-btn';
-                btn.textContent = '🔍 Hledat pomocí Google';
+                btn.textContent = '🔍 Hledat pomocí Google AI';
                 btn.addEventListener('click', () => openGoogleSearch(searchTerm));
                 card.appendChild(btn);
                 container.appendChild(header);
@@ -1146,12 +1156,12 @@
                 resultsDiv.appendChild(container);
                 return;
             }
-            
+
             let html = `
                 <div class="search-result">
                     <div class="result-header">🔍 Výsledky doplňování: "${escapeAttr(searchTerm)}" (${matches.length} ${matches.length === 1 ? 'výsledek' : matches.length < 5 ? 'výsledky' : 'výsledků'})</div>
             `;
-            
+
             matches.forEach((match, index) => {
                 html += `
                     <div class="result-item green">
@@ -1164,7 +1174,7 @@
                         </div>
                         <div class="result-row">
                             <span class="result-label">🏷️ Typové označení:</span>
-                            <span class="result-value">${escapeAttr(match.foundTyp || 'N/A')}</span>
+                            <span class="result-value">${escapeAttr(match.foundTyp || 'N/A')}<span class="google-search-icon" data-query="${escapeAttr(match.foundTyp || '')}" onclick="openGoogleSearchFromEl(this)">🔍</span></span>
                         </div>
                         <div class="result-row">
                             <span class="result-label">🏭 Výrobce:</span>
@@ -1174,23 +1184,20 @@
                             <span class="result-label">📝 Název:</span>
                             <span class="result-value">${escapeAttr(match.nazev || 'N/A')}</span>
                         </div>
-                        <div style="margin-top:8px; display:flex; gap:8px;">
-                            <button class="google-search-btn" data-query="${escapeAttr(match.foundTyp || '')}" onclick="openGoogleSearchFromEl(this)">🔍 Hledat typové označení na Google</button>
-                        </div>
                     </div>
                 `;
             });
-            
+
             html += '</div>';
             resultsDiv.innerHTML = html;
         }
-        
+
         function handleMasterFile(e) {
             const file = e.target.files[0];
             if (!file) return;
-            
+
             document.getElementById('masterFileName').textContent = '📄 ' + file.name;
-            
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
@@ -1198,12 +1205,12 @@
                     const workbook = XLSX.read(data, {type: 'array'});
                     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                     const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-                    
+
                     if (jsonData.length === 0) {
                         alert('❌ Soubor je prázdný!');
                         return;
                     }
-                    
+
                     // Fix Czech encoding in all string values
                     jsonData.forEach(row => {
                         Object.keys(row).forEach(key => {
@@ -1212,20 +1219,20 @@
                             }
                         });
                     });
-                    
+
                     const firstRow = jsonData[0];
                     if (!firstRow['Typové označení'] && !firstRow['Typov\u0082© ozna\u00a3\u0082¾ en\u00a3­']) {
                         alert('❌ Soubor musí obsahovat sloupec "Typové označení"!');
                         return;
                     }
-                    
+
                     masterData = jsonData;
                     usingPredefinedData = false;
-                    
-                    document.getElementById('masterStatus').innerHTML = 
+
+                    document.getElementById('masterStatus').innerHTML =
                         '<div class="status success">✅ Master soubor úspěšně nahrán (' + masterData.length + ' záznamů)</div>';
                     document.getElementById('clearMasterBtn').style.display = 'block';
-                    
+
                     checkReadyToProcess();
                     updateSearchButton();
                 } catch (error) {
@@ -1234,12 +1241,12 @@
             };
             reader.readAsArrayBuffer(file);
         }
-        
+
         function clearMasterFile() {
-            const message = usingPredefinedData 
+            const message = usingPredefinedData
                 ? 'Opravdu chcete smazat předpřipravená data? Budete muset nahrát vlastní master soubor.'
                 : 'Opravdu chcete smazat nahranou vědomostní základnu?';
-                
+
             if (confirm(message)) {
                 masterData = null;
                 usingPredefinedData = false;
@@ -1251,24 +1258,24 @@
                 updateSearchButton();
             }
         }
-        
+
         function handleUserFile(e) {
             const file = e.target.files[0];
             if (!file) return;
-            
+
             document.getElementById('userFileName').textContent = '📄 ' + file.name;
-            
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, {type: 'array'});
-                    
+
                     userData = {
                         workbook: workbook,
                         fileName: file.name
                     };
-                    
+
                     checkReadyToProcess();
                 } catch (error) {
                     alert('❌ Chyba při načítání souboru: ' + error.message);
@@ -1276,7 +1283,7 @@
             };
             reader.readAsArrayBuffer(file);
         }
-        
+
         function checkReadyToProcess() {
             const btn = document.getElementById('processBtn');
             if (masterData && userData) {
@@ -1285,12 +1292,12 @@
                 btn.disabled = true;
             }
         }
-        
+
         function removePrefix(str) {
             if (!str) return '';
             const strUpper = String(str).toUpperCase();
             const prefixes = ['RIT.', 'SE.', 'SIE.', 'PXC.', 'FES.', 'WAGO.', 'WEI.', 'PILZ.', 'ABB.', 'SCHNE.', 'PHO.', 'EATON.', 'SICK.'];
-            
+
             for (let prefix of prefixes) {
                 if (strUpper.startsWith(prefix)) {
                     return str.substring(prefix.length);
@@ -1298,32 +1305,32 @@
             }
             return str;
         }
-        
+
         function normalizeString(str) {
             return String(str).toUpperCase().replace(/[.\-_\s]/g, '');
         }
-        
+
         function calculateSimilarity(userStr, masterStr) {
             if (userStr === masterStr) return 100;
-            
+
             const userNorm = normalizeString(userStr);
             const masterNorm = normalizeString(masterStr);
-            
+
             if (userNorm === masterNorm) return 95;
-            
+
             const userNoLeadZero = userNorm.replace(/^0+/, '');
             const masterNoLeadZero = masterNorm.replace(/^0+/, '');
-            
+
             const userNoTrailZero = userNorm.replace(/0+$/, '');
             const masterNoTrailZero = masterNorm.replace(/0+$/, '');
-            
-            if (userNoLeadZero === masterNoLeadZero || 
+
+            if (userNoLeadZero === masterNoLeadZero ||
                 userNoTrailZero === masterNoTrailZero ||
                 userNoLeadZero === masterNoTrailZero ||
                 userNoTrailZero === masterNoLeadZero) {
                 return 95;
             }
-            
+
             if (userNorm.length === masterNorm.length) {
                 let differences = 0;
                 for (let i = 0; i < userNorm.length; i++) {
@@ -1331,34 +1338,34 @@
                         differences++;
                     }
                 }
-                
+
                 if (differences === 1) {
                     return 85;
                 } else if (differences === 2) {
                     return 70;
                 }
             }
-            
+
             const maxLen = Math.max(userNorm.length, masterNorm.length);
             if (maxLen === 0) return 100;
-            
+
             const distance = levenshteinDistance(userNorm, masterNorm);
             const similarity = ((maxLen - distance) / maxLen) * 100;
-            
+
             return Math.round(similarity * 10) / 10;
         }
-        
+
         function levenshteinDistance(str1, str2) {
             const matrix = [];
-            
+
             for (let i = 0; i <= str2.length; i++) {
                 matrix[i] = [i];
             }
-            
+
             for (let j = 0; j <= str1.length; j++) {
                 matrix[0][j] = j;
             }
-            
+
             for (let i = 1; i <= str2.length; i++) {
                 for (let j = 1; j <= str1.length; j++) {
                     if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
@@ -1372,10 +1379,10 @@
                     }
                 }
             }
-            
+
             return matrix[str2.length][str1.length];
         }
-        
+
         function removeSuffix(str) {
             if (!str) return '';
             return String(str)
@@ -1383,49 +1390,49 @@
                 .replace(/[-\s]ZY\d+$/i, '')
                 .trim();
         }
-        
+
         function findMatch(userTyp) {
-            if (!userTyp) return { 
-                matches: [], 
-                bestScore: 0, 
-                matchType: 'red' 
+            if (!userTyp) return {
+                matches: [],
+                bestScore: 0,
+                matchType: 'red'
             };
-            
+
             const userTypStr = String(userTyp);
-            
+
             if (!masterData || masterData.length === 0) {
                 console.error('Master data jsou prázdná!');
-                return { 
-                    matches: [], 
-                    bestScore: 0, 
-                    matchType: 'red' 
+                return {
+                    matches: [],
+                    bestScore: 0,
+                    matchType: 'red'
                 };
             }
-            
+
             let allMatches = [];
-            
+
             const firstRow = masterData[0];
             const columns = Object.keys(firstRow);
-            
-            const typColumn = columns.find(col => 
-                col.toLowerCase().includes('typ') || 
+
+            const typColumn = columns.find(col =>
+                col.toLowerCase().includes('typ') ||
                 col.toLowerCase().includes('ozna')
             ) || columns[0];
-            
-            const artiklColumn = columns.find(col => 
+
+            const artiklColumn = columns.find(col =>
                 col.toLowerCase().includes('artikl')
             ) || columns[1];
-            
-            const vyrobceColumn = columns.find(col => 
+
+            const vyrobceColumn = columns.find(col =>
                 col.toLowerCase().includes('výrobce') ||
                 col.toLowerCase().includes('vyrobce')
             ) || columns[2];
-            
-            const nazevColumn = columns.find(col => 
+
+            const nazevColumn = columns.find(col =>
                 col.toLowerCase().includes('název') ||
                 col.toLowerCase().includes('nazev')
             ) || columns[3];
-            
+
             // Determine which column to search in
             let searchColumn;
             switch(searchField) {
@@ -1440,25 +1447,25 @@
                     searchColumn = typColumn;
                     break;
             }
-            
+
             for (let row of masterData) {
                 const masterValue = row[searchColumn];
                 const masterArtikl = row[artiklColumn];
-                
+
                 if (!masterValue && !masterArtikl) continue;
-                
+
                 const masterValueStr = String(masterValue || '');
-                
+
                 let scores = [];
-                
+
                 const directScore = calculateSimilarity(userTypStr, masterValueStr);
                 scores.push(directScore);
-                
+
                 // Only apply prefix/suffix logic for typové označení
                 if (searchField === 'typ') {
                     const userNoPref = removePrefix(userTypStr);
                     const masterNoPref = removePrefix(masterValueStr);
-                    
+
                     if (userNoPref !== userTypStr || masterNoPref !== masterValueStr) {
                         const noPrefScore = calculateSimilarity(userNoPref, masterNoPref);
                         if (noPrefScore === 100) {
@@ -1470,7 +1477,7 @@
                         const noPrefScore = calculateSimilarity(userNoPref, masterNoPref);
                         scores.push(noPrefScore);
                     }
-                    
+
                     const prefixes = ['RIT.', 'SE.', 'SIE.', 'PXC.', 'FES.', 'WAGO.', 'WEI.', 'PILZ.', 'ABB.', 'SCHNE.', 'PHO.', 'EATON.', 'SICK.'];
                     for (let prefix of prefixes) {
                         const masterUpper = masterValueStr.toUpperCase();
@@ -1483,7 +1490,7 @@
                             }
                         }
                     }
-                    
+
                     const userNoSuffix = removeSuffix(userTypStr);
                     const masterNoSuffix = removeSuffix(masterValueStr);
                     if (userNoSuffix !== userTypStr || masterNoSuffix !== masterValueStr) {
@@ -1491,9 +1498,9 @@
                         scores.push(noSuffixScore);
                     }
                 }
-                
+
                 const bestScore = Math.max(...scores);
-                
+
                 if (bestScore >= 40) {
                     allMatches.push({
                         artikl: masterArtikl,
@@ -1504,63 +1511,63 @@
                     });
                 }
             }
-            
+
             allMatches.sort((a, b) => b.score - a.score);
-            
+
             const seen = new Set();
             allMatches = allMatches.filter(match => {
                 if (seen.has(match.artikl)) return false;
                 seen.add(match.artikl);
                 return true;
             });
-            
+
             const topMatches = allMatches.slice(0, 3);
-            
+
             if (topMatches.length === 0) {
-                return { 
-                    matches: [], 
-                    bestScore: 0, 
-                    matchType: 'red' 
+                return {
+                    matches: [],
+                    bestScore: 0,
+                    matchType: 'red'
                 };
             }
-            
+
             const bestScore = topMatches[0].score;
             let matchType;
             if (bestScore === 100) matchType = 'green';
             else if (bestScore >= 95) matchType = 'yellow';
             else if (bestScore >= 80) matchType = 'orange';
             else matchType = 'red';
-            
+
             return {
                 matches: topMatches,
                 bestScore: bestScore,
                 matchType: matchType
             };
         }
-        
+
         function processFile() {
             document.getElementById('processingDiv').style.display = 'block';
             document.getElementById('processBtn').disabled = true;
-            
+
             setTimeout(() => {
                 try {
                     const workbook = userData.workbook;
                     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                     const jsonData = XLSX.utils.sheet_to_json(firstSheet, {defval: ''});
-                    
+
                     let stats = {
                         green: 0,
                         yellow: 0,
                         orange: 0,
                         red: 0
                     };
-                    
+
                     for (let i = 0; i < jsonData.length; i++) {
                         const row = jsonData[i];
                         const userTyp = row['Typové označení'] || row['Typov\u0082© ozna\u00a3\u0082¾ en\u00a3­'];
-                        
+
                         const matchResult = findMatch(userTyp);
-                        
+
                         if (matchResult.matches.length > 0) {
                             for (let j = 0; j < 3; j++) {
                                 if (j < matchResult.matches.length) {
@@ -1587,30 +1594,30 @@
                             row['Nalezené typ. ozn. 3'] = '';
                             row['_matchType'] = 'red';
                         }
-                        
+
                         stats[matchResult.matchType]++;
                     }
-                    
+
                     const newWb = XLSX.utils.book_new();
                     const newWs = XLSX.utils.json_to_sheet(jsonData.map(row => {
                         const newRow = {...row};
                         delete newRow._matchType;
                         return newRow;
                     }));
-                    
+
                     const range = XLSX.utils.decode_range(newWs['!ref']);
-                    
+
                     for (let R = range.s.r + 1; R <= range.e.r; R++) {
                         const matchType = jsonData[R - 1]._matchType;
                         let fillColor;
-                        
+
                         switch(matchType) {
                             case 'green': fillColor = '90EE90'; break;
                             case 'yellow': fillColor = 'FFFF00'; break;
                             case 'orange': fillColor = 'FFA500'; break;
                             case 'red': fillColor = 'FF6B6B'; break;
                         }
-                        
+
                         if (fillColor) {
                             for (let C = range.s.c; C <= range.e.c; C++) {
                                 const cellAddress = XLSX.utils.encode_cell({r: R, c: C});
@@ -1626,21 +1633,21 @@
                             }
                         }
                     }
-                    
+
                     XLSX.utils.book_append_sheet(newWb, newWs, 'Data');
-                    
+
                     const fileName = userData.fileName.replace(/\.xlsx?$/i, '_doplneno.xlsx');
                     XLSX.writeFile(newWb, fileName, {cellStyles: true});
-                    
+
                     document.getElementById('resultsSection').style.display = 'block';
-                    document.getElementById('resultsInfo').innerHTML = 
+                    document.getElementById('resultsInfo').innerHTML =
                         `<strong>✅ Soubor zpracován a stažen!</strong><br><br>` +
                         `📊 Statistika:<br>` +
                         `🟢 Přesné shody (100%): ${stats.green}<br>` +
                         `🟡 Normalizované (95%+): ${stats.yellow}<br>` +
                         `🟠 Malé rozdíly (80-94%): ${stats.orange}<br>` +
                         `🔴 Částečná/nenalezeno (&lt;80%): ${stats.red}`;
-                    
+
                 } catch (error) {
                     alert('❌ Chyba při zpracování: ' + error.message);
                     console.error(error);
