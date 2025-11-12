@@ -837,8 +837,16 @@
                                 <span class="result-value"><strong>${match.artikl || 'N/A'}</strong></span>
                             </div>
                             <div class="result-row">
-                                <span class="result-label">🏷️ Nalezené typ. ozn.:</span>
+                                <span class="result-label">🏷️ Typové označení:</span>
                                 <span class="result-value">${match.foundTyp || 'N/A'}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">🏭 Výrobce:</span>
+                                <span class="result-value">${match.vyrobce || 'N/A'}</span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">📝 Název:</span>
+                                <span class="result-value">${match.nazev || 'N/A'}</span>
                             </div>
                         </div>
                     `;
@@ -1152,7 +1160,7 @@
                 if (bestScore >= 40) {
                     allMatches.push({
                         artikl: masterArtikl,
-                        foundTyp: row[typColumn],
+                        foundTyp: row[typColumn] || 'N/A',
                         vyrobce: row[vyrobceColumn] || 'N/A',
                         nazev: row[nazevColumn] || 'N/A',
                         score: Math.round(bestScore * 10) / 10
