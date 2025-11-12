@@ -273,7 +273,7 @@
         }
 
         .toggle-option-label.inactive {
-            color: #999;
+            color: #666; /* Changed to darker gray for better readability */
         }
 
         .search-result {
@@ -880,7 +880,7 @@
         function openGoogleSearch(query) {
             const q = encodeURIComponent(String(query || '').trim() || document.getElementById('searchInput').value.trim());
             if (!q) return;
-            const url = 'https://aistudio.google.com/app?prompt=' + q;
+            const url = 'https://www.google.com/search?q=' + q;
             window.open(url, '_blank');
         }
 
@@ -1004,7 +1004,7 @@
 
             const btn = document.createElement('button');
             btn.className = 'google-search-btn';
-            btn.textContent = '🔍 Hledat pomocí Google AI';
+            btn.textContent = '🔍 Hledat pomocí Google';
             btn.addEventListener('click', () => openGoogleSearch(searchTerm));
             card.appendChild(btn);
 
@@ -1148,7 +1148,7 @@
                 card.appendChild(row);
                 const btn = document.createElement('button');
                 btn.className = 'google-search-btn';
-                btn.textContent = '🔍 Hledat pomocí Google AI';
+                btn.textContent = '🔍 Hledat pomocí Google';
                 btn.addEventListener('click', () => openGoogleSearch(searchTerm));
                 card.appendChild(btn);
                 container.appendChild(header);
