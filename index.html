@@ -486,6 +486,18 @@
             <div id="searchResults" style="display:none; margin-top: 20px;"></div>
         </div>
 
+        <div class="section">
+            <h2>🤖 AI Asistent (Gemini)</h2>
+            <div id="chatWindow" style="height: 200px; border: 1px solid #ddd; border-radius: 8px; padding: 10px; overflow-y: scroll; background: #f9f9f9; margin-bottom: 10px;">
+                </div>
+            <input type="text" id="chatInput" placeholder="Zeptejte se AI (např. 'Hledám nerezovou průchodku M20...')"
+                style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 1.05em; margin-bottom: 10px;"
+                onkeypress="if(event.key==='Enter') sendChatMessage()">
+            <button class="btn btn-primary" onclick="sendChatMessage()">
+                💬 Odeslat dotaz AI
+            </button>
+        </div>
+
         <!-- User File Section -->
         <div class="section">
             <h2>📄 Uživatelský soubor (XLSX k doplnění)</h2>
@@ -550,6 +562,121 @@
         let lastSearchResults = []; // Store last search results for filtering
         let selectedManufacturers = new Set(); // Store selected manufacturers
         let currentDatabase = 'usti'; // 'usti' or 'effretikon'
+
+        // Uložte svůj klíč bezpečně (pro testování může být zde)
+        const GEMINI_API_KEY = 'AIzaSyAYAx90zkP1kxgy-CndRBsjBua0yo1fSFo';
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+        // Funkce pro přidání zprávy do okna chatu
+        function addChatMessage(message, sender) {
+            const chatWindow = document.getElementById('chatWindow');
+            const msgDiv = document.createElement('div');
+            msgDiv.style.marginBottom = '5px';
+            msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            chatWindow.appendChild(msgDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll
+        }
+
+        // Hlavní funkce pro odeslání dotazu
+        async function sendChatMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const userQuery = chatInput.value.trim();
+            if (!userQuery) return;
+            if (!masterData) {
+                alert('Nejprve musí být načtena vědomostní základna (Master XLSX).');
+                return;
+            }
+
+            addChatMessage(escapeAttr(userQuery), 'Vy');
+            chatInput.value = 'Přemýšlím...';
+            chatInput.disabled = true;
+
+            try {
+                // --- Krok 1: AI pro extrakci klíčových slov ---
+                const prompt1 = `Jsi expert na technické komponenty. Uživatel hledá: "${userQuery}".
+                Analyzuj tento dotaz a extrahuj z něj VŠECHNA relevantní klíčová slova pro prohledání databáze (sloupce 'Název', 'Typové označení').
+                Zahrň i běžná česká a technická synonymy (např. 'nerez'='MS', 'průchodka'='vývodka', 'díra'='otvor').
+                Odpověz POUZE jako JSON pole stringů. Příklad: ["SLOVO1", "SLOVO2"]`;
+
+                let response = await callGeminiAPI(prompt1);
+                let keywords = JSON.parse(response);
+
+                // --- Krok 2: Lokální vyhledávání (zjednodušená verze) ---
+                let localResults = [];
+                if (masterData && keywords.length > 0) {
+                    const nazevColumn = Object.keys(masterData[0]).find(k => k.toLowerCase().includes('název'));
+                    const typColumn = Object.keys(masterData[0]).find(k => k.toLowerCase().includes('typ'));
+
+                    localResults = masterData.filter(row => {
+                        const nazev = String(row[nazevColumn] || '').toUpperCase();
+                        const typ = String(row[typColumn] || '').toUpperCase();
+                        const searchText = nazev + ' ' + typ;
+
+                        // Musí obsahovat všechna klíčová slova
+                        return keywords.every(kw => searchText.includes(kw.toUpperCase()));
+                    }).slice(0, 10); // Omezíme na 10 nejlepších
+                }
+
+                // --- Krok 3: AI pro sumarizaci výsledků ---
+                let prompt2;
+                if (localResults.length === 0) {
+                    prompt2 = `Uživatel hledá: "${userQuery}". V databázi jsem nenašel nic, co by odpovídalo.
+                    Odpověz mu prosím v češtině, že jsi nic nenašel, a navrhni mu, aby zkusil hledat obecněji, nebo zda to máš zkusit vyhledat na Google.`;
+                } else {
+                    const resultsJSON = JSON.stringify(localResults);
+                    prompt2 = `Uživatel hledá: "${userQuery}".
+                    Prohledal jsem databázi a našel jsem těchto ${localResults.length} nejrelevantnějších výsledků:
+                    ${resultsJSON}
+
+                    Analyzuj tyto výsledky a vyber 1-3 nejlepší, které odpovídají dotazu.
+                    Odpověz uživateli přátelsky v češtině. Uveď 'Artikl' a 'Typové označení'.
+                    Stručně vysvětli, proč si myslíš, že je to shoda (např. '...protože obsahuje MS, což je nerez...').
+                    Pokud najdeš více dobrých shod, nabídni je.`;
+                }
+
+                let finalAnswer = await callGeminiAPI(prompt2);
+                addChatMessage(finalAnswer, 'Robo Technolog');
+
+            } catch (error) {
+                console.error('Chyba AI API:', error);
+                addChatMessage('Omlouvám se, při komunikaci s AI nastala chyba.', 'Robo Technolog');
+            } finally {
+                chatInput.value = '';
+                chatInput.disabled = false;
+            }
+        }
+
+        // Pomocná funkce pro volání API
+        async function callGeminiAPI(promptText) {
+            const body = {
+                contents: [{
+                    parts: [{ text: promptText }]
+                }],
+                generationConfig: {
+                    temperature: 0.3,
+                    maxOutputTokens: 1000
+                }
+            };
+
+            const response = await fetch(GEMINI_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // Čištění odpovědi od Markdownu a prefixů
+            let text = data.candidates[0].content.parts[0].text;
+            text = text.replace(/```json/g, '').replace(/```/g, '').trim();
+            return text;
+        }
 
         function escapeAttr(s) {
             return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
