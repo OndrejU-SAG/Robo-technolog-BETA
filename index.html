@@ -161,6 +161,14 @@
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
         }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
 
         .btn:disabled {
             background: #ccc;
@@ -380,26 +388,144 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* NOVÉ STYLY PRO CHATBOTA A MODAL */
+        
+        /* API Key Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .modal-content p {
+            margin-bottom: 25px;
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .modal-content input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        /* Chatbot UI */
+        #chatWindow {
+            height: 300px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            background: white;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-message {
+            padding: 10px 15px;
+            border-radius: 12px;
+            max-width: 85%;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+
+        .user-message {
+            background: #667eea;
+            color: white;
+            border-bottom-right-radius: 0;
+            align-self: flex-end;
+            margin-left: auto; /* Důležité pro zarovnání doprava */
+        }
+
+        .bot-message {
+            background: #e9ecef;
+            color: #333;
+            border-bottom-left-radius: 0;
+            align-self: flex-start;
+            margin-right: auto; /* Důležité pro zarovnání doleva */
+        }
+
+        #chatInputContainer {
+            display: flex;
+            gap: 10px;
+        }
+
+        #chatInput {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+        }
+        
+        #chatInput:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        #sendChatBtn {
+            padding: 12px 20px;
+            font-size: 1em;
+            width: auto;
+            margin-top: 0;
+            white-space: nowrap; /* Zabrání zalomení textu */
+        }
+        
+        #chatLoading {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .chat-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        /* Konec nových stylů */
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🤖 Robo Technolog</h1>
-        <p class="subtitle">V3.0 Pro vyhledávání artiklových čísel</p>
+        <p class="subtitle">V3.1 AI - Pro vyhledávání artiklových čísel</p>
 
-        <div class="section">
-            <h2>⚙️ Nastavení AI Asistenta</h2>
-            <p style="text-align: center; margin-bottom: 15px; font-size: 0.9em; color: #666;">
-                Pro použití AI Asistenta si musíte vložit vlastní Google AI API klíč.
-                Můžete si ho zdarma vygenerovat v <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.
-            </p>
-            <input type="password" id="apiKeyInput" placeholder="Vložte svůj Google AI API klíč..."
-                   style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 1.05em; margin-bottom: 10px;">
-            <button class="btn btn-primary" onclick="saveApiKey()" style="font-size: 0.95em; padding: 12px 25px;">
-                🔑 Uložit klíč
-            </button>
-            <div id="apiKeyStatus" style="text-align: center; margin-top: 10px; font-weight: 500;"></div>
-        </div>
         <div class="section">
             <h2>📚 Vědomostní základna (Master XLSX)</h2>
 
@@ -427,6 +553,33 @@
             <button class="btn btn-danger" id="clearMasterBtn" onclick="clearMasterFile()" style="display:none; margin-top:15px;">
                 🗑️ Smazat uloženou vědomostní základnu
             </button>
+        </div>
+
+        <div class="section">
+            <h2>🤖 AI Asistent (Gemini)</h2>
+            <p style="text-align: center; font-size: 0.9em; color: #666; margin-bottom: 15px;">
+                Ptejte se přirozeným jazykem. Např.: "Hledám průchodku M20, nerez, 10 díra."
+            </p>
+            
+            <div id="chatWindow">
+                <div class="chat-message bot-message">
+                    Dobrý den, jsem Robo Asistent. Jak vám mohu pomoci s vyhledáváním v databázi?
+                </div>
+            </div>
+            
+            <div id="chatLoading">
+                <div class="chat-spinner"></div>
+            </div>
+
+            <div id="chatInputContainer">
+                <input type="text" id="chatInput" placeholder="Napište svůj dotaz..." disabled>
+                <button class="btn btn-primary" id="sendChatBtn" disabled>
+                    Odeslat
+                </button>
+            </div>
+            <p style="text-align: right; font-size: 0.8em; color: #999; margin-top: 5px;">
+                Používá model <span id="geminiModelName"></span>
+            </p>
         </div>
 
         <div class="section">
@@ -493,17 +646,6 @@
         </div>
 
         <div class="section">
-            <h2>🤖 AI Asistent (Gemini)</h2>
-            <div id="chatWindow" style="height: 200px; border: 1px solid #ddd; border-radius: 8px; padding: 10px; overflow-y: scroll; background: #f9f9f9; margin-bottom: 10px; line-height: 1.5;">
-                </div>
-            <input type="text" id="chatInput" placeholder="Zeptejte se AI (např. 'Hledám nerezovou průchodku M20...')"
-                   style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 1.05em; margin-bottom: 10px;"
-                   onkeypress="if(event.key==='Enter') sendChatMessage()">
-            <button class="btn btn-primary" onclick="sendChatMessage()" style="background-color: #4285f4;" onmouseover="this.style.background='#3367d6'" onmouseout="this.style.background='#4285f4'">
-                💬 Odeslat dotaz AI
-            </button>
-        </div>
-        <div class="section">
             <h2>📄 Uživatelský soubor (XLSX k doplnění)</h2>
             <div class="file-input-wrapper">
                 <input type="file" id="userFile" accept=".xlsx,.xls" onchange="handleUserFile(event)">
@@ -550,10 +692,22 @@
         </div>
     </div>
 
+    <div id="apiKeyModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>🤖 Vítejte v AI Asistentovi</h2>
+            <p>Pro použití AI funkcí zadejte svůj Google AI API klíč. Klíč bude uložen pouze po dobu trvání této relace (session) a nikam se neodesílá, kromě přímé komunikace s Google API.</p>
+            <p style="font-size: 0.85em; color: #888;">Klíč můžete získat na <a href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com</a>.</p>
+            <input type="password" id="apiKeyInput" placeholder="Vložte svůj Google AI API klíč...">
+            <button class="btn btn-primary" onclick="saveApiKey()">Uložit a pokračovat</button>
+            <button class="btn btn-secondary" onclick="closeApiKeyModal()" style="margin-top: 10px; font-size: 0.9em; padding: 10px 20px;">Použít později</button>
+        </div>
+    </div>
+
     <script>
         const PREDEFINED_CSV = '';
         const PREDEFINED_CSV_URL = 'master-data.csv';
         const PREDEFINED_CSV_URL_EFFI = 'master-data-effi.csv';
+        const GEMINI_MODEL = 'gemini-1.5-flash-latest'; // Používáme nejnovější flash model
 
         let masterData = null;
         let userData = null;
@@ -563,10 +717,295 @@
         let lastSearchResults = []; // Store last search results for filtering
         let selectedManufacturers = new Set(); // Store selected manufacturers
         let currentDatabase = 'usti'; // 'usti' or 'effretikon'
-        let userApiKey = null; // Zde budeme držet klíč po dobu relace
+        
+        // Objekt pro ukládání dynamicky nalezených názvů sloupců
+        let dbColumns = {
+            typ: null,
+            artikl: null,
+            vyrobce: null,
+            nazev: null
+        };
+        
+        let isAiThinking = false;
+
+        // =====================================================================
+        // NOVÉ FUNKCE PRO API KLÍČ A MODAL
+        // =================================S====================================
+
+        function checkApiKey() {
+            const apiKey = sessionStorage.getItem('geminiApiKey');
+            const chatInput = document.getElementById('chatInput');
+            const sendChatBtn = document.getElementById('sendChatBtn');
+
+            if (!apiKey) {
+                document.getElementById('apiKeyModal').style.display = 'flex';
+                chatInput.disabled = true;
+                sendChatBtn.disabled = true;
+                chatInput.placeholder = "Nejprve zadejte API klíč...";
+            } else {
+                chatInput.disabled = false;
+                sendChatBtn.disabled = false;
+                chatInput.placeholder = "Napište svůj dotaz...";
+                document.getElementById('apiKeyModal').style.display = 'none';
+            }
+        }
+
+        function saveApiKey() {
+            const apiKey = document.getElementById('apiKeyInput').value;
+            if (apiKey && apiKey.trim() !== '') {
+                sessionStorage.setItem('geminiApiKey', apiKey);
+                checkApiKey();
+            } else {
+                alert('Prosím, zadejte platný API klíč.');
+            }
+        }
+
+        function closeApiKeyModal() {
+            document.getElementById('apiKeyModal').style.display = 'none';
+        }
+
+        // =====================================================================
+        // NOVÉ FUNKCE PRO AI CHATBOTA
+        // =====================================================================
+
+        function addMessageToChat(sender, message) {
+            const chatWindow = document.getElementById('chatWindow');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}-message`;
+            
+            // Základní nahrazení pro bezpečnější zobrazení a zachování nových řádků
+            let safeMessage = escapeAttr(message);
+            safeMessage = safeMessage.replace(/\n/g, '<br>');
+            
+            messageDiv.innerHTML = safeMessage;
+            
+            chatWindow.appendChild(messageDiv);
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        async function handleChatSend() {
+            if (isAiThinking) return;
+
+            const chatInput = document.getElementById('chatInput');
+            const query = chatInput.value.trim();
+
+            if (!query) return;
+
+            // Znovu zkontrolujeme klíč, kdyby ho uživatel ještě nezadal
+            const apiKey = sessionStorage.getItem('geminiApiKey');
+            if (!apiKey) {
+                checkApiKey();
+                return;
+            }
+            
+            if (!masterData) {
+                addMessageToChat('bot', 'Nejprve prosím nahrajte nebo načtěte vědomostní základnu (Master soubor).');
+                return;
+            }
+
+            addMessageToChat('user', query);
+            chatInput.value = '';
+            isAiThinking = true;
+            document.getElementById('chatLoading').style.display = 'block';
+            document.getElementById('sendChatBtn').disabled = true;
+            
+            try {
+                const botResponse = await getAiResponse(query);
+                addMessageToChat('bot', botResponse);
+            } catch (error) {
+                console.error('Chyba AI Asistenta:', error);
+                let errorMessage = 'Omlouvám se, došlo k chybě. Zkuste to prosím znovu.';
+                if (error.message.includes('400')) {
+                    errorMessage = 'Došlo k chybě s API (Bad Request). Zkontrolujte svůj API klíč nebo formát dotazu.';
+                } else if (error.message.includes('429')) {
+                     errorMessage = 'API je přetíženo nebo jste překročili kvótu (Rate Limit). Zkuste to prosím později.';
+                } else if (error.message.includes('API key not valid')) {
+                    errorMessage = 'Váš API klíč není platný. Prosím, zadejte platný klíč.';
+                    sessionStorage.removeItem('geminiApiKey');
+                    checkApiKey();
+                }
+                addMessageToChat('bot', errorMessage);
+            } finally {
+                isAiThinking = false;
+                document.getElementById('chatLoading').style.display = 'none';
+                document.getElementById('sendChatBtn').disabled = false;
+            }
+        }
+
+        function findRelevantData(query) {
+            if (!masterData || !dbColumns.nazev) return [];
+
+            // Jednoduchá extrakce klíčových slov
+            const keywords = query.toUpperCase()
+                                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Odstranění diakritiky
+                                .split(/[\s,.-_]+/) // Rozdělení podle běžných oddělovačů
+                                .filter(kw => kw.length > 1); // Ignorování příliš krátkých "slov"
+
+            if (keywords.length === 0) return [];
+
+            let matches = [];
+            
+            for (let row of masterData) {
+                const typValue = String(row[dbColumns.typ] || '').toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                const nazevValue = String(row[dbColumns.nazev] || '').toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                
+                const searchString = `${typValue} ${nazevValue}`;
+                
+                let matchCount = 0;
+                for (const kw of keywords) {
+                    if (searchString.includes(kw)) {
+                        matchCount++;
+                    }
+                }
+                
+                // Přidáme řádek, pokud se shoduje alespoň jedno klíčové slovo
+                if (matchCount > 0) {
+                    matches.push({ row, matchCount });
+                }
+            }
+
+            // Seřadíme podle počtu shodných klíčových slov
+            matches.sort((a, b) => b.matchCount - a.matchCount);
+
+            // Vrátíme pouze data (řádky), omezeno na 30 nejlepších pro kontext
+            return matches.slice(0, 30).map(m => m.row);
+        }
+
+        function buildPrompt(query, contextData) {
+            const contextString = contextData.length > 0 ? JSON.stringify(contextData) : '[]';
+
+            return `
+Jsi "Robo Technolog", přátelský a velmi nápomocný AI asistent. Tvým úkolem je pomoci uživateli najít položky v technické databázi.
+
+DŮLEŽITÁ PRAVIDLA:
+1.  **Mluv VÝHRADNĚ česky.**
+2.  Uživatel hledá položku pomocí přirozeného jazyka. Dotaz uživatele zní: "${escapeAttr(query)}"
+3.  Prohledal jsem databázi a toto je seznam potenciálně relevantních řádků (v JSON formátu), které jsem našel. Tvým úkolem je tento seznam analyzovat:
+    \`\`\`json
+    ${contextString}
+    \`\`\`
+4.  **Analyzuj** tento JSON seznam a najdi v něm nejlepší shody pro dotaz uživatele.
+5.  **Pochop kontext:** Uživatel může používat synonyma. Například "nerez" nebo "nerezová" v databázi často znamená "MS" (mosaz poniklovaná, která vypadá jako nerez). "Díra 10" může znamenat rozsah "8-11". Hledej tyto souvislosti.
+6.  **Formát odpovědi:**
+    * Pokud najdeš JEDNU SKVĚLOU shodu, přátelsky ji představ. Uveď **Artikl**, **Typové označení** a **Název**.
+        * Příklad: "Určitě! Našel jsem přesně to, co hledáte: \n- **Artikl:** 1813-7168 \n- **Typ:** Pruchodka kabel(MS)M20 /10 8-11 \n- **Název:** ..."
+    * Pokud najdeš VÍCE DOBRÝCH shod (max 3-5), vypiš je v odrážkách.
+        * Příklad: "Našel jsem několik možností, které by mohly odpovídat vašemu dotazu:"
+    * Pokud v JSON datech NENÍ žádná dobrá shoda (např. našel jsi M20, ale ne nerez), vysvětli to.
+        * Příklad: "Bohužel jsem nenašel přesnou kombinaci. Našel jsem průchodky M20, ale pouze v plastovém (PA) provedení, ne nerez (MS). Mám je vypsat?"
+    * Pokud byl JSON seznam PRÁZDNÝ ( `[]` ), znamená to, že lokální vyhledávání nic nenašlo.
+        * Odpověz: "Bohužel, v databázi jsem nenašel vůbec nic, co by odpovídalo '${escapeAttr(query)}'. Zkuste prosím upravit hledané výrazy."
+7.  **Buď stručný, přátelský a k věci.** Nevymýšlej si položky, které nejsou v poskytnutém JSON seznamu.
+
+Tvá odpověď pro uživatele:
+`;
+        }
+
+
+        async function getAiResponse(query) {
+            const apiKey = sessionStorage.getItem('geminiApiKey');
+            if (!apiKey) {
+                throw new Error('API key not valid. Please set your API key.');
+            }
+
+            const contextData = findRelevantData(query);
+            const prompt = buildPrompt(query, contextData);
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+
+            const requestBody = {
+                contents: [
+                    {
+                        parts: [
+                            { text: prompt }
+                        ]
+                    }
+                ],
+                // Nastavení bezpečnosti - můžeme být méně přísní
+                safetySettings: [
+                    { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+                    { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+                    { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
+                    { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
+                ],
+                generationConfig: {
+                    temperature: 0.3, // Nižší teplota pro více faktické odpovědi
+                    topK: 1,
+                    topP: 1,
+                    maxOutputTokens: 2048,
+                }
+            };
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Chyba API:', errorData);
+                if (errorData.error && errorData.error.message.includes('API key not valid')) {
+                    throw new Error('API key not valid. Please set your API key.');
+                }
+                throw new Error(`Chyba API: ${response.status} ${response.statusText}. ${errorData.error?.message || ''}`);
+            }
+
+            const result = await response.json();
+
+            if (!result.candidates || result.candidates.length === 0 || !result.candidates[0].content.parts[0].text) {
+                if (result.promptFeedback && result.promptFeedback.blockReason) {
+                     throw new Error(`Dotaz byl zablokován z bezpečnostních důvodů: ${result.promptFeedback.blockReason}`);
+                }
+                throw new Error('AI nevrátila žádnou platnou odpověď.');
+            }
+
+            return result.candidates[0].content.parts[0].text;
+        }
+
+
+        // =====================================================================
+        // STÁVAJÍCÍ KÓD (S MÍRNÝMI ÚPRAVAMI)
+        // =====================================================================
         
         function escapeAttr(s) {
             return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        }
+
+        // UPRAVENO: Funkce pro identifikaci názvů sloupců
+        function identifyDbColumns() {
+            if (!masterData || masterData.length === 0) {
+                dbColumns = { typ: null, artikl: null, vyrobce: null, nazev: null };
+                return;
+            }
+            
+            const firstRow = masterData[0];
+            const columns = Object.keys(firstRow);
+
+            dbColumns.typ = columns.find(col =>
+                col.toLowerCase().includes('typ') ||
+                col.toLowerCase().includes('ozna') ||
+                col.toLowerCase().includes('typové označení') ||
+                col.toLowerCase().includes('typov\u0082© ozna\u00a3\u0082¾ en\u00a3­') // Staré kódování
+            ) || columns[0];
+
+            dbColumns.artikl = columns.find(col =>
+                col.toLowerCase().includes('artikl')
+            ) || columns[1];
+
+            dbColumns.vyrobce = columns.find(col =>
+                col.toLowerCase().includes('výrobce') ||
+                col.toLowerCase().includes('vyrobce')
+            ) || columns[2];
+
+            dbColumns.nazev = columns.find(col =>
+                col.toLowerCase().includes('název') ||
+                col.toLowerCase().includes('nazev')
+            ) || columns[3];
+            
+             console.log('Identifikované sloupce:', dbColumns);
         }
 
         function parseCsvWithSemicolon(csvText) {
@@ -628,42 +1067,8 @@
                 loadPredefinedFromURL();
                 return true;
             }
-
-            if (!PREDEFINED_CSV || PREDEFINED_CSV.trim() === '') {
-                return false;
-            }
-
-            try {
-                const data = parseCsvWithSemicolon(PREDEFINED_CSV);
-
-                if (data.length === 0) {
-                    console.warn('Předpřipravená data jsou prázdná');
-                    return false;
-                }
-
-                const firstRow = data[0];
-                if (!firstRow.hasOwnProperty('Typové označení') && !firstRow.hasOwnProperty('Artikl')) {
-                    console.error('Předpřipravená data nemají požadované sloupce (Typové označení, Artikl)');
-                    return false;
-                }
-
-                masterData = data;
-                usingPredefinedData = true;
-
-                document.getElementById('masterFileName').textContent = '📄 Předpřipravená data (neobsahují artikly ve výběhu a označené k výmazu)';
-                document.getElementById('masterStatus').innerHTML =
-                    '<div class="status success">✅ Používají se předpřipravená data -bez výběhů a výmazů  (' + masterData.length + ' záznamů)</div>';
-                document.getElementById('clearMasterBtn').style.display = 'block';
-
-                checkReadyToProcess();
-                updateSearchButton();
-                console.log('Předpřipravená data úspěšně načtena:', masterData.length, 'záznamů');
-                return true;
-            } catch (error) {
-                console.error('Chyba při načítání předpřipravených dat:', error);
-                alert('⚠️ Chyba při načítání předpřipravených dat: ' + error.message);
-                return false;
-            }
+            // ... (zbytek původní loadPredefinedData, pokud ji používáte - pro URL je to dostačující)
+            return false; // Přidáno pro jasnost
         }
 
         function loadPredefinedFromURL() {
@@ -686,13 +1091,14 @@
                     if (data.length === 0) {
                         throw new Error('Soubor je prázdný');
                     }
+                    
+                    masterData = data;
+                    identifyDbColumns(); // UPRAVENO: Identifikujeme sloupce zde
 
-                    const firstRow = data[0];
-                    if (!firstRow.hasOwnProperty('Typové označení') && !firstRow.hasOwnProperty('Artikl')) {
+                    if (!dbColumns.typ || !dbColumns.artikl) {
                         throw new Error('Soubor nemá požadované sloupce (Typové označení, Artikl)');
                     }
 
-                    masterData = data;
                     usingPredefinedData = true;
 
                     document.getElementById('masterFileName').textContent = `📄 Předpřipravená data (${dbName})`;
@@ -711,11 +1117,23 @@
                 });
         }
 
-        // === UPRAVENÁ FUNKCE window.load ===
         window.addEventListener('load', function() {
             loadPredefinedData();
             checkReadyToProcess();
             updateSearchButton();
+            
+            // NOVÉ: Nastavení pro chatbot
+            document.getElementById('geminiModelName').textContent = GEMINI_MODEL;
+            checkApiKey();
+            
+            // NOVÉ: Event listenery pro chatbot
+            document.getElementById('sendChatBtn').addEventListener('click', handleChatSend);
+            document.getElementById('chatInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault(); // Zabráníme odřádkování v inputu
+                    handleChatSend();
+                }
+            });
         });
 
         function updateSearchButton() {
@@ -806,32 +1224,9 @@
         }
 
         function searchCompletion(searchTerm) {
-            if (!masterData) {
+            if (!masterData || !dbColumns.typ) {
                 return [];
             }
-
-            const firstRow = masterData[0];
-            const columns = Object.keys(firstRow);
-
-            // Get column names
-            const typColumn = columns.find(col =>
-                col.toLowerCase().includes('typ') ||
-                col.toLowerCase().includes('ozna')
-            ) || columns[0];
-
-            const artiklColumn = columns.find(col =>
-                col.toLowerCase().includes('artikl')
-            ) || columns[1];
-
-            const vyrobceColumn = columns.find(col =>
-                col.toLowerCase().includes('výrobce') ||
-                col.toLowerCase().includes('vyrobce')
-            ) || columns[2];
-
-            const nazevColumn = columns.find(col =>
-                col.toLowerCase().includes('název') ||
-                col.toLowerCase().includes('nazev')
-            ) || columns[3];
 
             let matches = [];
 
@@ -839,14 +1234,14 @@
             let searchColumn;
             switch(searchField) {
                 case 'vyrobce':
-                    searchColumn = vyrobceColumn;
+                    searchColumn = dbColumns.vyrobce;
                     break;
                 case 'nazev':
-                    searchColumn = nazevColumn;
+                    searchColumn = dbColumns.nazev;
                     break;
                 case 'typ':
                 default:
-                    searchColumn = typColumn;
+                    searchColumn = dbColumns.typ;
                     break;
             }
 
@@ -861,10 +1256,10 @@
 
                     if (regex.test(searchValue)) {
                         matches.push({
-                            artikl: row[artiklColumn],
-                            foundTyp: row[typColumn],
-                            vyrobce: row[vyrobceColumn] || 'N/A',
-                            nazev: row[nazevColumn] || 'N/A',
+                            artikl: row[dbColumns.artikl],
+                            foundTyp: row[dbColumns.typ],
+                            vyrobce: row[dbColumns.vyrobce] || 'N/A',
+                            nazev: row[dbColumns.nazev] || 'N/A',
                             score: 100
                         });
                     }
@@ -879,10 +1274,10 @@
 
                     if (searchValueUpper.includes(searchUpper)) {
                         matches.push({
-                            artikl: row[artiklColumn],
-                            foundTyp: row[typColumn],
-                            vyrobce: row[vyrobceColumn] || 'N/A',
-                            nazev: row[nazevColumn] || 'N/A',
+                            artikl: row[dbColumns.artikl],
+                            foundTyp: row[dbColumns.typ],
+                            vyrobce: row[dbColumns.vyrobce] || 'N/A',
+                            nazev: row[dbColumns.nazev] || 'N/A',
                             score: 100
                         });
                     }
@@ -1138,6 +1533,7 @@
             // Clear current data and reload with new database if using predefined data
             if (usingPredefinedData) {
                 masterData = null;
+                identifyDbColumns(); // Vyčistit staré názvy sloupců
                 loadPredefinedData();
             }
         }
@@ -1235,13 +1631,16 @@
                         });
                     });
 
-                    const firstRow = jsonData[0];
-                    if (!firstRow['Typové označení'] && !firstRow['Typov\u0082© ozna\u00a3\u0082¾ en\u00a3­']) {
+                    masterData = jsonData;
+                    identifyDbColumns(); // UPRAVENO: Identifikujeme sloupce zde
+
+                    if (!dbColumns.typ) {
                         alert('❌ Soubor musí obsahovat sloupec "Typové označení"!');
+                        masterData = null; // Zpět na null, pokud jsou data neplatná
+                        identifyDbColumns();
                         return;
                     }
-
-                    masterData = jsonData;
+                    
                     usingPredefinedData = false;
 
                     document.getElementById('masterStatus').innerHTML =
@@ -1264,6 +1663,7 @@
 
             if (confirm(message)) {
                 masterData = null;
+                identifyDbColumns(); // UPRAVENO: Vyčistíme názvy sloupců
                 usingPredefinedData = false;
                 document.getElementById('masterFileName').textContent = '';
                 document.getElementById('masterStatus').innerHTML = '';
@@ -1415,8 +1815,8 @@
 
             const userTypStr = String(userTyp);
 
-            if (!masterData || masterData.length === 0) {
-                console.error('Master data jsou prázdná!');
+            if (!masterData || masterData.length === 0 || !dbColumns.typ) {
+                console.error('Master data nejsou prázdná nebo chybí sloupce!');
                 return {
                     matches: [],
                     bestScore: 0,
@@ -1426,46 +1826,24 @@
 
             let allMatches = [];
 
-            const firstRow = masterData[0];
-            const columns = Object.keys(firstRow);
-
-            const typColumn = columns.find(col =>
-                col.toLowerCase().includes('typ') ||
-                col.toLowerCase().includes('ozna')
-            ) || columns[0];
-
-            const artiklColumn = columns.find(col =>
-                col.toLowerCase().includes('artikl')
-            ) || columns[1];
-
-            const vyrobceColumn = columns.find(col =>
-                col.toLowerCase().includes('výrobce') ||
-                col.toLowerCase().includes('vyrobce')
-            ) || columns[2];
-
-            const nazevColumn = columns.find(col =>
-                col.toLowerCase().includes('název') ||
-                col.toLowerCase().includes('nazev')
-            ) || columns[3];
-
             // Determine which column to search in
             let searchColumn;
             switch(searchField) {
                 case 'vyrobce':
-                    searchColumn = vyrobceColumn;
+                    searchColumn = dbColumns.vyrobce;
                     break;
                 case 'nazev':
-                    searchColumn = nazevColumn;
+                    searchColumn = dbColumns.nazev;
                     break;
                 case 'typ':
                 default:
-                    searchColumn = typColumn;
+                    searchColumn = dbColumns.typ;
                     break;
             }
 
             for (let row of masterData) {
                 const masterValue = row[searchColumn];
-                const masterArtikl = row[artiklColumn];
+                const masterArtikl = row[dbColumns.artikl];
 
                 if (!masterValue && !masterArtikl) continue;
 
@@ -1519,9 +1897,9 @@
                 if (bestScore >= 40) {
                     allMatches.push({
                         artikl: masterArtikl,
-                        foundTyp: row[typColumn] || 'N/A',
-                        vyrobce: row[vyrobceColumn] || 'N/A',
-                        nazev: row[nazevColumn] || 'N/A',
+                        foundTyp: row[dbColumns.typ] || 'N/A',
+                        vyrobce: row[dbColumns.vyrobce] || 'N/A',
+                        nazev: row[dbColumns.nazev] || 'N/A',
                         score: Math.round(bestScore * 10) / 10
                     });
                 }
@@ -1576,10 +1954,23 @@
                         orange: 0,
                         red: 0
                     };
+                    
+                    // Najdeme název sloupce pro typové označení v uživatelském souboru
+                    const userTypColumn = Object.keys(jsonData[0]).find(col => 
+                        col.toLowerCase().includes('typ') ||
+                        col.toLowerCase().includes('ozna') ||
+                        col.toLowerCase().includes('typové označení') ||
+                        col.toLowerCase().includes('typov\u0082© ozna\u00a3\u0082¾ en\u00a3­')
+                    );
+                    
+                    if (!userTypColumn) {
+                        alert('❌ Uživatelský soubor neobsahuje sloupec "Typové označení".');
+                        throw new Error('Chybí sloupec "Typové označení" v uživatelském souboru.');
+                    }
 
                     for (let i = 0; i < jsonData.length; i++) {
                         const row = jsonData[i];
-                        const userTyp = row['Typové označení'] || row['Typov\u0082© ozna\u00a3\u0082¾ en\u00a3­'];
+                        const userTyp = row[userTypColumn];
 
                         const matchResult = findMatch(userTyp);
 
@@ -1657,7 +2048,7 @@
                     document.getElementById('resultsSection').style.display = 'block';
                     document.getElementById('resultsInfo').innerHTML =
                         `<strong>✅ Soubor zpracován a stažen!</strong><br><br>` +
-                        `📊 Statistika:<br>`G +
+                        `📊 Statistika:<br>`G
                         `🟢 Přesné shody (100%): ${stats.green}<br>` +
                         `🟡 Normalizované (95%+): ${stats.yellow}<br>` +
                         `🟠 Malé rozdíly (80-94%): ${stats.orange}<br>` +
@@ -1672,240 +2063,6 @@
                 }
             }, 500);
         }
-
-        // ======================================================
-        // =========== NOVÉ FUNKCE PRO AI ASISTENTA (Zjednodušená verze) ===========
-        // ======================================================
-
-        /**
-         * Uloží API klíč do dočasné proměnné `userApiKey` pro tuto relaci.
-         */
-        function saveApiKey() {
-            const keyInput = document.getElementById('apiKeyInput');
-            const key = keyInput.value.trim();
-            const statusDiv = document.getElementById('apiKeyStatus');
-
-            if (key && key.length > 20) { // Základní kontrola, že klíč není prázdný
-                userApiKey = key;
-                statusDiv.innerHTML = '<span style="color: green;">✅ Klíč úspěšně uložen pro tuto relaci.</span>';
-                keyInput.value = '*************************'; // Vizuální skrytí klíče
-                keyInput.disabled = true;
-            } else {
-                userApiKey = null;
-                statusDiv.innerHTML = '<span style="color: red;">❌ Prosím, vložte platný API klíč.</span>';
-                keyInput.disabled = false;
-            }
-        }
-
-        /**
-         * Vrátí uložený API klíč z dočasné proměnné.
-         */
-        function getApiKey() {
-            return userApiKey;
-        }
-
-        /**
-         * Přidá zprávu do okna chatu.
-         */
-        function addChatMessage(message, sender) {
-            const chatWindow = document.getElementById('chatWindow');
-            const msgDiv = document.createElement('div');
-            msgDiv.style.marginBottom = '8px';
-            msgDiv.style.wordWrap = 'break-word';
-            
-            // Nahradíme nové řádky za <br> a tučný text za <strong>
-            const formattedMessage = escapeAttr(message)
-                .replace(/\n/g, '<br>')
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); 
-
-            msgDiv.innerHTML = `<strong>${escapeAttr(sender)}:</strong> ${formattedMessage}`;
-            chatWindow.appendChild(msgDiv);
-            chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll
-        }
-
-        /**
-         * Odešle dotaz uživatele do AI a zpracuje odpověď.
-         */
-        async function sendChatMessage() {
-            const chatInput = document.getElementById('chatInput');
-            const userQuery = chatInput.value.trim();
-            
-            // 1. Kontrola API klíče
-            const apiKey = getApiKey();
-            if (!apiKey) {
-                addChatMessage("Prosím, nejprve uložte svůj Google AI API klíč v sekci 'Nastavení AI Asistenta' nahoře.", 'Robo Technolog');
-                return;
-            }
-
-            // 2. Kontrola dotazu
-            if (!userQuery) {
-                addChatMessage("Prosím, zadejte nějaký dotaz.", 'Robo Technolog');
-                return;
-            }
-
-            // 3. Kontrola Master Dat
-            if (!masterData) {
-                addChatMessage('Nejprve musí být načtena vědomostní základna (Master XLSX).', 'Robo Technolog');
-                return;
-            }
-
-            // Vše je OK, pokračujeme
-            addChatMessage(userQuery, 'Vy');
-            chatInput.value = 'Přemýšlím...';
-            chatInput.disabled = true;
-            addChatMessage('...', 'Robo Technolog'); // Dočasná zpráva "píšu..."
-
-            try {
-                // Krok 1: AI extrahuje klíčová slova
-                const prompt1 = `Jsi expert na technické komponenty. Uživatel hledá: "${userQuery}". 
-                Analyzuj tento dotaz a extrahuj z něj VŠECHNA relevantní klíčová slova pro prohledání databáze (sloupce 'Název', 'Typové označení'). 
-                Zahrň i běžná česká a technická synonymy (např. 'nerez'='MS' nebo 'NEREZ', 'průchodka'='VÝVODKA' nebo 'PRUCHODKA', 'díra'='OTVOR'). 
-                Odpověz POUZE jako JSON pole stringů v horním registru (UPPERCASE). Příklad: ["SLOVO1", "SLOVO2"]`;
-
-                const keywordsResponse = await callGeminiAPI(prompt1);
-                let keywords = [];
-                try {
-                    keywords = JSON.parse(keywordsResponse);
-                } catch (e) {
-                    throw new Error("AI nevrátila platná klíčová slova (očekávala JSON). Odpověď AI: " + keywordsResponse);
-                }
-
-
-                // Krok 2: Lokální vyhledávání v masterData
-                let localResults = [];
-                if (masterData && keywords.length > 0) {
-                    const nazevColumn = Object.keys(masterData[0]).find(k => k.toLowerCase().includes('název'));
-                    const typColumn = Object.keys(masterData[0]).find(k => k.toLowerCase().includes('typ'));
-                    const artiklColumn = Object.keys(masterData[0]).find(k => k.toLowerCase().includes('artikl'));
-                    const vyrobceColumn = Object.keys(masterData[0]).find(k => k.toLowerCase().includes('výrobce'));
-
-                    localResults = masterData.filter(row => {
-                        const nazev = String(row[nazevColumn] || '').toUpperCase();
-                        const typ = String(row[typColumn] || '').toUpperCase();
-                        const searchText = nazev + ' ' + typ;
-                        
-                        // Musí obsahovat všechna klíčová slova
-                        return keywords.every(kw => searchText.includes(kw.toUpperCase()));
-                    }).map(row => ({ // Vrátíme jen potřebná data
-                        artikl: row[artiklColumn],
-                        typ: row[typColumn],
-                        nazev: row[nazevColumn],
-                        vyrobce: row[vyrobceColumn]
-                    })).slice(0, 15); // Omezíme na 15 nejlepších
-                }
-
-                // Krok 3: AI sumarizuje výsledky
-                let prompt2;
-                if (localResults.length === 0) {
-                    prompt2 = `Uživatel hledá: "${userQuery}". V databázi jsem nenašel nic, co by odpovídalo klíčovým slovům ${JSON.stringify(keywords)}. 
-                    Odpověz mu prosím v češtině, že jsi nic nenašel, a navrhni mu, aby zkusil hledat obecněji, nebo zda to máš zkusit vyhledat na Google.`;
-                } else {
-                    const resultsJSON = JSON.stringify(localResults);
-                    prompt2 = `Uživatel hledá: "${userQuery}". 
-                    Prohledal jsem databázi a našel jsem těchto ${localResults.length} nejrelevantnějších výsledků:
-                    ${resultsJSON}
-                    
-                    Analyzuj tyto výsledky a vyber 1-3 nejlepší, které PŘESNĚ odpovídají dotazu. 
-                    Odpověz uživateli přátelsky v češtině. Uveď tučně 'Artikl' a 'Typové označení'. 
-                    Stručně vysvětli, proč si myslíš, že je to shoda (např. '...protože název obsahuje MS, což je nerez...').
-                    Pokud najdeš více dobrých shod, nabídni je (každou na novém řádku).
-                    Pokud žádný výsledek neodpovídá přesně, napiš, že jsi našel jen podobné položky, a vypiš je.`;
-                }
-
-                const finalAnswer = await callGeminiAPI(prompt2);
-                
-                // Aktualizujeme "..." zprávu s finální odpovědí
-                const chatWindow = document.getElementById('chatWindow');
-                const lastMsg = chatWindow.lastChild;
-                lastMsg.innerHTML = `<strong>Robo Technolog:</strong> ${finalAnswer.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}`;
-
-            } catch (error) {
-                console.error('Chyba AI API:', error);
-                const chatWindow = document.getElementById('chatWindow');
-                const lastMsg = chatWindow.lastChild;
-                // Zobrazíme srozumitelnou chybu
-                lastMsg.innerHTML = `<strong>Robo Technolog:</strong> Omlouvám se, nastala chyba: ${escapeAttr(error.message)}`;
-            } finally {
-                chatInput.value = '';
-                chatInput.disabled = false;
-                chatInput.focus();
-            }
-        }
-
-        /**
-         * Pomocná funkce pro volání Google Gemini API.
-         */
-        async function callGeminiAPI(promptText) {
-            const GEMINI_API_KEY = getApiKey(); // Načteme klíč z naší dočasné proměnné
-
-            if (!GEMINI_API_KEY) {
-                throw new Error("API klíč není nastaven.");
-            }
-            
-            const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-
-            const body = {
-                contents: [{
-                    parts: [{ text: promptText }]
-                }],
-                generationConfig: {
-                    temperature: 0.2,
-                    maxOutputTokens: 1000
-                }
-            };
-
-            const response = await fetch(GEMINI_API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(`Chyba API (${response.status}): ${errorData.error.message}. Zkontrolujte platnost svého API klíče.`);
-            }
-
-            const data = await response.json();
-            
-            if (!data.candidates || !data.candidates[0].content) {
-                throw new Error("API vrátilo neočekávanou nebo prázdnou odpověď.");
-            }
-
-            let text = data.candidates[0].content.parts[0].text;
-            text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-            return text;
-        }
-            };
-
-            const response = await fetch(GEMINI_API_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(body)
-            });
-
-            if (!response.ok) {
-                if (response.status === 400 || response.status === 403 || response.status === 429) {
-                    const errorData = await response.json();
-                     throw new Error(`Chyba API: ${errorData.error.message}. Zkontrolujte, zda je váš API klíč platný a aktivní.`);
-                }
-                throw new Error(`HTTP chyba! Status: ${response.status}`);
-            }
-
-            const data = await response.json();
-
-            if (!data.candidates || !data.candidates[0].content) {
-                throw new Error("API vrátilo neočekávanou odpověď. Zkuste to prosím znovu.");
-            }
-
-            let text = data.candidates[0].content.parts[0].text;
-            // Čištění odpovědi od Markdownu a prefixů
-            text = text.replace(/```json/g, '').replace(/```/g, '').trim();
-            return text;
-        }
-
-
     </script>
 </body>
 </html>
