@@ -465,7 +465,7 @@
                     </button>
                 </div>
                 <div style="margin-top: 8px; font-size: 0.85em; color: #666;">
-                    ℹ️ API klíč je uložen pouze po dobu relace (sessionStorage). <a href="https://aistudio.google.com/apikey" target="_blank" style="color: #667eea;">Získat API klíč</a>
+                    ℹ️ API klíč je uložen pouze po dobu relace. <a href="https://aistudio.google.com/apikey" target="_blank" style="color: #667eea;">Získat API klíč</a>
                 </div>
                 <div id="apiKeyStatus" style="margin-top: 10px;"></div>
             </div>
@@ -707,8 +707,9 @@ DATABÁZE: Obsahuje ${masterData.length} položek s těmito sloupci:
 
 ZKRATKY A ZNAČENÍ:
 - MS = nerez (materiál)
+- PG = Pancéřový závit (druh šroubení)
 - M20, M16, M12, M25, M32 = metrické velikosti (průměr v mm)
-- Kabel/Průchodka = typ součástky
+- Kabel, Průchodka, vodič, kabelové oko, dutinka, šroub, matka, jistič, stykač, svorka  = typ součástky
 - Čísla za lomítkem (např /10) = průměr díry v mm
 
 DOTAZ UŽIVATELE: "${message}"
@@ -763,7 +764,8 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
 ÚKOL: Prezentuj výsledky v češtině, přehledně:
 - Pokud jsou výsledky (max 5 nejlepších), uveď pro každý: Artikl, Typové označení, Výrobce, Název, + krátké vysvětlení proč odpovídá
 - Pokud je více než 5 výsledků, uveď počet a zobraz prvních 5
-- Pokud není žádný výsledek, navrhni úpravu dotazu nebo Google vyhledávání
+- Pokud není žádný výsledek dostatečně přesný, navrhni úpravu dotazu nebo Google vyhledávání
+- Vše přehledně formátuj pomocí ASCII charakterů.
 - Buď konkrétní a praktický`
                             }]
                         }],
