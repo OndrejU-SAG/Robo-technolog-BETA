@@ -10,8 +10,9 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
-
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -21,7 +22,11 @@
             justify-content: center;
             align-items: center;
         }
-
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
+        
         .container {
             background: white;
             border-radius: 20px;
@@ -30,21 +35,54 @@
             max-width: 800px;
             width: 100%;
         }
-
+        
+        .dark-mode .container {
+            background: #2d2d44;
+            color: #e0e0e0;
+        }
+        
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
         h1 {
             color: #667eea;
-            margin-bottom: 10px;
+            margin-bottom: 0;
             font-size: 2.5em;
-            text-align: center;
+            text-align: left;
         }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
+        
+        .dark-mode h1 {
+            color: #8b7cff;
         }
-
+        
+        .dark-mode-toggle {
+            background: #f0f2ff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .dark-mode .dark-mode-toggle {
+            background: #3d3d5c;
+        }
+        
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
         .section {
             margin-bottom: 30px;
             padding: 25px;
@@ -53,30 +91,54 @@
             border: 2px dashed #ddd;
             transition: all 0.3s;
         }
-
+        
+        .dark-mode .section {
+            background: #3d3d5c;
+            border-color: #555;
+        }
+        
+        .section.compact {
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .section.compact h2 {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
         .section:hover {
             border-color: #667eea;
             background: #f0f2ff;
         }
-
+        
+        .dark-mode .section:hover {
+            border-color: #8b7cff;
+            background: #4a4a6a;
+        }
+        
         .section h2 {
             color: #333;
             margin-bottom: 15px;
             font-size: 1.3em;
         }
-
+        
+        .dark-mode .section h2 {
+            color: #e0e0e0;
+        }
+        
         .file-input-wrapper {
             position: relative;
             overflow: hidden;
             display: inline-block;
             width: 100%;
         }
-
+        
         .file-input-wrapper input[type=file] {
             position: absolute;
             left: -9999px;
         }
-
+        
         .file-input-label {
             display: block;
             padding: 15px 25px;
@@ -89,45 +151,45 @@
             transition: all 0.3s;
             font-size: 1.05em;
         }
-
+        
         .file-input-label:hover {
             background: #5568d3;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-
+        
         .file-name {
             margin-top: 10px;
             color: #666;
             font-size: 0.9em;
             text-align: center;
         }
-
+        
         .status {
             margin-top: 15px;
             padding: 12px;
             border-radius: 8px;
             font-weight: 500;
         }
-
+        
         .status.success {
             background: #d4edda;
             color: #155724;
             border: 1px solid #c3e6cb;
         }
-
+        
         .status.info {
             background: #d1ecf1;
             color: #0c5460;
             border: 1px solid #bee5eb;
         }
-
+        
         .status.warning {
             background: #fff3cd;
             color: #856404;
             border: 1px solid #ffeaa7;
         }
-
+        
         .btn {
             padding: 15px 30px;
             border: none;
@@ -139,35 +201,35 @@
             width: 100%;
             margin-top: 10px;
         }
-
+        
         .btn-primary {
             background: #28a745;
             color: white;
         }
-
+        
         .btn-primary:hover:not(:disabled) {
             background: #218838;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
         }
-
+        
         .btn-danger {
             background: #dc3545;
             color: white;
         }
-
+        
         .btn-danger:hover {
             background: #c82333;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
         }
-
+        
         .btn:disabled {
             background: #ccc;
             cursor: not-allowed;
             transform: none;
         }
-
+        
         .legend {
             margin-top: 20px;
             padding: 20px;
@@ -175,20 +237,20 @@
             border-radius: 10px;
             border: 1px solid #ddd;
         }
-
+        
         .legend h3 {
             margin-bottom: 15px;
             color: #333;
             font-size: 1.1em;
         }
-
+        
         .legend-item {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
             font-size: 0.95em;
         }
-
+        
         .legend-color {
             width: 30px;
             height: 20px;
@@ -196,21 +258,23 @@
             margin-right: 10px;
             border: 1px solid #ddd;
         }
-
+        
         .color-green { background: #90EE90; }
         .color-yellow { background: #FFFF00; }
         .color-orange { background: #FFA500; }
         .color-red { background: #FF6B6B; }
-
+        .color-purple { background: #b8a3ff; border-color: #6d4aff; }
+        
+        /* Material You Toggle Switch */
         .toggle-container {
             position: relative;
             display: inline-block;
         }
-
+        
         .toggle-input {
             display: none;
         }
-
+        
         .toggle-label {
             display: block;
             width: 60px;
@@ -222,7 +286,7 @@
             transition: background 0.3s;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-
+        
         .toggle-button {
             position: absolute;
             top: 3px;
@@ -234,19 +298,20 @@
             transition: transform 0.3s;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-
+        
         .toggle-input:checked + .toggle-label {
             background: #28a745;
         }
-
+        
         .toggle-label.effretikon {
             background: #dc3545 !important;
         }
-
+        
         .toggle-input:checked + .toggle-label .toggle-button {
             transform: translateX(30px);
         }
-
+        
+        /* Enhanced toggle with labels */
         .toggle-with-labels {
             display: flex;
             align-items: center;
@@ -256,7 +321,7 @@
             border-radius: 25px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-
+        
         .toggle-option-label {
             font-weight: 600;
             font-size: 0.95em;
@@ -265,15 +330,145 @@
             padding: 5px 10px;
             border-radius: 15px;
         }
-
+        
         .toggle-option-label.active {
             color: white;
         }
-
+        
         .toggle-option-label.inactive {
-            color: #666;
+            color: #999;
         }
-
+        
+        /* Three-state toggle */
+        .three-state-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f0f2ff;
+            padding: 8px 15px;
+            border-radius: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .three-state-option {
+            font-weight: 600;
+            font-size: 0.95em;
+            padding: 8px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        
+        .three-state-option.active {
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .three-state-option.inactive {
+            color: #999;
+            background: transparent;
+        }
+        
+        .three-state-option:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* Search history */
+        .search-history {
+            margin-top: 10px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+            font-size: 0.85em;
+        }
+        
+        .dark-mode .search-history {
+            background: #3d3d5c;
+        }
+        
+        .history-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 4px 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            margin: 3px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        
+        .dark-mode .history-item {
+            background: #4a4a6a;
+            border-color: #666;
+            color: #e0e0e0;
+        }
+        
+        .history-item:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+        
+        .history-clear {
+            color: #999;
+            cursor: pointer;
+            font-size: 0.75em;
+            margin-left: 8px;
+        }
+        
+        .history-clear:hover {
+            color: #dc3545;
+        }
+        
+        /* Copy button */
+        .copy-btn {
+            background: transparent;
+            color: #667eea;
+            border: 1px solid #667eea;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 6px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .copy-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .copy-btn.copied {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+        
+        /* Highlight match */
+        .highlight {
+            background: rgba(255, 235, 59, 0.4);
+            font-weight: 600;
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+        
+        .dark-mode .highlight {
+            background: rgba(109, 74, 255, 0.3);
+            color: #e0e0e0;
+        }
+        
         .search-result {
             background: white;
             border-radius: 10px;
@@ -281,48 +476,44 @@
             margin-bottom: 15px;
             border: 2px solid #ddd;
         }
-
+        
         .result-header {
             font-size: 1.2em;
             font-weight: bold;
             margin-bottom: 15px;
             color: #333;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
         }
-
+        
         .result-item {
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 10px;
             border: 2px solid #ddd;
-            position: relative;
         }
-
+        
         .result-item.green { background: #90EE90; border-color: #5cb85c; }
         .result-item.yellow { background: #FFFF00; border-color: #f0ad4e; }
         .result-item.orange { background: #FFA500; border-color: #ff8c00; }
         .result-item.red { background: #FF6B6B; border-color: #d9534f; }
-
+        .result-item.purple { background: #b8a3ff; border-color: #6d4aff; }
+        
         .result-row {
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
             font-size: 1em;
         }
-
+        
         .result-label {
             font-weight: 600;
             color: #333;
         }
-
+        
         .result-value {
             color: #555;
             text-align: right;
         }
-
+        
         .google-search-btn {
             margin-top: 10px;
             padding: 8px 16px;
@@ -333,74 +524,72 @@
             cursor: pointer;
             font-weight: 500;
             font-size: 0.9em;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 8px;
             transition: all 0.3s;
+            width: 100%;
+            justify-content: center;
         }
-
+        
         .google-search-btn:hover {
             background: #3367d6;
             transform: translateY(-2px);
             box-shadow: 0 3px 10px rgba(66, 133, 244, 0.4);
         }
-
-        .google-search-icon {
-            cursor: pointer;
-            color: #4285f4;
-            font-size: 1.2em;
-            margin-left: 8px;
-            transition: all 0.3s;
-        }
-
-        .google-search-icon:hover {
-            color: #3367d6;
-            transform: scale(1.2);
-        }
-
-        .chat-message {
-            margin-bottom: 15px;
-            padding: 12px 15px;
-            border-radius: 10px;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .bot-message {
+        
+        .google-icon {
+            width: 18px;
+            height: 18px;
+            display: inline-block;
             background: white;
-            border: 2px solid #667eea;
-            border-left: 5px solid #667eea;
+            border-radius: 3px;
+            padding: 2px;
+            font-weight: bold;
+            font-size: 12px;
+            text-align: center;
+            line-height: 18px;
         }
-
-        .user-message {
-            background: #e3f2fd;
-            border: 2px solid #2196f3;
-            border-left: 5px solid #2196f3;
-            margin-left: 20px;
+        
+        .google-mini-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-left: 8px;
+            padding: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
         }
-
-        .chat-message strong {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
+        
+        .google-mini-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            border-color: #4285f4;
         }
-
-        .chat-message p {
-            margin: 5px 0;
-            color: #555;
-            line-height: 1.5;
+        
+        .google-logo-mini {
+            font-weight: 700;
+            font-size: 15px;
+            font-family: 'Product Sans', Arial, sans-serif;
+            background: linear-gradient(90deg, #4285f4 0%, #ea4335 25%, #fbbc05 50%, #34a853 75%, #4285f4 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-
+        
         .processing {
             text-align: center;
             padding: 20px;
             display: none;
         }
-
+        
         .spinner {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #667eea;
@@ -410,7 +599,7 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 15px;
         }
-
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -419,14 +608,19 @@
 </head>
 <body>
     <div class="container">
-        <h1>🤖 Robo Technolog</h1>
-        <p class="subtitle">V3.1 s AI Asistentem</p>
-
+        <div class="header-controls">
+            <h1>🤖 Robo Technolog</h1>
+            <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Přepnout tmavý režim">
+                <span id="darkModeIcon">🌙</span>
+            </button>
+        </div>
+        
         <!-- Master File Section -->
-        <div class="section">
-            <h2>📚 Vědomostní základna (Master XLSX)</h2>
-
-            <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 15px;">
+        <div class="section compact">
+            <h2>📚 Vědomostní základna</h2>
+            
+            <!-- Database Toggle -->
+            <div style="margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 15px;">
                 <div class="toggle-with-labels">
                     <span class="toggle-option-label" id="ustiLabel" style="color: white; background: #28a745;">Ústí</span>
                     <div class="toggle-container">
@@ -438,75 +632,40 @@
                     <span class="toggle-option-label inactive" id="effiLabel">Effretikon</span>
                 </div>
             </div>
-
-            <div class="file-input-wrapper">
-                <input type="file" id="masterFile" accept=".xlsx,.xls" onchange="handleMasterFile(event)">
-                <label for="masterFile" class="file-input-label">
-                    📂 Nahrát Master soubor
-                </label>
-            </div>
-            <div class="file-name" id="masterFileName"></div>
-            <div id="masterStatus"></div>
-            <button class="btn btn-danger" id="clearMasterBtn" onclick="clearMasterFile()" style="display:none; margin-top:15px;">
-                🗑️ Smazat uloženou vědomostní základnu
-            </button>
-        </div>
-
-        <!-- AI Assistant Section -->
-        <div class="section">
-            <h2>🤖 AI Asistent (Gemini 2.5 Flash)</h2>
             
-            <div id="apiKeySection" style="margin-bottom: 20px;">
-                <div style="display: flex; gap: 10px; align-items: flex-start;">
-                    <input type="password" id="apiKeyInput" placeholder="Zadejte váš Google AI API klíč..."
-                           style="flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1em;">
-                    <button class="btn btn-primary" onclick="saveApiKey()" style="width: auto; margin: 0; padding: 12px 24px;">
-                        🔑 Uložit klíč
-                    </button>
-                </div>
-                <div style="margin-top: 8px; font-size: 0.85em; color: #666;">
-                    ℹ️ API klíč je uložen pouze po dobu relace. <a href="https://aistudio.google.com/apikey" target="_blank" style="color: #667eea;">Získat API klíč</a>
-                </div>
-                <div id="apiKeyStatus" style="margin-top: 10px;"></div>
-            </div>
-
-            <div id="chatSection" style="display: none;">
-                <div id="chatMessages" style="background: #f8f9fa; border-radius: 10px; padding: 20px; min-height: 300px; max-height: 400px; overflow-y: auto; margin-bottom: 15px; border: 2px solid #ddd;">
-                    <div class="chat-message bot-message">
-                        <strong>🤖 AI Asistent:</strong>
-                        <p>Ahoj! Jsem tady, abych ti pomohl najít komponenty v databázi. Můžeš mi říct co hledáš a já se pokusím najít nejvhodnější artikl.</p>
-                        <p style="margin-top: 10px; font-size: 0.9em; color: #666;">Příklad: "Hledám průchodku M20, nerez, 10 díra"</p>
+            <div class="file-name" id="masterFileName" style="font-size: 0.85em;"></div>
+            <div id="masterStatus" style="font-size: 0.85em;"></div>
+            
+            <details style="margin-top: 10px;">
+                <summary style="cursor: pointer; font-weight: 600; color: #667eea; font-size: 0.9em;">⚙️ Pokročilé možnosti</summary>
+                <div style="margin-top: 10px;">
+                    <div class="file-input-wrapper">
+                        <input type="file" id="masterFile" accept=".xlsx,.xls" onchange="handleMasterFile(event)">
+                        <label for="masterFile" class="file-input-label" style="padding: 10px 20px; font-size: 0.95em;">
+                            📂 Nahrát vlastní Master soubor
+                        </label>
                     </div>
-                </div>
-
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="chatInput" placeholder="Napiš co hledáš..."
-                           style="flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1em;"
-                           onkeypress="if(event.key==='Enter') sendChatMessage()">
-                    <button class="btn btn-primary" onclick="sendChatMessage()" id="sendChatBtn" style="width: auto; margin: 0; padding: 12px 24px;">
-                        📤 Odeslat
+                    <button class="btn btn-danger" id="clearMasterBtn" onclick="clearMasterFile()" style="display:none; margin-top:10px; padding: 10px 20px; font-size: 0.9em;">
+                        🗑️ Smazat uloženou základnu
                     </button>
                 </div>
-            </div>
+            </details>
         </div>
-
+        
         <!-- Quick Search Section -->
         <div class="section">
             <h2>🔍 Rychlé vyhledávání</h2>
-
+            
+            <!-- Mode Toggle -->
             <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 15px;">
-                <div class="toggle-with-labels">
-                    <span class="toggle-option-label" id="fuzzyLabel" style="color: white; background: #667eea;">Fuzzy Search</span>
-                    <div class="toggle-container">
-                        <input type="checkbox" id="searchModeToggle" class="toggle-input" onchange="updateSearchMode()">
-                        <label for="searchModeToggle" class="toggle-label">
-                            <span class="toggle-button"></span>
-                        </label>
-                    </div>
-                    <span class="toggle-option-label inactive" id="completionLabel">Doplňování</span>
+                <div class="three-state-toggle">
+                    <span class="three-state-option inactive" id="fuzzyLabel" onclick="setSearchMode('fuzzy')">Fuzzy Search</span>
+                    <span class="three-state-option active" id="combinedLabel" onclick="setSearchMode('combined')" style="background: #667eea; color: white;">Kombinované</span>
+                    <span class="three-state-option inactive" id="completionLabel" onclick="setSearchMode('completion')">Doplňování</span>
                 </div>
             </div>
-
+            
+            <!-- Search Field Selector -->
             <div style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
                 <span style="font-weight: 600; color: #333;">Hledat v:</span>
                 <label style="display: flex; align-items: center; gap: 5px; cursor: pointer; padding: 8px 15px; background: #f0f2ff; border-radius: 8px; transition: all 0.3s;" onmouseover="this.style.background='#e0e4ff'" onmouseout="this.style.background='#f0f2ff'">
@@ -522,39 +681,49 @@
                     <span style="font-weight: 500;">Název</span>
                 </label>
             </div>
-
+            
             <div id="searchModeDescription" style="text-align: center; margin-bottom: 15px; padding: 10px; background: #f0f2ff; border-radius: 8px; font-size: 0.95em; color: #555;">
-                🎯 Hledá nejpodobnější shody, vrací top 3 výsledky
+                🎯 Kombinuje fuzzy search a wildcard (*), vrací všechny shody
             </div>
-
-            <input type="text" id="searchInput" placeholder="Zadejte typové označení k vyhledání..."
+            
+            <input type="text" id="searchInput" placeholder="Zadejte typové označení k vyhledání..." 
                    style="width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 1.05em; margin-bottom: 10px;"
                    onkeypress="if(event.key==='Enter') searchSingle()">
             <button class="btn btn-primary" id="searchBtn" onclick="searchSingle()" disabled>
                 🔎 Vyhledat artikl
             </button>
-
-            <div id="manufacturerFilter" style="display:none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 2px solid #ddd;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <div style="font-weight: 600; color: #333;">🏭 Filtrovat podle výrobců:</div>
-                    <div style="display: flex; gap: 10px;">
-                        <button onclick="selectAllManufacturers()" style="padding: 5px 10px; background: #667eea; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='#5568d3'" onmouseout="this.style.background='#667eea'">
+            
+            <!-- Search History -->
+            <div class="search-history" id="searchHistory">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <span style="font-weight: 600; font-size: 0.85em; color: #666;">📜 Historie:</span>
+                    <span class="history-clear" onclick="clearHistory()">Vymazat</span>
+                </div>
+                <div id="historyItems"></div>
+            </div>
+            
+            <!-- Manufacturer Filter (only visible in completion mode after search) -->
+            <div id="manufacturerFilter" style="display:none; margin-top: 10px; padding: 10px; background: #f8f9fa; border-radius: 8px; border: 2px solid #ddd; font-size: 0.9em;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div style="font-weight: 600; color: #333; font-size: 0.95em;">🏭 Filtr výrobců:</div>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="selectAllManufacturers()" style="padding: 4px 12px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.8em; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='#5568d3'" onmouseout="this.style.background='#667eea'">
                             ✓ Vše
                         </button>
-                        <button onclick="deselectAllManufacturers()" style="padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='#c82333'" onmouseout="this.style.background='#dc3545'">
+                        <button onclick="deselectAllManufacturers()" style="padding: 4px 12px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.8em; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='#c82333'" onmouseout="this.style.background='#dc3545'">
                             ✗ Nic
                         </button>
                     </div>
                 </div>
-                <div id="manufacturerCheckboxes" style="display: flex; flex-wrap: wrap; gap: 5px;"></div>
-                <button class="btn btn-primary" onclick="applyManufacturerFilter()" style="margin-top: 10px; padding: 10px 20px; font-size: 0.95em;">
+                <div id="manufacturerCheckboxes" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+                <button class="btn btn-primary" onclick="applyManufacturerFilter()" style="margin-top: 8px; padding: 8px 16px; font-size: 0.9em;">
                     ✓ Použít filtr
                 </button>
             </div>
-
+            
             <div id="searchResults" style="display:none; margin-top: 20px;"></div>
         </div>
-
+        
         <!-- User File Section -->
         <div class="section">
             <h2>📄 Uživatelský soubor (XLSX k doplnění)</h2>
@@ -569,18 +738,18 @@
                 ⚙️ Zpracovat a doplnit artikly
             </button>
         </div>
-
+        
         <!-- Processing Animation -->
         <div class="processing" id="processingDiv">
             <div class="spinner"></div>
             <p>Zpracovávám data...</p>
         </div>
-
+        
         <!-- Results Section -->
         <div id="resultsSection" style="display:none;">
             <div class="status info" id="resultsInfo"></div>
         </div>
-
+        
         <!-- Legend -->
         <div class="legend">
             <h3>📊 Legenda označení:</h3>
@@ -610,334 +779,61 @@
         const PREDEFINED_CSV = '';
         const PREDEFINED_CSV_URL = 'master-data.csv';
         const PREDEFINED_CSV_URL_EFFI = 'master-data-effi.csv';
-
+        
         let masterData = null;
         let userData = null;
         let usingPredefinedData = false;
-        let searchMode = 'fuzzy';
-        let searchField = 'typ';
-        let lastSearchResults = [];
-        let selectedManufacturers = new Set();
-        let currentDatabase = 'usti';
-        let apiKey = null;
-
-        function escapeAttr(s) {
-            return String(s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-        }
-
-        function escapeHtml(s) {
-            const div = document.createElement('div');
-            div.textContent = s;
-            return div.innerHTML;
-        }
-
-        // API Key Management
-        function saveApiKey() {
-            const input = document.getElementById('apiKeyInput');
-            const key = input.value.trim();
-            
-            if (!key) {
-                alert('⚠️ Prosím zadejte API klíč');
-                return;
-            }
-
-            sessionStorage.setItem('gemini_api_key', key);
-            apiKey = key;
-            
-            document.getElementById('apiKeyStatus').innerHTML = 
-                '<div class="status success">✅ API klíč byl uložen pro tuto relaci</div>';
-            document.getElementById('chatSection').style.display = 'block';
-            document.getElementById('apiKeySection').style.display = 'none';
-            
-            input.value = '';
-        }
-
-        function loadApiKey() {
-            const savedKey = sessionStorage.getItem('gemini_api_key');
-            if (savedKey) {
-                apiKey = savedKey;
-                document.getElementById('apiKeyStatus').innerHTML = 
-                    '<div class="status success">✅ API klíč načten z relace</div>';
-                document.getElementById('chatSection').style.display = 'block';
-                document.getElementById('apiKeySection').style.display = 'none';
-            }
-        }
-
-        // Chat functionality with database search
-        async function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            if (!apiKey) {
-                alert('⚠️ Nejprve zadejte API klíč');
-                return;
-            }
-
-            if (!masterData || masterData.length === 0) {
-                alert('⚠️ Nejprve nahrajte master databázi');
-                return;
-            }
-
-            addChatMessage(message, 'user');
-            input.value = '';
-
-            const sendBtn = document.getElementById('sendChatBtn');
-            sendBtn.disabled = true;
-            sendBtn.textContent = '⏳ Zpracovávám...';
-
-            try {
-                // Step 1: Extract search parameters
-                const response = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=' + apiKey, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: `Jsi asistent pro extrakci vyhledávacích parametrů z dotazů uživatelů.
-
-DATABÁZE: Obsahuje ${masterData.length} položek s těmito sloupci:
-- Artikl (artikelní číslo)
-- Typové označení (model/typ produktu)
-- Výrobce (značka)
-- Název (popis produktu)
-
-ZKRATKY A ZNAČENÍ:
-- MS = nerez (materiál)
-- PG = Pancéřový závit (druh šroubení)
-- M20, M16, M12, M25, M32 = metrické velikosti (průměr v mm)
-- Kabel, Průchodka, vodič, kabelové oko, dutinka, šroub, matka, jistič, stykač, svorka  = typ součástky
-- Čísla za lomítkem (např /10) = průměr díry v mm
-
-DOTAZ UŽIVATELE: "${message}"
-
-ÚKOL: Analyzuj dotaz a extrahuj klíčová slova. Odpověz POUZE ve formátu JSON (bez markdown):
-{
-  "keywords": ["klíčové", "slovo1", "slovo2"],
-  "type": "typ součástky pokud je uvedený",
-  "manufacturer": "výrobce pokud je uvedený",
-  "size": "velikost pokud je uvedená (např. M20)",
-  "material": "materiál pokud je uvedený (např. MS/nerez)",
-  "description": "krátký popis co uživatel hledá"
-}`
-                            }]
-                        }],
-                        generationConfig: {
-                            temperature: 0.1,
-                            maxOutputTokens: 500,
-                        }
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.error?.message || 'Chyba API volání');
-                }
-
-                const data = await response.json();
-                let aiResponseText = data.candidates[0]?.content?.parts[0]?.text || '{}';
-                
-                aiResponseText = aiResponseText.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-                
-                const searchParams = JSON.parse(aiResponseText);
-                
-                // Step 2: Search entire database
-                const searchResults = searchDatabaseWithAI(searchParams);
-                
-                // Step 3: Present results
-                const presentationResponse = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=' + apiKey, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{
-                                text: `Uživatel hledal: "${message}"
-
-Nalezené výsledky z databáze (${searchResults.length} položek):
-${JSON.stringify(searchResults.slice(0, 10), null, 2)}
-
-ÚKOL: Prezentuj výsledky v češtině, přehledně:
-- Pokud jsou výsledky (max 5 nejlepších), uveď pro každý: Artikl, Typové označení, Výrobce, Název, + krátké vysvětlení proč odpovídá
-- Pokud je více než 5 výsledků, uveď počet a zobraz prvních 5
-- Pokud není žádný výsledek, navrhni úpravu dotazu nebo Google vyhledávání
-- Buď konkrétní a praktický`
-                            }]
-                        }],
-                        generationConfig: {
-                            temperature: 0.3,
-                            maxOutputTokens: 2048,
-                        }
-                    })
-                });
-
-                if (!presentationResponse.ok) {
-                    const errorData = await presentationResponse.json();
-                    throw new Error(errorData.error?.message || 'Chyba API volání');
-                }
-
-                const presentationData = await presentationResponse.json();
-                const finalResponse = presentationData.candidates[0]?.content?.parts[0]?.text || 'Nepodařilo se získat odpověď';
-                
-                addChatMessage(finalResponse, 'bot');
-                
-            } catch (error) {
-                console.error('Chat error:', error);
-                addChatMessage('❌ Chyba při zpracování: ' + error.message + '\n\nZkontrolujte prosím API klíč a připojení k internetu.', 'bot');
-            } finally {
-                sendBtn.disabled = false;
-                sendBtn.textContent = '📤 Odeslat';
-            }
-        }
-
-        function searchDatabaseWithAI(params) {
-            const results = [];
-            
-            const firstRow = masterData[0];
-            const columns = Object.keys(firstRow);
-            
-            const typColumn = columns.find(col => 
-                col.toLowerCase().includes('typ') || 
-                col.toLowerCase().includes('ozna')
-            ) || columns[0];
-            
-            const artiklColumn = columns.find(col => 
-                col.toLowerCase().includes('artikl')
-            ) || columns[1];
-            
-            const vyrobceColumn = columns.find(col => 
-                col.toLowerCase().includes('výrobce') || 
-                col.toLowerCase().includes('vyrobce')
-            ) || columns[2];
-            
-            const nazevColumn = columns.find(col => 
-                col.toLowerCase().includes('název') || 
-                col.toLowerCase().includes('nazev')
-            ) || columns[3];
-
-            for (let row of masterData) {
-                let score = 0;
-                let matchReasons = [];
-
-                const typValue = String(row[typColumn] || '').toUpperCase();
-                const vyrobceValue = String(row[vyrobceColumn] || '').toUpperCase();
-                const nazevValue = String(row[nazevColumn] || '').toUpperCase();
-                const artiklValue = String(row[artiklColumn] || '');
-
-                if (params.keywords && Array.isArray(params.keywords)) {
-                    params.keywords.forEach(keyword => {
-                        const kw = String(keyword).toUpperCase();
-                        if (typValue.includes(kw)) {
-                            score += 30;
-                            matchReasons.push('typ obsahuje ' + keyword);
-                        }
-                        if (nazevValue.includes(kw)) {
-                            score += 20;
-                            matchReasons.push('název obsahuje ' + keyword);
-                        }
-                        if (vyrobceValue.includes(kw)) {
-                            score += 15;
-                            matchReasons.push('výrobce obsahuje ' + keyword);
-                        }
-                    });
-                }
-
-                if (params.manufacturer) {
-                    const mfg = String(params.manufacturer).toUpperCase();
-                    if (vyrobceValue.includes(mfg)) {
-                        score += 40;
-                        matchReasons.push('výrobce odpovídá');
-                    }
-                }
-
-                if (params.size) {
-                    const size = String(params.size).toUpperCase();
-                    if (typValue.includes(size) || nazevValue.includes(size)) {
-                        score += 35;
-                        matchReasons.push('velikost odpovídá');
-                    }
-                }
-
-                if (params.material) {
-                    const mat = String(params.material).toUpperCase();
-                    if (typValue.includes(mat) || nazevValue.includes(mat) || typValue.includes('MS') || nazevValue.includes('MS')) {
-                        score += 25;
-                        matchReasons.push('materiál odpovídá');
-                    }
-                }
-
-                if (params.type) {
-                    const type = String(params.type).toUpperCase();
-                    if (nazevValue.includes(type) || typValue.includes(type)) {
-                        score += 30;
-                        matchReasons.push('typ odpovídá');
-                    }
-                }
-
-                if (score > 0) {
-                    results.push({
-                        artikl: artiklValue,
-                        typ: row[typColumn] || 'N/A',
-                        vyrobce: row[vyrobceColumn] || 'N/A',
-                        nazev: row[nazevColumn] || 'N/A',
-                        score: score,
-                        reasons: matchReasons.join(', ')
-                    });
-                }
-            }
-
-            results.sort((a, b) => b.score - a.score);
-            return results.slice(0, 20);
-        }
-
-        function addChatMessage(message, type) {
-            const messagesDiv = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat-message ${type}-message`;
-            
-            const icon = type === 'bot' ? '🤖 AI Asistent:' : '👤 Vy:';
-            
-            let formattedMessage = escapeHtml(message)
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\n/g, '<br>');
-            
-            messageDiv.innerHTML = `<strong>${icon}</strong><p>${formattedMessage}</p>`;
-            messagesDiv.appendChild(messageDiv);
-            
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
+        let searchMode = 'combined'; // 'fuzzy', 'completion', or 'combined'
+        let searchField = 'typ'; // 'typ', 'vyrobce', or 'nazev'
+        let lastSearchResults = []; // Store last search results for filtering
+        let selectedManufacturers = new Set(); // Store selected manufacturers
+        let currentDatabase = 'usti'; // 'usti' or 'effretikon'
+        let searchHistory = []; // Store search history
+        let currentSearchTerm = ''; // Store current search term for highlighting
+        
+        // Manufacturer synonyms
+        const manufacturerSynonyms = {
+            'SCHALTAG': ['SCHALTAG CZ', 'SCHALTAG'],
+            'SCHALTAG CZ': ['SCHALTAG CZ', 'SCHALTAG'],
+            'WAGO': ['WAGO', 'WAGO KONTAKTTECHNIK'],
+            'SIEMENS': ['SIEMENS', 'SIE', 'SIE.'],
+            'RITTAL': ['RITTAL', 'RIT', 'RIT.'],
+            'PHOENIX': ['PHOENIX', 'PHO', 'PHO.', 'PHOENIX CONTACT'],
+            'ABB': ['ABB', 'ABB STOTZ'],
+            'SCHNEIDER': ['SCHNEIDER', 'SCHNE', 'SCHNE.', 'SCHNEIDER ELECTRIC'],
+            'EATON': ['EATON', 'EATON MOELLER'],
+            'SICK': ['SICK', 'SICK AG']
+        };
+        
         function parseCsvWithSemicolon(csvText) {
             const lines = csvText.trim().split('\n');
             if (lines.length < 2) return [];
-
+            
             const headers = lines[0].split(';').map(h => h.trim());
             const data = [];
-
+            
             for (let i = 1; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (!line) continue;
-
+                
                 const values = line.split(';');
                 const row = {};
                 headers.forEach((header, index) => {
                     const value = values[index] !== undefined ? values[index].trim() : '';
+                    // Fix encoding issues with Czech characters
                     row[header] = fixCzechEncoding(value);
                 });
-
+                
                 data.push(row);
             }
-
+            
             return data;
         }
-
+        
         function fixCzechEncoding(text) {
             if (!text) return text;
-
+            
+            // Remove all diacritics - convert accented characters to base characters
             const diacriticsMap = {
                 'á': 'a', 'Á': 'A', 'ä': 'a', 'Ä': 'A',
                 'č': 'c', 'Č': 'C', 'ć': 'c', 'Ć': 'C',
@@ -952,52 +848,58 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                 'ú': 'u', 'Ú': 'U', 'ů': 'u', 'Ů': 'U', 'ü': 'u', 'Ü': 'U', 'ù': 'u', 'Ù': 'U',
                 'ý': 'y', 'Ý': 'Y', 'ÿ': 'y',
                 'ž': 'z', 'Ž': 'Z',
-                'ß': 'ss'
+                'ß': 'ss',
+                // Fix common encoding issues first
+                'Ã¡': 'a', 'Ã©': 'e', 'Ã­': 'i', 'Ã³': 'o', 'Ãº': 'u', 'Å¯': 'u', 'Ã½': 'y',
+                'Ä': 'c', 'Ä›': 'e', 'Å¡': 's', 'Å™': 'r', 'Å¾': 'z', 'Ä': 'd', 'Å¥': 't', 'Å': 'n',
+                'Ã': 'A', 'Ã‰': 'E', 'Ã': 'I', 'Ã"': 'O', 'Ãš': 'U', 'Å®': 'U', 'Ã': 'Y',
+                'Ä': 'C', 'Äš': 'E', 'Å ': 'S', 'Å˜': 'R', 'Å½': 'Z', 'ÄŽ': 'D', 'Å¤': 'T', 'Å‡': 'N',
+                'Ã¤': 'a', 'Ã¶': 'o', 'Ã¼': 'u', 'Ã„': 'A', 'Ã–': 'O', 'Ãœ': 'U', 'ÃŸ': 'ss'
             };
-
+            
             let fixed = text;
             for (let [accented, base] of Object.entries(diacriticsMap)) {
                 fixed = fixed.replace(new RegExp(accented, 'g'), base);
             }
-
+            
             return fixed;
         }
-
+        
         function loadPredefinedData() {
             if (PREDEFINED_CSV_URL && PREDEFINED_CSV_URL.trim() !== '') {
                 loadPredefinedFromURL();
                 return true;
             }
-
+            
             if (!PREDEFINED_CSV || PREDEFINED_CSV.trim() === '') {
                 return false;
             }
-
+            
             try {
                 const data = parseCsvWithSemicolon(PREDEFINED_CSV);
-
+                
                 if (data.length === 0) {
                     console.warn('Předpřipravená data jsou prázdná');
                     return false;
                 }
-
+                
                 const firstRow = data[0];
                 if (!firstRow.hasOwnProperty('Typové označení') && !firstRow.hasOwnProperty('Artikl')) {
-                    console.error('Předpřipravená data nemají požadované sloupce');
+                    console.error('Předpřipravená data nemají požadované sloupce (Typové označení, Artikl)');
                     return false;
                 }
-
+                
                 masterData = data;
                 usingPredefinedData = true;
-
+                
                 document.getElementById('masterFileName').textContent = '📄 Předpřipravená data (neobsahují artikly ve výběhu a označené k výmazu)';
-                document.getElementById('masterStatus').innerHTML =
-                    '<div class="status success">✅ Používají se předpřipravená data (' + masterData.length + ' záznamů)</div>';
+                document.getElementById('masterStatus').innerHTML = 
+                    '<div class="status success">✅ Používají se předpřipravená data -bez výběhů a výmazů  (' + masterData.length + ' záznamů)</div>';
                 document.getElementById('clearMasterBtn').style.display = 'block';
-
-                checkReadyToProcess();
-                updateSearchButton();
+                
                 console.log('Předpřipravená data úspěšně načtena:', masterData.length, 'záznamů');
+                console.log('První 3 záznamy:', masterData.slice(0, 3));
+                console.log('Názvy sloupců:', Object.keys(masterData[0]));
                 return true;
             } catch (error) {
                 console.error('Chyba při načítání předpřipravených dat:', error);
@@ -1005,14 +907,14 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                 return false;
             }
         }
-
+        
         function loadPredefinedFromURL() {
             const csvUrl = currentDatabase === 'usti' ? PREDEFINED_CSV_URL : PREDEFINED_CSV_URL_EFFI;
-            const dbName = currentDatabase === 'usti' ? 'Ústí' : 'Effretikon';
-
-            document.getElementById('masterStatus').innerHTML =
+            const dbName = currentDatabase === 'usti' ? 'Ústí nad Labem' : 'Effretikon';
+            
+            document.getElementById('masterStatus').innerHTML = 
                 '<div class="status info">⏳ Načítám předpřipravená data ze souboru...</div>';
-
+            
             fetch(csvUrl)
                 .then(response => {
                     if (!response.ok) {
@@ -1022,66 +924,70 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                 })
                 .then(csvText => {
                     const data = parseCsvWithSemicolon(csvText);
-
+                    
                     if (data.length === 0) {
                         throw new Error('Soubor je prázdný');
                     }
-
+                    
                     const firstRow = data[0];
                     if (!firstRow.hasOwnProperty('Typové označení') && !firstRow.hasOwnProperty('Artikl')) {
-                        throw new Error('Soubor nemá požadované sloupce');
+                        throw new Error('Soubor nemá požadované sloupce (Typové označení, Artikl)');
                     }
-
+                    
                     masterData = data;
                     usingPredefinedData = true;
-
+                    
                     document.getElementById('masterFileName').textContent = `📄 Předpřipravená data (${dbName})`;
-                    document.getElementById('masterStatus').innerHTML =
+                    document.getElementById('masterStatus').innerHTML = 
                         '<div class="status success">✅ Používají se předpřipravená data (' + masterData.length + ' záznamů)</div>';
                     document.getElementById('clearMasterBtn').style.display = 'block';
-
+                    
                     checkReadyToProcess();
                     updateSearchButton();
                     console.log('Předpřipravená data úspěšně načtena ze souboru:', masterData.length, 'záznamů');
+                    console.log('První 3 záznamy:', masterData.slice(0, 3));
+                    console.log('Názvy sloupců:', Object.keys(masterData[0]));
                 })
                 .catch(error => {
                     console.error('Chyba při načítání ze souboru:', error);
-                    document.getElementById('masterStatus').innerHTML =
+                    document.getElementById('masterStatus').innerHTML = 
                         '<div class="status warning">⚠️ Chyba při načítání: ' + error.message + '</div>';
                 });
         }
-
+        
         window.addEventListener('load', function() {
             loadPredefinedData();
             checkReadyToProcess();
             updateSearchButton();
-            loadApiKey();
+            loadSearchHistory();
+            loadDarkMode();
         });
-
+        
         function updateSearchButton() {
             const searchBtn = document.getElementById('searchBtn');
             const searchInput = document.getElementById('searchInput');
-
+            
             if (masterData && searchInput.value.trim()) {
                 searchBtn.disabled = false;
             } else {
                 searchBtn.disabled = true;
             }
         }
-
+        
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
                 searchInput.addEventListener('input', updateSearchButton);
             }
         });
-
+        
         function updateSearchMode() {
             const toggle = document.getElementById('searchModeToggle');
             const modeDescription = document.getElementById('searchModeDescription');
+            const searchInput = document.getElementById('searchInput');
             const fuzzyLabel = document.getElementById('fuzzyLabel');
             const completionLabel = document.getElementById('completionLabel');
-
+            
             if (toggle.checked) {
                 searchMode = 'completion';
                 fuzzyLabel.className = 'toggle-option-label inactive';
@@ -1089,7 +995,7 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                 completionLabel.style.color = 'white';
                 completionLabel.style.background = '#28a745';
                 fuzzyLabel.style.background = 'transparent';
-                modeDescription.innerHTML = '🔎 Doplňuje typové označení, vrací všechny shody. Podporuje wildcard (*).';
+                modeDescription.innerHTML = '📝 Doplňuje typové označení, vrací všechny shody. Podporuje wildcard (*).';
                 modeDescription.style.background = '#d4edda';
                 updatePlaceholder();
             } else {
@@ -1104,7 +1010,211 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                 updatePlaceholder();
             }
         }
-
+        
+        function setSearchMode(mode) {
+            searchMode = mode;
+            const fuzzyLabel = document.getElementById('fuzzyLabel');
+            const combinedLabel = document.getElementById('combinedLabel');
+            const completionLabel = document.getElementById('completionLabel');
+            const modeDescription = document.getElementById('searchModeDescription');
+            
+            // Reset all
+            fuzzyLabel.className = 'three-state-option inactive';
+            combinedLabel.className = 'three-state-option inactive';
+            completionLabel.className = 'three-state-option inactive';
+            fuzzyLabel.style.background = 'transparent';
+            combinedLabel.style.background = 'transparent';
+            completionLabel.style.background = 'transparent';
+            fuzzyLabel.style.color = '#999';
+            combinedLabel.style.color = '#999';
+            completionLabel.style.color = '#999';
+            
+            // Set active with animation
+            if (mode === 'fuzzy') {
+                fuzzyLabel.className = 'three-state-option active';
+                fuzzyLabel.style.background = '#667eea';
+                fuzzyLabel.style.color = 'white';
+                modeDescription.innerHTML = '🎯 Hledá nejpodobnější shody, vrací všechny výsledky';
+                modeDescription.style.background = '#f0f2ff';
+            } else if (mode === 'combined') {
+                combinedLabel.className = 'three-state-option active';
+                combinedLabel.style.background = '#6d4aff';
+                combinedLabel.style.color = 'white';
+                modeDescription.innerHTML = '🎯 Kombinuje fuzzy search a wildcard (*), vrací všechny shody';
+                modeDescription.style.background = '#e8e3ff';
+            } else if (mode === 'completion') {
+                completionLabel.className = 'three-state-option active';
+                completionLabel.style.background = '#28a745';
+                completionLabel.style.color = 'white';
+                modeDescription.innerHTML = '📝 Doplňuje typové označení, vrací všechny shody. Podporuje wildcard (*).';
+                modeDescription.style.background = '#d4edda';
+            }
+            
+            updatePlaceholder();
+        }
+        
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.getElementById('darkModeIcon');
+            const isDark = document.body.classList.contains('dark-mode');
+            icon.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('darkMode', isDark);
+        }
+        
+        function loadDarkMode() {
+            const isDark = localStorage.getItem('darkMode') === 'true';
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeIcon').textContent = '☀️';
+            }
+        }
+        
+        function addToHistory(term) {
+            if (!term || term.trim() === '') return;
+            
+            // Remove if already exists
+            searchHistory = searchHistory.filter(item => item !== term);
+            
+            // Add to beginning
+            searchHistory.unshift(term);
+            
+            // Keep only last 10
+            if (searchHistory.length > 10) {
+                searchHistory = searchHistory.slice(0, 10);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+            
+            // Update UI
+            updateHistoryUI();
+        }
+        
+        function loadSearchHistory() {
+            const saved = localStorage.getItem('searchHistory');
+            if (saved) {
+                searchHistory = JSON.parse(saved);
+                updateHistoryUI();
+            }
+        }
+        
+        function updateHistoryUI() {
+            const historyDiv = document.getElementById('searchHistory');
+            const itemsDiv = document.getElementById('historyItems');
+            
+            if (searchHistory.length === 0) {
+                historyDiv.style.display = 'none';
+                return;
+            }
+            
+            historyDiv.style.display = 'block';
+            itemsDiv.innerHTML = '';
+            
+            searchHistory.forEach(term => {
+                const item = document.createElement('span');
+                item.className = 'history-item';
+                item.textContent = term;
+                item.onclick = () => {
+                    document.getElementById('searchInput').value = term;
+                    updateSearchButton();
+                    searchSingle();
+                };
+                itemsDiv.appendChild(item);
+            });
+        }
+        
+        function clearHistory() {
+            searchHistory = [];
+            localStorage.removeItem('searchHistory');
+            updateHistoryUI();
+        }
+        
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = '✓';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = '📋';
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Chyba při kopírování: ' + err);
+            });
+        }
+        
+        function highlightMatch(text, searchTerm) {
+            if (!text || !searchTerm) return text;
+            
+            // Convert to string if not already
+            text = String(text);
+            searchTerm = String(searchTerm);
+            
+            // Handle wildcards
+            if (searchTerm.includes('*')) {
+                // Split by * and highlight each part
+                const parts = searchTerm.split('*').filter(p => p.length > 0);
+                let result = text;
+                
+                parts.forEach(part => {
+                    const searchNorm = normalizeString(part);
+                    const textNorm = normalizeString(result);
+                    const index = textNorm.indexOf(searchNorm);
+                    
+                    if (index !== -1) {
+                        const before = result.substring(0, index);
+                        const match = result.substring(index, index + part.length);
+                        const after = result.substring(index + part.length);
+                        result = `${before}<span class="highlight">${match}</span>${after}`;
+                    }
+                });
+                
+                return result;
+            }
+            
+            const searchNorm = normalizeString(searchTerm);
+            const textNorm = normalizeString(text);
+            
+            // Find matching substring
+            const index = textNorm.indexOf(searchNorm);
+            
+            if (index === -1) return text;
+            
+            // Highlight the matching part
+            const before = text.substring(0, index);
+            const match = text.substring(index, index + searchTerm.length);
+            const after = text.substring(index + searchTerm.length);
+            
+            return `${before}<span class="highlight">${match}</span>${after}`;
+        }
+        
+        function matchesManufacturer(manufacturer, searchTerm) {
+            if (!manufacturer || !searchTerm) return false;
+            
+            // Convert to strings
+            manufacturer = String(manufacturer);
+            searchTerm = String(searchTerm);
+            
+            const manufNorm = normalizeString(manufacturer);
+            const searchNorm = normalizeString(searchTerm);
+            
+            // Direct match
+            if (manufNorm.includes(searchNorm)) return true;
+            
+            // Check synonyms
+            for (const [key, synonyms] of Object.entries(manufacturerSynonyms)) {
+                const keyNorm = normalizeString(key);
+                if (keyNorm.includes(searchNorm) || searchNorm.includes(keyNorm)) {
+                    // Check if current manufacturer is in synonyms
+                    return synonyms.some(syn => normalizeString(syn) === manufNorm);
+                }
+            }
+            
+            // Fuzzy match for manufacturer
+            const similarity = calculateSimilarity(manufNorm, searchNorm);
+            return similarity >= 70; // 70% similarity for manufacturers
+        }
+        
         function updateSearchField() {
             const selected = document.querySelector('input[name="searchField"]:checked');
             if (selected) {
@@ -1112,11 +1222,11 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                 updatePlaceholder();
             }
         }
-
+        
         function updatePlaceholder() {
             const searchInput = document.getElementById('searchInput');
             let fieldName = '';
-
+            
             switch(searchField) {
                 case 'typ':
                     fieldName = 'typové označení';
@@ -1128,49 +1238,55 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                     fieldName = 'název';
                     break;
             }
-
+            
             if (searchMode === 'completion') {
                 searchInput.placeholder = `Např: ${fieldName === 'typové označení' ? 'VX, *VX*50*, 2500.*' : fieldName === 'výrobce' ? 'WAGO, *SCHALTAG*' : 'Kanal*, *SROUB*'}`;
+            } else if (searchMode === 'combined') {
+                searchInput.placeholder = `Zadejte ${fieldName} - podporuje wildcard (*)`;
             } else {
                 searchInput.placeholder = `Zadejte ${fieldName} k vyhledání...`;
             }
         }
-
+        
         function wildcardToRegex(pattern) {
-            const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\  "description": "');
+            // Escape special regex characters except *
+            const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
+            // Replace * with .*
             const regex = escaped.replace(/\*/g, '.*');
             return new RegExp(regex, 'i');
         }
-
+        
         function searchCompletion(searchTerm) {
             if (!masterData) {
                 return [];
             }
-
+            
             const firstRow = masterData[0];
             const columns = Object.keys(firstRow);
-
-            const typColumn = columns.find(col =>
-                col.toLowerCase().includes('typ') ||
+            
+            // Get column names
+            const typColumn = columns.find(col => 
+                col.toLowerCase().includes('typ') || 
                 col.toLowerCase().includes('ozna')
             ) || columns[0];
-
-            const artiklColumn = columns.find(col =>
+            
+            const artiklColumn = columns.find(col => 
                 col.toLowerCase().includes('artikl')
             ) || columns[1];
-
-            const vyrobceColumn = columns.find(col =>
+            
+            const vyrobceColumn = columns.find(col => 
                 col.toLowerCase().includes('výrobce') ||
                 col.toLowerCase().includes('vyrobce')
             ) || columns[2];
-
-            const nazevColumn = columns.find(col =>
+            
+            const nazevColumn = columns.find(col => 
                 col.toLowerCase().includes('název') ||
                 col.toLowerCase().includes('nazev')
             ) || columns[3];
-
+            
             let matches = [];
-
+            
+            // Determine which column to search in
             let searchColumn;
             switch(searchField) {
                 case 'vyrobce':
@@ -1184,207 +1300,207 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                     searchColumn = typColumn;
                     break;
             }
-
+            
+            // Check if wildcard is used
             const hasWildcard = searchTerm.includes('*');
-
+            
             if (hasWildcard) {
                 const regex = wildcardToRegex(searchTerm);
-
+                
                 for (let row of masterData) {
                     const searchValue = String(row[searchColumn] || '');
-
+                    
+                    // Check for wildcard match
                     if (regex.test(searchValue)) {
                         matches.push({
                             artikl: row[artiklColumn],
                             foundTyp: row[typColumn],
                             vyrobce: row[vyrobceColumn] || 'N/A',
                             nazev: row[nazevColumn] || 'N/A',
-                            score: 100
+                            score: 'wildcard',
+                            isWildcard: true
                         });
                     }
                 }
             } else {
+                // Simple contains search
                 const searchUpper = searchTerm.toUpperCase();
-
+                
                 for (let row of masterData) {
                     const searchValue = String(row[searchColumn] || '');
                     const searchValueUpper = searchValue.toUpperCase();
-
-                    if (searchValueUpper.includes(searchUpper)) {
+                    
+                    // Check different matching strategies
+                    let isMatch = false;
+                    
+                    if (searchField === 'vyrobce') {
+                        // Use fuzzy matching for manufacturers
+                        isMatch = matchesManufacturer(searchValue, searchTerm);
+                    } else {
+                        // Regular contains match
+                        isMatch = searchValueUpper.includes(searchUpper);
+                    }
+                    
+                    if (isMatch) {
                         matches.push({
                             artikl: row[artiklColumn],
                             foundTyp: row[typColumn],
                             vyrobce: row[vyrobceColumn] || 'N/A',
                             nazev: row[nazevColumn] || 'N/A',
-                            score: 100
+                            score: 'wildcard',
+                            isWildcard: true
                         });
                     }
                 }
             }
-
+            
             return matches;
         }
-
-        function openGoogleSearch(query) {
-            const q = encodeURIComponent(String(query || '').trim() || document.getElementById('searchInput').value.trim());
-            if (!q) return;
-            const url = 'https://www.google.com/search?q=' + q;
-            window.open(url, '_blank');
-        }
-
-        function openGoogleSearchFromEl(el) {
-            const q = el && el.dataset && el.dataset.query ? el.dataset.query : document.getElementById('searchInput').value.trim();
-            openGoogleSearch(q);
-        }
-
+        
         function searchSingle() {
             const searchInput = document.getElementById('searchInput');
             const searchTerm = searchInput.value.trim();
-
+            
             if (!searchTerm) {
                 alert('⚠️ Zadejte typové označení k vyhledání');
                 return;
             }
-
+            
             if (!masterData) {
                 alert('⚠️ Nejprve nahrajte master soubor');
                 return;
             }
-
+            
+            // Add to history
+            addToHistory(searchTerm);
+            currentSearchTerm = searchTerm;
+            
             const resultsDiv = document.getElementById('searchResults');
             resultsDiv.style.display = 'block';
-
+            
             if (searchMode === 'completion') {
+                // Completion mode - wildcard only
                 const matches = searchCompletion(searchTerm);
                 lastSearchResults = matches;
-
+                
                 if (matches.length === 0) {
-                    document.getElementById('manufacturerFilter').style.display = 'none';
-                    renderNoResults(searchTerm);
-                    return;
-                }
-
-                showManufacturerFilter(matches);
-                displayCompletionResults(matches, searchTerm);
-
-            } else {
-                document.getElementById('manufacturerFilter').style.display = 'none';
-                const matchResult = findMatch(searchTerm);
-
-                if (matchResult.matches.length === 0) {
-                    renderNoResults(searchTerm);
-                    return;
-                }
-
-                let html = `
-                    <div class="search-result">
-                        <div class="result-header">🔍 Výsledky vyhledávání: "${escapeAttr(searchTerm)}"</div>
-                `;
-
-                matchResult.matches.forEach((match, index) => {
-                    let colorClass;
-                    if (match.score === 100) colorClass = 'green';
-                    else if (match.score >= 95) colorClass = 'yellow';
-                    else if (match.score >= 80) colorClass = 'orange';
-                    else colorClass = 'red';
-
-                    let matchIcon;
-                    if (match.score === 100) matchIcon = '✅';
-                    else if (match.score >= 95) matchIcon = '⚠️';
-                    else if (match.score >= 80) matchIcon = '🔶';
-                    else matchIcon = '❌';
-
-                    html += `
-                        <div class="result-item ${colorClass}">
-                            <div class="result-row">
-                                <span class="result-label">${matchIcon} Shoda ${index + 1}:</span>
-                                <span class="result-value">${match.score}%</span>
-                            </div>
-                            <div class="result-row">
-                                <span class="result-label">📦 Artikl:</span>
-                                <span class="result-value"><strong>${escapeAttr(match.artikl || 'N/A')}</strong></span>
-                            </div>
-                            <div class="result-row">
-                                <span class="result-label">🏷️ Typové označení:</span>
-                                <span class="result-value">${escapeAttr(match.foundTyp || 'N/A')}<span class="google-search-icon" data-query="${escapeAttr(match.foundTyp || '')}" onclick="openGoogleSearchFromEl(this)">🔍</span></span>
-                            </div>
-                            <div class="result-row">
-                                <span class="result-label">🏭 Výrobce:</span>
-                                <span class="result-value">${escapeAttr(match.vyrobce || 'N/A')}</span>
-                            </div>
-                            <div class="result-row">
-                                <span class="result-label">📝 Název:</span>
-                                <span class="result-value">${escapeAttr(match.nazev || 'N/A')}</span>
+                    resultsDiv.innerHTML = `
+                        <div class="search-result">
+                            <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
+                            <div class="result-item red">
+                                <div class="result-row">
+                                    <span class="result-label">❌ Nenalezena žádná shoda</span>
+                                </div>
+                                <button class="google-search-btn" onclick="searchGoogle('${searchTerm.replace(/'/g, "\\'")}')">
+                                    🔍 Vyhledat pomocí Google
+                                </button>
                             </div>
                         </div>
                     `;
+                    document.getElementById('manufacturerFilter').style.display = 'none';
+                    return;
+                }
+                
+                showManufacturerFilter(matches);
+                displayCompletionResults(matches, searchTerm);
+                
+            } else if (searchMode === 'combined') {
+                // Combined mode - both fuzzy and wildcard
+                const wildcardMatches = searchCompletion(searchTerm);
+                const fuzzyMatches = findMatch(searchTerm);
+                
+                // Combine and deduplicate results
+                const allMatches = [...wildcardMatches];
+                const seenArtikls = new Set(wildcardMatches.map(m => m.artikl));
+                
+                fuzzyMatches.matches.forEach(match => {
+                    if (!seenArtikls.has(match.artikl)) {
+                        allMatches.push(match);
+                        seenArtikls.add(match.artikl);
+                    }
                 });
-
-                html += '</div>';
-                resultsDiv.innerHTML = html;
+                
+                lastSearchResults = allMatches;
+                
+                if (allMatches.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div class="search-result">
+                            <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
+                            <div class="result-item red">
+                                <div class="result-row">
+                                    <span class="result-label">❌ Nenalezena žádná shoda</span>
+                                </div>
+                                <button class="google-search-btn" onclick="searchGoogle('${searchTerm.replace(/'/g, "\\'")}')">
+                                    🔍 Vyhledat pomocí Google
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('manufacturerFilter').style.display = 'none';
+                    return;
+                }
+                
+                showManufacturerFilter(allMatches);
+                displayCombinedResults(allMatches, searchTerm);
+                
+            } else {
+                // Fuzzy search mode - returns all matches now
+                document.getElementById('manufacturerFilter').style.display = 'none';
+                const matchResult = findMatch(searchTerm);
+                
+                if (matchResult.matches.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div class="search-result">
+                            <div class="result-header">🔍 Výsledky vyhledávání: "${searchTerm}"</div>
+                            <div class="result-item red">
+                                <div class="result-row">
+                                    <span class="result-label">❌ Nenalezena žádná shoda</span>
+                                </div>
+                                <button class="google-search-btn" onclick="searchGoogle('${searchTerm.replace(/'/g, "\\'")}')">
+                                    🔍 Vyhledat pomocí Google
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                displayFuzzyResults(matchResult.allMatches || matchResult.matches, searchTerm);
             }
         }
-
-        function renderNoResults(searchTerm) {
-            const resultsDiv = document.getElementById('searchResults');
-            resultsDiv.innerHTML = '';
-            const container = document.createElement('div');
-            container.className = 'search-result';
-            const header = document.createElement('div');
-            header.className = 'result-header';
-            header.textContent = `🔍 Hledání: "${searchTerm}"`;
-
-            const card = document.createElement('div');
-            card.className = 'result-item red';
-
-            const row = document.createElement('div');
-            row.className = 'result-row';
-            const label = document.createElement('span');
-            label.className = 'result-label';
-            label.textContent = '❌ Nenalezena žádná shoda';
-            row.appendChild(label);
-            card.appendChild(row);
-
-            const btn = document.createElement('button');
-            btn.className = 'google-search-btn';
-            btn.textContent = '🔍 Hledat pomocí Google';
-            btn.addEventListener('click', () => openGoogleSearch(searchTerm));
-            card.appendChild(btn);
-
-            container.appendChild(header);
-            container.appendChild(card);
-            resultsDiv.appendChild(container);
-        }
-
+        
         function showManufacturerFilter(matches) {
+            // Get unique manufacturers
             const manufacturers = new Set();
             matches.forEach(match => {
                 if (match.vyrobce && match.vyrobce !== 'N/A') {
                     manufacturers.add(match.vyrobce);
                 }
             });
-
+            
+            // Initialize all manufacturers as selected
             selectedManufacturers = new Set(manufacturers);
-
+            
             const filterDiv = document.getElementById('manufacturerFilter');
             const checkboxesDiv = document.getElementById('manufacturerCheckboxes');
-
+            
             if (manufacturers.size === 0) {
                 filterDiv.style.display = 'none';
                 return;
             }
-
+            
             filterDiv.style.display = 'block';
             checkboxesDiv.innerHTML = '';
-
+            
+            // Sort manufacturers alphabetically
             const sortedManufacturers = Array.from(manufacturers).sort();
-
+            
             sortedManufacturers.forEach(manufacturer => {
                 const label = document.createElement('label');
-                label.style.cssText = 'display: flex; align-items: center; gap: 3px; cursor: pointer; padding: 5px 8px; background: white; border-radius: 6px; border: 1px solid #ddd; transition: all 0.3s; font-size: 0.85em;';
+                label.style.cssText = 'display: flex; align-items: center; gap: 4px; cursor: pointer; padding: 5px 10px; background: white; border-radius: 6px; border: 1px solid #ddd; transition: all 0.3s; font-size: 0.85em;';
                 label.onmouseover = () => label.style.background = '#f0f2ff';
                 label.onmouseout = () => label.style.background = 'white';
-
+                
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.checked = true;
@@ -1397,28 +1513,29 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                         selectedManufacturers.delete(manufacturer);
                     }
                 };
-
+                
                 const span = document.createElement('span');
                 span.textContent = manufacturer;
                 span.style.fontWeight = '500';
-
+                
                 label.appendChild(checkbox);
                 label.appendChild(span);
                 checkboxesDiv.appendChild(label);
             });
         }
-
+        
         function applyManufacturerFilter() {
             const searchInput = document.getElementById('searchInput');
             const searchTerm = searchInput.value.trim();
-
+            
+            // Filter results based on selected manufacturers
             const filteredResults = lastSearchResults.filter(match => {
                 return selectedManufacturers.has(match.vyrobce) || match.vyrobce === 'N/A';
             });
-
+            
             displayCompletionResults(filteredResults, searchTerm);
         }
-
+        
         function selectAllManufacturers() {
             const checkboxes = document.querySelectorAll('#manufacturerCheckboxes input[type="checkbox"]');
             checkboxes.forEach(checkbox => {
@@ -1426,7 +1543,7 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                 selectedManufacturers.add(checkbox.value);
             });
         }
-
+        
         function deselectAllManufacturers() {
             const checkboxes = document.querySelectorAll('#manufacturerCheckboxes input[type="checkbox"]');
             checkboxes.forEach(checkbox => {
@@ -1434,72 +1551,68 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                 selectedManufacturers.delete(checkbox.value);
             });
         }
-
+        
         function updateDatabase() {
             const toggle = document.getElementById('databaseToggle');
             const toggleLabel = document.getElementById('databaseToggleLabel');
-
+            const ustiLabel = document.getElementById('ustiLabel');
+            const effiLabel = document.getElementById('effiLabel');
+            
             if (toggle.checked) {
                 currentDatabase = 'effretikon';
-                toggleLabel.classList.add('effretikon');
-                document.getElementById('ustiLabel').style.background = 'transparent';
-                document.getElementById('ustiLabel').style.color = '#999';
-                document.getElementById('effiLabel').className = 'toggle-option-label active';
-                document.getElementById('effiLabel').style.background = '#dc3545';
-                document.getElementById('effiLabel').style.color = 'white';
+                ustiLabel.className = 'toggle-option-label inactive';
+                effiLabel.className = 'toggle-option-label active';
+                effiLabel.style.color = 'white';
+                effiLabel.style.background = '#dc3545';
+                ustiLabel.style.background = 'transparent';
+                toggleLabel.style.background = '#dc3545';
             } else {
                 currentDatabase = 'usti';
-                toggleLabel.classList.remove('effretikon');
-                document.getElementById('ustiLabel').className = 'toggle-option-label active';
-                document.getElementById('ustiLabel').style.background = '#28a745';
-                document.getElementById('ustiLabel').style.color = 'white';
-                document.getElementById('effiLabel').className = 'toggle-option-label inactive';
-                document.getElementById('effiLabel').style.background = 'transparent';
-                document.getElementById('effiLabel').style.color = '#999';
+                ustiLabel.className = 'toggle-option-label active';
+                effiLabel.className = 'toggle-option-label inactive';
+                ustiLabel.style.color = 'white';
+                ustiLabel.style.background = '#28a745';
+                effiLabel.style.background = 'transparent';
+                toggleLabel.style.background = '#28a745';
             }
-
+            
+            // Clear current data and reload with new database
             if (usingPredefinedData) {
                 masterData = null;
                 loadPredefinedData();
             }
         }
-
+        
         function displayCompletionResults(matches, searchTerm) {
             const resultsDiv = document.getElementById('searchResults');
-
+            
             if (matches.length === 0) {
-                resultsDiv.innerHTML = '';
-                const container = document.createElement('div');
-                container.className = 'search-result';
-                const header = document.createElement('div');
-                header.className = 'result-header';
-                header.textContent = `🔍 Výsledky doplňování: "${searchTerm}" (0 výsledků)`;
-                const card = document.createElement('div');
-                card.className = 'result-item red';
-                const row = document.createElement('div');
-                row.className = 'result-row';
-                const label = document.createElement('span');
-                label.className = 'result-label';
-                label.textContent = '❌ Žádné výsledky pro vybrané výrobce';
-                row.appendChild(label);
-                card.appendChild(row);
-                const btn = document.createElement('button');
-                btn.className = 'google-search-btn';
-                btn.textContent = '🔍 Hledat pomocí Google';
-                btn.addEventListener('click', () => openGoogleSearch(searchTerm));
-                card.appendChild(btn);
-                container.appendChild(header);
-                container.appendChild(card);
-                resultsDiv.appendChild(container);
+                resultsDiv.innerHTML = `
+                    <div class="search-result">
+                        <div class="result-header">🔍 Výsledky doplňování: "${searchTerm}" (0 výsledků po filtrování)</div>
+                        <div class="result-item red">
+                            <div class="result-row">
+                                <span class="result-label">❌ Žádné výsledky pro vybrané výrobce</span>
+                            </div>
+                            <button class="google-search-btn" onclick="searchGoogle('${searchTerm.replace(/'/g, "\\'")}')">
+                                🔍 Vyhledat pomocí Google
+                            </button>
+                        </div>
+                    </div>
+                `;
                 return;
             }
-
+            
             let html = `
                 <div class="search-result">
-                    <div class="result-header">🔍 Výsledky doplňování: "${escapeAttr(searchTerm)}" (${matches.length} ${matches.length === 1 ? 'výsledek' : matches.length < 5 ? 'výsledky' : 'výsledků'})</div>
+                    <div class="result-header">🔍 Výsledky doplňování: "${searchTerm}" (${matches.length} ${matches.length === 1 ? 'výsledek' : matches.length < 5 ? 'výsledky' : 'výsledků'})</div>
             `;
-
+            
             matches.forEach((match, index) => {
+                const highlightedTyp = highlightMatch(match.foundTyp, currentSearchTerm);
+                const highlightedVyrobce = searchField === 'vyrobce' ? highlightMatch(match.vyrobce, currentSearchTerm) : match.vyrobce;
+                const highlightedNazev = searchField === 'nazev' ? highlightMatch(match.nazev, currentSearchTerm) : match.nazev;
+                
                 html += `
                     <div class="result-item green">
                         <div class="result-row">
@@ -1507,34 +1620,200 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                         </div>
                         <div class="result-row">
                             <span class="result-label">📦 Artikl:</span>
-                            <span class="result-value"><strong>${escapeAttr(match.artikl || 'N/A')}</strong></span>
+                            <span class="result-value">
+                                <strong>${match.artikl || 'N/A'}</strong>
+                                <button class="copy-btn" onclick="copyToClipboard('${match.artikl}', this)" title="Kopírovat artikl">📋</button>
+                            </span>
                         </div>
                         <div class="result-row">
                             <span class="result-label">🏷️ Typové označení:</span>
-                            <span class="result-value">${escapeAttr(match.foundTyp || 'N/A')}<span class="google-search-icon" data-query="${escapeAttr(match.foundTyp || '')}" onclick="openGoogleSearchFromEl(this)">🔍</span></span>
+                            <span class="result-value">
+                                ${highlightedTyp || 'N/A'}
+                                <button class="google-mini-btn" onclick="searchGoogle('${(match.foundTyp || '').replace(/'/g, "\\'")}'); event.stopPropagation();" title="Vyhledat v Google">
+                                    <span class="google-logo-mini">G</span>
+                                </button>
+                            </span>
                         </div>
                         <div class="result-row">
                             <span class="result-label">🏭 Výrobce:</span>
-                            <span class="result-value">${escapeAttr(match.vyrobce || 'N/A')}</span>
+                            <span class="result-value">${highlightedVyrobce || 'N/A'}</span>
                         </div>
                         <div class="result-row">
                             <span class="result-label">📝 Název:</span>
-                            <span class="result-value">${escapeAttr(match.nazev || 'N/A')}</span>
+                            <span class="result-value">${highlightedNazev || 'N/A'}</span>
                         </div>
                     </div>
                 `;
             });
-
+            
             html += '</div>';
             resultsDiv.innerHTML = html;
         }
-
+        
+        function searchGoogle(query) {
+            if (!query || query === 'N/A') {
+                alert('⚠️ Nelze vyhledat prázdný dotaz');
+                return;
+            }
+            const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            window.open(searchUrl, '_blank');
+        }
+        
+        function displayFuzzyResults(matches, searchTerm) {
+            const resultsDiv = document.getElementById('searchResults');
+            
+            let html = `
+                <div class="search-result">
+                    <div class="result-header">🔍 Výsledky fuzzy search: "${searchTerm}" (${matches.length} ${matches.length === 1 ? 'výsledek' : matches.length < 5 ? 'výsledky' : 'výsledků'})</div>
+            `;
+            
+            matches.forEach((match, index) => {
+                let colorClass;
+                if (match.score === 100) colorClass = 'green';
+                else if (match.score >= 95) colorClass = 'yellow';
+                else if (match.score >= 80) colorClass = 'orange';
+                else colorClass = 'red';
+                
+                let matchIcon;
+                if (match.score === 100) matchIcon = '✅';
+                else if (match.score >= 95) matchIcon = '⚠️';
+                else if (match.score >= 80) matchIcon = '🔶';
+                else matchIcon = '❌';
+                
+                const highlightedTyp = highlightMatch(match.foundTyp, currentSearchTerm);
+                
+                html += `
+                    <div class="result-item ${colorClass}">
+                        <div class="result-row">
+                            <span class="result-label">${matchIcon} Shoda ${index + 1}:</span>
+                            <span class="result-value">${match.score}%</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">📦 Artikl:</span>
+                            <span class="result-value">
+                                <strong>${match.artikl || 'N/A'}</strong>
+                                <button class="copy-btn" onclick="copyToClipboard('${match.artikl}', this)" title="Kopírovat artikl">📋</button>
+                            </span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">🏷️ Typové označení:</span>
+                            <span class="result-value">
+                                ${highlightedTyp || 'N/A'}
+                                <button class="google-mini-btn" onclick="searchGoogle('${(match.foundTyp || '').replace(/'/g, "\\'")}'); event.stopPropagation();" title="Vyhledat v Google">
+                                    <span class="google-logo-mini">G</span>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">🏭 Výrobce:</span>
+                            <span class="result-value">${match.vyrobce || 'N/A'}</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">📝 Název:</span>
+                            <span class="result-value">${match.nazev || 'N/A'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+        
+        function displayCombinedResults(matches, searchTerm) {
+            const resultsDiv = document.getElementById('searchResults');
+            
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = `
+                    <div class="search-result">
+                        <div class="result-header">🔍 Výsledky kombinovaného vyhledávání: "${searchTerm}" (0 výsledků)</div>
+                        <div class="result-item red">
+                            <div class="result-row">
+                                <span class="result-label">❌ Žádné výsledky</span>
+                            </div>
+                            <button class="google-search-btn" onclick="searchGoogle('${searchTerm.replace(/'/g, "\\'")}')">
+                                🔍 Vyhledat pomocí Google
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="search-result">
+                    <div class="result-header">🔍 Výsledky kombinovaného vyhledávání: "${searchTerm}" (${matches.length} ${matches.length === 1 ? 'výsledek' : matches.length < 5 ? 'výsledky' : 'výsledků'})</div>
+            `;
+            
+            matches.forEach((match, index) => {
+                let colorClass = 'purple'; // Default for wildcard
+                let matchIcon = '🔍';
+                
+                // If match has score and it's not wildcard, use score-based color
+                if (match.score !== undefined && match.score !== 'wildcard' && !match.isWildcard) {
+                    if (match.score === 100) {
+                        colorClass = 'green';
+                        matchIcon = '✅';
+                    } else if (match.score >= 95) {
+                        colorClass = 'yellow';
+                        matchIcon = '⚠️';
+                    } else if (match.score >= 80) {
+                        colorClass = 'orange';
+                        matchIcon = '🔶';
+                    } else {
+                        colorClass = 'red';
+                        matchIcon = '❌';
+                    }
+                }
+                
+                const highlightedTyp = searchField === 'typ' ? highlightMatch(match.foundTyp, currentSearchTerm) : match.foundTyp;
+                const highlightedVyrobce = searchField === 'vyrobce' ? highlightMatch(match.vyrobce, currentSearchTerm) : match.vyrobce;
+                const highlightedNazev = searchField === 'nazev' ? highlightMatch(match.nazev, currentSearchTerm) : match.nazev;
+                
+                html += `
+                    <div class="result-item ${colorClass}">
+                        <div class="result-row">
+                            <span class="result-label">${matchIcon} Výsledek ${index + 1}:</span>
+                            ${match.score !== undefined && match.score !== 'wildcard' ? `<span class="result-value">${match.score}%</span>` : '<span class="result-value" style="font-size: 0.85em; color: #6d4aff;">Wildcard</span>'}
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">📦 Artikl:</span>
+                            <span class="result-value">
+                                <strong>${match.artikl || 'N/A'}</strong>
+                                <button class="copy-btn" onclick="copyToClipboard('${match.artikl}', this)" title="Kopírovat artikl">📋</button>
+                            </span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">🏷️ Typové označení:</span>
+                            <span class="result-value">
+                                ${highlightedTyp || 'N/A'}
+                                <button class="google-mini-btn" onclick="searchGoogle('${(match.foundTyp || '').replace(/'/g, "\\'")}'); event.stopPropagation();" title="Vyhledat v Google">
+                                    <span class="google-logo-mini">G</span>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">🏭 Výrobce:</span>
+                            <span class="result-value">${highlightedVyrobce || 'N/A'}</span>
+                        </div>
+                        <div class="result-row">
+                            <span class="result-label">📝 Název:</span>
+                            <span class="result-value">${highlightedNazev || 'N/A'}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+        
         function handleMasterFile(e) {
             const file = e.target.files[0];
             if (!file) return;
-
+            
             document.getElementById('masterFileName').textContent = '📄 ' + file.name;
-
+            
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
@@ -1542,12 +1821,13 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                     const workbook = XLSX.read(data, {type: 'array'});
                     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                     const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-
+                    
                     if (jsonData.length === 0) {
                         alert('❌ Soubor je prázdný!');
                         return;
                     }
-
+                    
+                    // Fix Czech encoding in all string values
                     jsonData.forEach(row => {
                         Object.keys(row).forEach(key => {
                             if (typeof row[key] === 'string') {
@@ -1555,20 +1835,20 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                             }
                         });
                     });
-
+                    
                     const firstRow = jsonData[0];
                     if (!firstRow['Typové označení'] && !firstRow['Typov\u0082© ozna\u00a3\u0082¾ en\u00a3­']) {
                         alert('❌ Soubor musí obsahovat sloupec "Typové označení"!');
                         return;
                     }
-
+                    
                     masterData = jsonData;
                     usingPredefinedData = false;
-
-                    document.getElementById('masterStatus').innerHTML =
+                    
+                    document.getElementById('masterStatus').innerHTML = 
                         '<div class="status success">✅ Master soubor úspěšně nahrán (' + masterData.length + ' záznamů)</div>';
                     document.getElementById('clearMasterBtn').style.display = 'block';
-
+                    
                     checkReadyToProcess();
                     updateSearchButton();
                 } catch (error) {
@@ -1577,12 +1857,12 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
             };
             reader.readAsArrayBuffer(file);
         }
-
+        
         function clearMasterFile() {
-            const message = usingPredefinedData
+            const message = usingPredefinedData 
                 ? 'Opravdu chcete smazat předpřipravená data? Budete muset nahrát vlastní master soubor.'
                 : 'Opravdu chcete smazat nahranou vědomostní základnu?';
-
+                
             if (confirm(message)) {
                 masterData = null;
                 usingPredefinedData = false;
@@ -1594,24 +1874,24 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                 updateSearchButton();
             }
         }
-
+        
         function handleUserFile(e) {
             const file = e.target.files[0];
             if (!file) return;
-
+            
             document.getElementById('userFileName').textContent = '📄 ' + file.name;
-
+            
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, {type: 'array'});
-
+                    
                     userData = {
                         workbook: workbook,
                         fileName: file.name
                     };
-
+                    
                     checkReadyToProcess();
                 } catch (error) {
                     alert('❌ Chyba při načítání souboru: ' + error.message);
@@ -1619,7 +1899,7 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
             };
             reader.readAsArrayBuffer(file);
         }
-
+        
         function checkReadyToProcess() {
             const btn = document.getElementById('processBtn');
             if (masterData && userData) {
@@ -1628,12 +1908,12 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                 btn.disabled = true;
             }
         }
-
+        
         function removePrefix(str) {
             if (!str) return '';
             const strUpper = String(str).toUpperCase();
             const prefixes = ['RIT.', 'SE.', 'SIE.', 'PXC.', 'FES.', 'WAGO.', 'WEI.', 'PILZ.', 'ABB.', 'SCHNE.', 'PHO.', 'EATON.', 'SICK.'];
-
+            
             for (let prefix of prefixes) {
                 if (strUpper.startsWith(prefix)) {
                     return str.substring(prefix.length);
@@ -1641,32 +1921,32 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
             }
             return str;
         }
-
+        
         function normalizeString(str) {
             return String(str).toUpperCase().replace(/[.\-_\s]/g, '');
         }
-
+        
         function calculateSimilarity(userStr, masterStr) {
             if (userStr === masterStr) return 100;
-
+            
             const userNorm = normalizeString(userStr);
             const masterNorm = normalizeString(masterStr);
-
+            
             if (userNorm === masterNorm) return 95;
-
+            
             const userNoLeadZero = userNorm.replace(/^0+/, '');
             const masterNoLeadZero = masterNorm.replace(/^0+/, '');
-
+            
             const userNoTrailZero = userNorm.replace(/0+$/, '');
             const masterNoTrailZero = masterNorm.replace(/0+$/, '');
-
-            if (userNoLeadZero === masterNoLeadZero ||
+            
+            if (userNoLeadZero === masterNoLeadZero || 
                 userNoTrailZero === masterNoTrailZero ||
                 userNoLeadZero === masterNoTrailZero ||
                 userNoTrailZero === masterNoLeadZero) {
                 return 95;
             }
-
+            
             if (userNorm.length === masterNorm.length) {
                 let differences = 0;
                 for (let i = 0; i < userNorm.length; i++) {
@@ -1674,34 +1954,34 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                         differences++;
                     }
                 }
-
+                
                 if (differences === 1) {
                     return 85;
                 } else if (differences === 2) {
                     return 70;
                 }
             }
-
+            
             const maxLen = Math.max(userNorm.length, masterNorm.length);
             if (maxLen === 0) return 100;
-
+            
             const distance = levenshteinDistance(userNorm, masterNorm);
             const similarity = ((maxLen - distance) / maxLen) * 100;
-
+            
             return Math.round(similarity * 10) / 10;
         }
-
+        
         function levenshteinDistance(str1, str2) {
             const matrix = [];
-
+            
             for (let i = 0; i <= str2.length; i++) {
                 matrix[i] = [i];
             }
-
+            
             for (let j = 0; j <= str1.length; j++) {
                 matrix[0][j] = j;
             }
-
+            
             for (let i = 1; i <= str2.length; i++) {
                 for (let j = 1; j <= str1.length; j++) {
                     if (str2.charAt(i - 1) === str1.charAt(j - 1)) {
@@ -1715,10 +1995,10 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                     }
                 }
             }
-
+            
             return matrix[str2.length][str1.length];
         }
-
+        
         function removeSuffix(str) {
             if (!str) return '';
             return String(str)
@@ -1726,49 +2006,50 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                 .replace(/[-\s]ZY\d+$/i, '')
                 .trim();
         }
-
+        
         function findMatch(userTyp) {
-            if (!userTyp) return {
-                matches: [],
-                bestScore: 0,
-                matchType: 'red'
+            if (!userTyp) return { 
+                matches: [], 
+                bestScore: 0, 
+                matchType: 'red' 
             };
-
+            
             const userTypStr = String(userTyp);
-
+            
             if (!masterData || masterData.length === 0) {
                 console.error('Master data jsou prázdná!');
-                return {
-                    matches: [],
-                    bestScore: 0,
-                    matchType: 'red'
+                return { 
+                    matches: [], 
+                    bestScore: 0, 
+                    matchType: 'red' 
                 };
             }
-
+            
             let allMatches = [];
-
+            
             const firstRow = masterData[0];
             const columns = Object.keys(firstRow);
-
-            const typColumn = columns.find(col =>
-                col.toLowerCase().includes('typ') ||
+            
+            const typColumn = columns.find(col => 
+                col.toLowerCase().includes('typ') || 
                 col.toLowerCase().includes('ozna')
             ) || columns[0];
-
-            const artiklColumn = columns.find(col =>
+            
+            const artiklColumn = columns.find(col => 
                 col.toLowerCase().includes('artikl')
             ) || columns[1];
-
-            const vyrobceColumn = columns.find(col =>
+            
+            const vyrobceColumn = columns.find(col => 
                 col.toLowerCase().includes('výrobce') ||
                 col.toLowerCase().includes('vyrobce')
             ) || columns[2];
-
-            const nazevColumn = columns.find(col =>
+            
+            const nazevColumn = columns.find(col => 
                 col.toLowerCase().includes('název') ||
                 col.toLowerCase().includes('nazev')
             ) || columns[3];
-
+            
+            // Determine which column to search in
             let searchColumn;
             switch(searchField) {
                 case 'vyrobce':
@@ -1782,24 +2063,25 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                     searchColumn = typColumn;
                     break;
             }
-
+            
             for (let row of masterData) {
                 const masterValue = row[searchColumn];
                 const masterArtikl = row[artiklColumn];
-
+                
                 if (!masterValue && !masterArtikl) continue;
-
+                
                 const masterValueStr = String(masterValue || '');
-
+                
                 let scores = [];
-
+                
                 const directScore = calculateSimilarity(userTypStr, masterValueStr);
                 scores.push(directScore);
-
+                
+                // Only apply prefix/suffix logic for typové označení
                 if (searchField === 'typ') {
                     const userNoPref = removePrefix(userTypStr);
                     const masterNoPref = removePrefix(masterValueStr);
-
+                    
                     if (userNoPref !== userTypStr || masterNoPref !== masterValueStr) {
                         const noPrefScore = calculateSimilarity(userNoPref, masterNoPref);
                         if (noPrefScore === 100) {
@@ -1811,7 +2093,7 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                         const noPrefScore = calculateSimilarity(userNoPref, masterNoPref);
                         scores.push(noPrefScore);
                     }
-
+                    
                     const prefixes = ['RIT.', 'SE.', 'SIE.', 'PXC.', 'FES.', 'WAGO.', 'WEI.', 'PILZ.', 'ABB.', 'SCHNE.', 'PHO.', 'EATON.', 'SICK.'];
                     for (let prefix of prefixes) {
                         const masterUpper = masterValueStr.toUpperCase();
@@ -1824,7 +2106,7 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                             }
                         }
                     }
-
+                    
                     const userNoSuffix = removeSuffix(userTypStr);
                     const masterNoSuffix = removeSuffix(masterValueStr);
                     if (userNoSuffix !== userTypStr || masterNoSuffix !== masterValueStr) {
@@ -1832,9 +2114,9 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                         scores.push(noSuffixScore);
                     }
                 }
-
+                
                 const bestScore = Math.max(...scores);
-
+                
                 if (bestScore >= 40) {
                     allMatches.push({
                         artikl: masterArtikl,
@@ -1845,63 +2127,65 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                     });
                 }
             }
-
+            
             allMatches.sort((a, b) => b.score - a.score);
-
+            
             const seen = new Set();
             allMatches = allMatches.filter(match => {
                 if (seen.has(match.artikl)) return false;
                 seen.add(match.artikl);
                 return true;
             });
-
+            
             const topMatches = allMatches.slice(0, 3);
-
+            
             if (topMatches.length === 0) {
-                return {
-                    matches: [],
-                    bestScore: 0,
-                    matchType: 'red'
+                return { 
+                    matches: [], 
+                    allMatches: [],
+                    bestScore: 0, 
+                    matchType: 'red' 
                 };
             }
-
+            
             const bestScore = topMatches[0].score;
             let matchType;
             if (bestScore === 100) matchType = 'green';
             else if (bestScore >= 95) matchType = 'yellow';
             else if (bestScore >= 80) matchType = 'orange';
             else matchType = 'red';
-
+            
             return {
                 matches: topMatches,
+                allMatches: allMatches, // Return all matches
                 bestScore: bestScore,
                 matchType: matchType
             };
         }
-
+        
         function processFile() {
             document.getElementById('processingDiv').style.display = 'block';
             document.getElementById('processBtn').disabled = true;
-
+            
             setTimeout(() => {
                 try {
                     const workbook = userData.workbook;
                     const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
                     const jsonData = XLSX.utils.sheet_to_json(firstSheet, {defval: ''});
-
+                    
                     let stats = {
                         green: 0,
                         yellow: 0,
                         orange: 0,
                         red: 0
                     };
-
+                    
                     for (let i = 0; i < jsonData.length; i++) {
                         const row = jsonData[i];
                         const userTyp = row['Typové označení'] || row['Typov\u0082© ozna\u00a3\u0082¾ en\u00a3­'];
-
+                        
                         const matchResult = findMatch(userTyp);
-
+                        
                         if (matchResult.matches.length > 0) {
                             for (let j = 0; j < 3; j++) {
                                 if (j < matchResult.matches.length) {
@@ -1928,30 +2212,30 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                             row['Nalezené typ. ozn. 3'] = '';
                             row['_matchType'] = 'red';
                         }
-
+                        
                         stats[matchResult.matchType]++;
                     }
-
+                    
                     const newWb = XLSX.utils.book_new();
                     const newWs = XLSX.utils.json_to_sheet(jsonData.map(row => {
                         const newRow = {...row};
                         delete newRow._matchType;
                         return newRow;
                     }));
-
+                    
                     const range = XLSX.utils.decode_range(newWs['!ref']);
-
+                    
                     for (let R = range.s.r + 1; R <= range.e.r; R++) {
                         const matchType = jsonData[R - 1]._matchType;
                         let fillColor;
-
+                        
                         switch(matchType) {
                             case 'green': fillColor = '90EE90'; break;
                             case 'yellow': fillColor = 'FFFF00'; break;
                             case 'orange': fillColor = 'FFA500'; break;
                             case 'red': fillColor = 'FF6B6B'; break;
                         }
-
+                        
                         if (fillColor) {
                             for (let C = range.s.c; C <= range.e.c; C++) {
                                 const cellAddress = XLSX.utils.encode_cell({r: R, c: C});
@@ -1967,21 +2251,21 @@ ${JSON.stringify(searchResults.slice(0, 10), null, 2)}
                             }
                         }
                     }
-
+                    
                     XLSX.utils.book_append_sheet(newWb, newWs, 'Data');
-
+                    
                     const fileName = userData.fileName.replace(/\.xlsx?$/i, '_doplneno.xlsx');
                     XLSX.writeFile(newWb, fileName, {cellStyles: true});
-
+                    
                     document.getElementById('resultsSection').style.display = 'block';
-                    document.getElementById('resultsInfo').innerHTML =
+                    document.getElementById('resultsInfo').innerHTML = 
                         `<strong>✅ Soubor zpracován a stažen!</strong><br><br>` +
                         `📊 Statistika:<br>` +
                         `🟢 Přesné shody (100%): ${stats.green}<br>` +
                         `🟡 Normalizované (95%+): ${stats.yellow}<br>` +
                         `🟠 Malé rozdíly (80-94%): ${stats.orange}<br>` +
                         `🔴 Částečná/nenalezeno (&lt;80%): ${stats.red}`;
-
+                    
                 } catch (error) {
                     alert('❌ Chyba při zpracování: ' + error.message);
                     console.error(error);
